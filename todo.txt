@@ -1,19 +1,41 @@
 TODO:
-* Client
+* Client/UI
 	* FEATURE: ? Play local files ?
-	* BUG: open_all doesn't always trigger in addDir. If node is closed it works, but then linking to dir fails.
 	* BUG: Long pause bug
-* UI
-	* Graphical buttons
-		* ? Settings ?
-	* Find good container background
+	* Emit important events and document them
+	* Implement the bigscreen:
+		* Insert bigscreen.html into hidden iframe/div
+    	* Insert toggle option (same icon as in bigscreen.html?)
+    	* Make use of triggered jplay events
+	* Find some use case for deferred (maybe in showNotification [1034])
+	* Optimize menus. Probably best to make/use a widget
+	* Select multiple in playlist.
+	* Context menu in playlist.
+	* Show album cover in notifications [1051]
+	* Change container background
         * Selectable items in playlist/saved playlists
 	* ? Progressbar indicating song progress in playlist ?
 	* ? Song duration in playlist ?
 	* Better JQuery UI Theme
 	* Change headers to JQuery UI Theme
 	* Advanced linking with checkboxes etc.
-	* FEATURE: Full screen cover
+	* Should the shuffle object be in the playlist object for semantic correctness?
+	* Initing each ui object seems unnecessary
+	* In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
+	* Button to add random song to playlist
+	* remove the attribs thingy in data() for playlist items
 * Server
+	* Implement addRandomSong
 * General
 	* Video support
+	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
+	* Rename player to something more original
+	* Structure files better and create GIT repository
+	* Make a real package.json file
+	* Figure out why the sort order in jstree fails in jQuery 1.9
+
+
+
+
+
+

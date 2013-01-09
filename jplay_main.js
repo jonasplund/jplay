@@ -8,7 +8,7 @@
 		app = express(),
 		server = require('http').createServer(app),
 		io = require('socket.io').listen(server, { "log level": 1 }),
-        db = require('./db2.js');
+        db = require('./db_connector.js');
 
     jps.configure({
         musicDir: MUSIC_DIR,
