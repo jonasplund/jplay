@@ -1,0 +1,19 @@
+TODO:
+* Client
+	* FEATURE: ? Play local files ?
+	* BUG: open_all doesn't always trigger in addDir. If node is closed it works, but then linking to dir fails.
+	* BUG: Long pause bug
+* UI
+	* Graphical buttons
+		* ? Settings ?
+	* Find good container background
+        * Selectable items in playlist/saved playlists
+	* ? Progressbar indicating song progress in playlist ?
+	* ? Song duration in playlist ?
+	* Better JQuery UI Theme
+	* Change headers to JQuery UI Theme
+	* Advanced linking with checkboxes etc.
+	* FEATURE: Full screen cover
+* Server
+* General
+	* Video support
