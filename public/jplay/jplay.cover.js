@@ -47,9 +47,14 @@
         },
         _destroy: function () { },
         _toggleExpanded: function (e) {
-            var animateTo, clickBalance, that = this, container,
-                $etarget, reqFS, exitFS, offset;
-            container = this.container;
+            var animateTo,
+                clickBalance,
+                that = this,
+                container = this.container,
+                $etarget,
+                reqFS,
+                exitFS, 
+                offset;
             if (e) {
                 $etarget = $(e.target);
                 // Browser normalization

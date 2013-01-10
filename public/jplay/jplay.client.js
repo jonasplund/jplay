@@ -61,7 +61,7 @@
             elements.clearplaylistbutton = $("#clearplaylistbutton");
             elements.shufflebutton = $("#shufflebutton");
             elements.repeatbutton = $("#repeatbutton");
-            elements.addrandom = $("#addrandom");
+            elements.addrandombutton = $("#addrandom");
 
             elements.mutebutton.button({
                 icons: { primary: "ui-icon-volume-on" },
@@ -111,7 +111,7 @@
                 icons: { primary: "ui-icon-refresh" },
                 text: false
             });
-            elements.addrandom.button({
+            elements.addrandombutton.button({
                 icons: { primary: "ui-icon-transfer-e-w" },
                 text: false,
                 title: "Add random song to playlist",
@@ -376,6 +376,7 @@
             elements.bigscreenbutton.click(function () {
                 $("#bigscreencontainer").toggle();
             });
+            elements.addrandombutton.click(jplay.searchfn.addRandom);
         },
         toggleplay: function () {
             "use strict";
@@ -766,6 +767,14 @@
                         scrollTop: scrollto
                     }, jplay.settings.items.animationspeed, callback);
                     jplay.ui.elements.searchtext.val("").blur();
+                });
+            });
+        },
+        addRandom: function (data, callback) {
+            'use strict';
+            $.get('/getRandomSongs', { count: 1 }, function (result) {
+                $.each(result, function (key, val) {
+                    jplay.playlist.addFile(val);
                 });
             });
         }

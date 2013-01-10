@@ -20,12 +20,13 @@ TODO:
 	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
 	* BUG: Initing each ui object seems unnecessary
 	* BUG: In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
-	* FEATURE: Button to add random song to playlist
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* UICHANGE: Use jstree theme instead of custom icons
 	* UICHANGE: Do some sort of animation for going to bigscreenmode
+	* BUG: isdir check in downloadSong doesn't work
+	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
 * Server
-	* FEATURE: Implement addRandomSong
+	* BUG: addRandomSong returns a float id instead of the real int id
 	* IMPROVEMENT: Move all DB stuff from jps.js to db_connector.js
 	* BUG: Verify that changing an id3 tag updates the correlating db field
 	* IMPROVEMENT: Use the options object from jplay_main.js in other files

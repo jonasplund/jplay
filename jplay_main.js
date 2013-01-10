@@ -20,7 +20,7 @@
     app.configure(function () {
         app.use(express.static(__dirname + '/public'));
     });
-    app.get('/', function () { console.log("asdf") });
+    app.get('/', function () { });
     app.get('/dirtree', jps.dirtree);
     app.get('/getMusic', jps.getMusic);
     app.get('/getRandomSongs', jps.getRandomSongs);
