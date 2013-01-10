@@ -1,12 +1,19 @@
 {
   "name"          : "jplay",
-  "description"   : "musicplayer",
+  "description"   : "music player",
   "url"           : "http://github.com/cantremember",
   "keywords"      : ["music"],
   "author"        : "Jon Asplund <jon.asplund@gmail.com>",
   "contributors"  : [],
   "licenses"      : ["MIT"],
-  "dependencies"  : [],
+  "dependencies"  : {
+    "async": "*",
+    "express": "*",
+    "id3": "*",
+    "metalminer": "*",
+    "mysql": "*",
+    "socket.io": "*"
+  },
   "lib"           : "lib",
   "version"       : "0.1",
   "engines"       : { "node": ">= 0.4.1" }
