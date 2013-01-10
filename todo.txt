@@ -25,6 +25,7 @@ TODO:
 	* BUG: In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
 	* FEATURE: Button to add random song to playlist
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
+	* UICHANGE: Use jstree theme instead of custom icons
 * Server
 	* FEATURE: Implement addRandomSong
 	* IMPROVEMENT: Move all DB stuff from jps.js to db_connector.js
