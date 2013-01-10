@@ -15,6 +15,7 @@
 	* UICHANGE: Use jstree theme instead of custom icons
 	* UICHANGE: Do some sort of animation for going to bigscreenmode
 	* UICHANGE: Change container background
+	* UICHANGE: Don't go to fullscreen until cover animation is completed
 	* FEATURE: Emit important events and document them
 	* FEATURE: Improve playlist/saved playlists
 		* Select multiple
@@ -30,10 +31,11 @@
 	* BUG: Verify that changing an id3 tag updates the correlating db field
 	* IMPROVEMENT: Use the options object from jplay_main.js in other files
 	* IMPROVEMENT: ? Move all DB stuff from jps.js to db_connector.js ?
+	* IMPROVEMENT: Move the chat code to separate file
 	* FEATURE: Add multiple sources to metalminer
+	* FEATURE: Add command line interface
 * General
 	* IMPROVEMENT: Rename player to something more original
-	* IMPROVEMENT: Structure files better and create GIT repository
 	* FEATURE: ? Video support ?
 	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9
 	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch

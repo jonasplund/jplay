@@ -9,8 +9,8 @@ var url = require('url'),
 var db = exports = module.exports = {};
 
 var options = {
-    //musicDir: "E:\\Musik",
-    musicDir: "C:\\aaa\\music",
+    musicDir: "E:\\Musik",
+    //musicDir: "C:\\aaa\\music",
     baseDirId: 1,
     extensions: [
             { extension: "", contenttype: "" },

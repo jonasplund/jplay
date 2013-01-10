@@ -67,7 +67,7 @@
     });
     //db.investigate();
     //db.build();
-    db.update();
+    //db.update();
     //jps.setBaseDirId();
 
     /*require('fs').watch("C:\\aaa\\music", { persistent: true }, function (event, filename) {
