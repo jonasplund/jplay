@@ -3,10 +3,7 @@ TODO:
 	* FEATURE: ? Play local files ?
 	* BUG: Long pause bug
 	* FEATURE: Emit important events and document them
-	* FEATURE: Implement the bigscreen:
-		* Insert bigscreen.html into hidden iframe/div
-    		* Insert toggle option (same icon as in bigscreen.html?)
-    		* Make use of triggered jplay events
+	* IMPROVEMENT: Fine tune bigscreen mode
 	* WHATTHEHELL: Find some use case for deferred (maybe in showNotification [1034])
 	* IMPROVEMENT: Optimize menus. Probably best to make/use a widget
 	* FEATURE: Improve playlist/saved playlists

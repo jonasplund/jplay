@@ -1,6 +1,8 @@
 ﻿var jplay = {
     ui: {
         elements: {
+            bigscreen: {},
+            smallscreen: {},
             nextbutton: {},
             prevbutton: {},
             playpausebutton: {},
@@ -35,19 +37,22 @@
                     div.show("blind", jplay.settings.items.animationspeed, function () { });
                 }
             });
-            elements.nextbutton = $("#nextbutton").add($("#bigscreen").contents().find("#bs_nextbutton"));
-            elements.prevbutton = $("#prevbutton");
-            elements.playpausebutton = $("#playpausebutton");
-            elements.playinfo = $("#playinfo");
+            elements.bigscreen = $("#bigscreen");
+            elements.smallscreen = $("#maincontainer");
+            elements.nextbutton = $("#nextbutton,#bigscreen #bs_nextbutton");
+            elements.prevbutton = $("#prevbutton,#bigscreen #bs_prevbutton");
+            elements.playpausebutton = $("#playpausebutton,#bigscreen #bs_playpausebutton");
+            elements.playinfo = $("#playinfo,#bigscreen #bs_playinfo");
             elements.searchlinksbutton = $("#searchlinksbutton");
             elements.searchlinksmenu = $("#searchlinksmenu");
             elements.progressmeter = $("#progressmeter");
             elements.volumeslider = $("#volumeslider");
             elements.mutebutton = $("#mutebutton");
             elements.covercontainer = $("#covercontainer");
+            elements.bscover = $("#bs_coverrow");
             elements.time = $("#time");
             elements.lyricsbutton = $("#lyrics_button");
-            elements.bigscreenbutton = $("#bigscreen_button");
+            elements.bigscreenbutton = $("#bigscreen_button").add("#bigscreen #bs_toggle");
             elements.playlistcontainer = $("#playlistcontainer");
             elements.playlist = $("#playlist");
             elements.searchsettings = $("#searchsettings");
@@ -57,7 +62,7 @@
             elements.shufflebutton = $("#shufflebutton");
             elements.repeatbutton = $("#repeatbutton");
             elements.addrandom = $("#addrandom");
-            console.log(elements.nextbutton);
+
             elements.mutebutton.button({
                 icons: { primary: "ui-icon-volume-on" },
                 text: false
@@ -84,7 +89,7 @@
                 label: "Get lyrics",
                 text: false
             });
-            elements.bigscreenbutton.button({
+            elements.bigscreenbutton.filter(elements.smallscreen.find("*")).button({
                 icons: { primary: "ui-icon-arrow-4-diag" },
                 label: "Go to big screen mode (not implemented)",
                 text: false
@@ -369,8 +374,7 @@
                 });
             });
             elements.bigscreenbutton.click(function () {
-                //toggleBigscreen();
-                $("#bigscreen").css("display", "block");
+                $("#bigscreencontainer").toggle();
             });
         },
         toggleplay: function () {
@@ -462,8 +466,8 @@
             jplay.player.activeSong = playlistentry;
             $(".songinplaylist").removeClass("activesong");
             ple.addClass("activesong");
-            $("#playinfo #title").text(data.title);
-            $("#playinfo #artist").text(data.artist);
+            jplay.ui.elements.playinfo.find(".title").text(data.title);
+            jplay.ui.elements.playinfo.find(".artist").text(data.artist);
             document.title = data.artist + " - " + data.title;
             relpos = ple.offset().top - plcontainer.offset().top;
             if (relpos + ple.height() >= plcontainer.height()) {
@@ -479,6 +483,7 @@
             }
             jplay.helpfunctions.showNotification(data);
             jplay.ui.elements.covercontainer.cover({ "src": "/getImage?id=" + data.dirid });
+            jplay.ui.elements.bscover.css("background-image", "url('/getImage?id=" + data.dirid + "')");
             jplay.player.mesource = null;
             jplay.player.createInstance();
             jplay.player.jqobj.prop("src", "/getMusic?id=" + data.id).get(0).play();

@@ -4,6 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>Muzak</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="css/jplay.bigscreen.css" />
     <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.9.1.custom.min.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="/socket.io/socket.io.js" type="text/javascript" defer="defer"></script>
@@ -29,8 +30,8 @@
 			        <div id="nextbutton" class="controlbutton button" title="Next"></div>
 			        <div id="playinfo" class="ui-state-default ui-corner-all">
                         <div id="piinner">
-                            <span id="artist"></span><br />
-                            <span id="title"></span>
+                            <span class="artist"></span><br />
+                            <span class="title"></span>
                         </div>
                         <div id="searchlinksbutton" href="javascript:;"></div>
                     </div>
@@ -134,6 +135,21 @@
         <div id="debug"></div>
         <div id="warning"></div>
 	</div>
-    <iframe src="./bigscreen/bigscreen.html" id="bigscreen" seamless></iframe>
+    <div id="bigscreencontainer">
+        <div id="bigscreen">
+            <div id="bs_headrow">
+                <h1 id="bs_head"><span id="bs_playinfo"><span class="artist">Amon Amarth</span> - <span class="title">01 - Death in Fire</span></span></h1>
+            </div>
+            <div id="bs_coverrow"></div>
+            <div id="bs_bottomrow">
+                <div id="bs_controls">
+                    <div id="bs_prevbutton" class="bs_button"></div>
+                    <div id="bs_playpausebutton" class="bs_button active">&gt;</div>
+                    <div id="bs_nextbutton" class="bs_button"></div>
+                </div>
+            </div>
+            <div id="bs_toggle">u</div>
+        </div>
+    </div>
 </body>
 </html>
