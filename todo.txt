@@ -1,45 +1,40 @@
-TODO:
 * Client/UI
-	* FEATURE: ? Play local files ?
-	* BUG: Long pause bug
-	* FEATURE: Emit important events and document them
-	* IMPROVEMENT: Fine tune bigscreen mode
-	* WHATTHEHELL: Find some use case for deferred (maybe in showNotification [1034])
+	* BUG: In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
+	* BUG: Long pause bug. Possible solution is to reload the source when resuming play
+	* BUG: isdir check in downloadSong doesn't work
+	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
+	* IMPROVEMENT: Initing each ui object seems unnecessary
+	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
+	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
 	* IMPROVEMENT: Optimize menus. Probably best to make/use a widget
+	* IMPROVEMENT: Fine tune bigscreen mode
+		* Add progressbar
+		* Don't make $.buttons
+		* Go fullscreen
+	* UICHANGE: Better JQuery UI Theme
+	* UICHANGE: Use jstree theme instead of custom icons
+	* UICHANGE: Do some sort of animation for going to bigscreenmode
+	* UICHANGE: Change container background
+	* FEATURE: Emit important events and document them
 	* FEATURE: Improve playlist/saved playlists
 		* Select multiple
 		* Context menu (containing what?)
 		* Selectable items
 	* FEATURE: Show album cover in notifications [1051]
-	* UICHANGE: Change container background
-        * FEATURE: ? Progressbar indicating song progress in playlist ?
-	* FEATURE: ? Song duration in playlist ?
-	* IMPROVEMENT: Better JQuery UI Theme
-	* IMPROVEMENT: Change headers to JQuery UI Theme
 	* FEATURE: Advanced linking with checkboxes etc.
-	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
-	* BUG: Initing each ui object seems unnecessary
-	* BUG: In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
-	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
-	* UICHANGE: Use jstree theme instead of custom icons
-	* UICHANGE: Do some sort of animation for going to bigscreenmode
-	* BUG: isdir check in downloadSong doesn't work
-	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
+	* FEATURE: ? Song duration in playlist ?
+	* FEATURE: ? Play local files ?
+	* WHATTHEHELL: Find some use case for deferred (maybe in showNotification [1034])
 * Server
 	* BUG: addRandomSong returns a float id instead of the real int id
-	* IMPROVEMENT: Move all DB stuff from jps.js to db_connector.js
 	* BUG: Verify that changing an id3 tag updates the correlating db field
 	* IMPROVEMENT: Use the options object from jplay_main.js in other files
+	* IMPROVEMENT: ? Move all DB stuff from jps.js to db_connector.js ?
+	* FEATURE: Add multiple sources to metalminer
 * General
-	* FEATURE: Video support
-	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
 	* IMPROVEMENT: Rename player to something more original
 	* IMPROVEMENT: Structure files better and create GIT repository
-	* IMPROVEMENT: Make a real package.json file
+	* FEATURE: ? Video support ?
 	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9
-
-
-
-
-
+	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
 
