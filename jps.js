@@ -94,6 +94,19 @@
         });
     }
 
+    module.exports.getRandomSongs = function (req, res) {
+        var count = isNaN(req.query.counter - 0) || req.query.counter === undefined ? 1 : req.query.counter;
+        console.log(count);
+        var connection = mysql.createConnection(options.dbConnection);
+        var qry = connection.query("SELECT * FROM SONGS AS r1 JOIN (SELECT (RAND() * " +
+            "(SELECT MAX(id) FROM songs)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY " +
+            "r1.id ASC LIMIT " + count + ";", function (err, data) {
+                connection.end();
+                console.log(qry.sql);
+                res.send(data);
+            });
+    }
+
     module.exports.getLyrics = function (req, res) {
         var lyrics = metalminer.getMetalLyrics(req.query, function (err, data) {
             if (!err) {

@@ -1,7 +1,7 @@
 (function () {
     //"use strict";
     var MUSIC_DIR = "E:/Musik",
-        //MUSIC_DIR = "C:\\aaa\\music",
+    //MUSIC_DIR = "C:\\aaa\\music",
 		PORT = 8088,
 		jps = require('./jps.js'),
 		express = require('express'),
@@ -23,11 +23,11 @@
     app.get('/', function () { console.log("asdf") });
     app.get('/dirtree', jps.dirtree);
     app.get('/getMusic', jps.getMusic);
+    app.get('/getRandomSongs', jps.getRandomSongs);
     app.get('/getImage', jps.getImage);
     app.get('/downloadSong', jps.downloadSong);
     app.get('/downloadSongs', jps.downloadSongs);
     app.get('/dbUpdate', jps.dbUpdate);
-    //app.get('/refreshSearchtree', jps.refreshSearchtree);
     app.get('/search', jps.searchFile);
     app.get('/getAncestors', jps.getIdArray);
     app.get('/getSongInfo', jps.getSongInfo);
@@ -69,6 +69,7 @@
     //db.build();
     db.update();
     //jps.setBaseDirId();
+
     /*require('fs').watch("C:\\aaa\\music", { persistent: true }, function (event, filename) {
     console.log(event + ": " + filename);
     });*/
