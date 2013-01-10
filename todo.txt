@@ -23,6 +23,7 @@ TODO:
 	* FEATURE: Button to add random song to playlist
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* UICHANGE: Use jstree theme instead of custom icons
+	* UICHANGE: Do some sort of animation for going to bigscreenmode
 * Server
 	* FEATURE: Implement addRandomSong
 	* IMPROVEMENT: Move all DB stuff from jps.js to db_connector.js
