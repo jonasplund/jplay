@@ -4,6 +4,7 @@
 	* BUG: isdir check in downloadSong doesn't work
 	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
 	* BUG: Popup should have a maxheight and scroll on overflow
+	* BUG: Error when trying to close the cover after fullscreen mode has been exited manually [element null at cover.js:191]
 	* IMPROVEMENT: Initing each ui object seems unnecessary
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
@@ -40,4 +41,5 @@
 	* FEATURE: ? Video support ?
 	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9
 	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
+	* Start using the bug tracking system at GitHub
 
