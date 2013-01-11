@@ -3,6 +3,7 @@
 	* BUG: Long pause bug. Possible solution is to reload the source when resuming play
 	* BUG: isdir check in downloadSong doesn't work
 	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
+	* BUG: Popup should have a maxheight and scroll on overflow
 	* IMPROVEMENT: Initing each ui object seems unnecessary
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
