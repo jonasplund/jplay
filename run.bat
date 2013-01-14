@@ -1,1 +1,1 @@
-node.exe jplay_main.js
+node jplay_main.js

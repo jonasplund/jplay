@@ -3,7 +3,6 @@
     var config = module.exports = {};
 
     config.musicDir = 'E:\\Musik';
-    //config.musicDir = 'E:\\Musik';
     config.baseDir = 1;
     config.musicExtensions = [
         { extension: '', contentType: '' },

@@ -1,12 +1,12 @@
 (function () {
     'use strict';
+
     var PORT = 8088,
 		jps = require('./jps.js'),
 		express = require('express'),
 		app = express(),
-		server = require('http').createServer(app),
-		io = require('socket.io').listen(server, { 'log level': 1 }),
-        db = require('./db_connector.js');
+        db = require('./db_connector.js'),
+		server = require('http').createServer(app);
 
     server.listen(PORT);
 
@@ -27,41 +27,22 @@
     app.get('/addDir', jps.addDir);
     app.get('/getLyrics', jps.getLyrics);
 
-    String.prototype.lpad = function (padString, length) {
-        var str = this;
-        while (str.length < length) {
-            str = padString + str;
-        }
-        return str;
-    };
-    var users = [];
-    io.sockets.on('connection', function (client) {
-        var user = {};
-        user.id = client.id;
-        user.name = null;
-        user.ip = client.handshake.address.address;
-        users.push(user);
-        client.on('msg', function (data) {
-            var msg = {
-                address: client.handshake.address.address,
-                message: data.message,
-                time: data.time
-            };
-            client.broadcast.emit('msg', msg);
-        });
-        client.on('set_nickname', function () {
-            for (var i = 0; i < users.length; i++) {
-                //if (users[i].id === 
-            }
-        });
-        client.on('disconnect', function () {
-            clearInterval(users);
-        });
-    });
-    //db.investigate();
-    //db.build();
-    db.update();
-    //jps.setBaseDirId();
+    var args = process.argv.slice(2);
+    switch (args[0]) {
+        case 'investigate':
+            db.investigate();
+            break;
+        case 'build':
+            db.build();
+            break;
+        case 'update':
+            db.update();
+            break;
+        default:
+            break;
+    }
+
+    require('./chat.js').init(server);
 
     /*require('fs').watch("C:\\aaa\\music", { persistent: true }, function (event, filename) {
     console.log(event + ": " + filename);

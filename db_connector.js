@@ -37,11 +37,11 @@
                 createIndex(connection, callback);
             },
 		    function (callback) {
-                console.log('Index created. Adding dir references...');
+                console.log('Index created. Adding directory references...');
                 addDirRefsToDirs(connection, callback);
 		    },
 		    function (callback) {
-                console.log('Dir refs added. Adding song references...');
+                console.log('Directory referencess added. Adding song references...');
                 addDirRefsToSongs(connection, callback);
 		    }
 	    ], function () {
@@ -79,11 +79,11 @@
                 addDirRefsToDirs(connection, callback);
 		    },
 		    function (callback) {
-                console.log('Dir refs added. Adding song references...');
+                console.log('Directory references added. Adding song references...');
                 addDirRefsToSongs(connection, callback);
 		    }
 	    ], function (err, results) {
-            console.log('References added.');
+            console.log('All references added.');
             console.log('Everything updated!');
             connection.end();
 	    });
