@@ -8,7 +8,7 @@ Install node.js
 Extract jplay to a directory of your choice  
 Uncomment the line db.build(); in jplay_main.js  
 Comment the line db.update(); in jplay_main.js  
-Set the correct path for options.musicDir in db_connector.js  
+Set correct info in config.default.js and rename it to config.js    
 Run "node.exe jplay_main.js"  
 Comment the line db.build() in jplay_main.js  
 Uncomment the line db.update() in jplay_main.js  

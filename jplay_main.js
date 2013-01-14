@@ -1,19 +1,12 @@
 (function () {
     'use strict';
-    var MUSIC_DIR = "E:/Musik",
-        //MUSIC_DIR = "C:\\aaa\\music",
-		PORT = 8088,
+    var PORT = 8088,
 		jps = require('./jps.js'),
 		express = require('express'),
 		app = express(),
 		server = require('http').createServer(app),
-		io = require('socket.io').listen(server, { "log level": 1 }),
+		io = require('socket.io').listen(server, { 'log level': 1 }),
         db = require('./db_connector.js');
-
-    jps.configure({
-        musicDir: MUSIC_DIR,
-        baseDirId: 1
-    });
 
     server.listen(PORT);
 
@@ -74,5 +67,5 @@
     console.log(event + ": " + filename);
     });*/
 
-    console.log("Server listening at http://jooon.mooo.com:8088");
+    console.log('Server listening at port ' + server.address().port);
 } ());

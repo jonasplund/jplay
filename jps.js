@@ -1,76 +1,25 @@
 (function () {
     'use strict';
-    var express = require('express'),
-		url = require('url'),
-		path = require('path'),
+    var path = require('path'),
 		fs = require('fs'),
 		util = require('util'),
 		sys = require('sys'),
-		ID3 = require('id3'),
 		mysql = require('mysql'),
-		crypto = require('crypto'),
-        metalminer = require('metalminer');
+		metalminer = require('metalminer'),
+        options = require('./config.js');
 
-    var options = {
-        musicDir: "E:\\Musik\\Annat",
-        //musicDir: "C:\\aaa\\music",
-        baseDirId: 1,
-        extensions: [
-            { extension: "", contenttype: "" },
-            { extension: ".mp3", contenttype: "audio/mpeg" },
-            { extension: ".ogg", contenttype: "audio/ogg" },
-            { extension: ".oga", contenttype: "audio/ogg" }
-        ],
-        pictureExtensions: [".jpg", ".png", ".gif"],
-        dbConnection: {
-            host: 'localhost',
-            user: 'root',
-            password: 'sjaak',
-            charset: 'utf8',
-            database: 'jplay',
-            multipleStatements: true
-        }
-    };
 
-    module.exports.configure = function (options) {
+    var jps = module.exports = {};
 
-    };
-
-    var getID3size = function (filename) {
-        // var fd, buffer;
-        var fd = fs.openSync(filename, "r");
-        var buffer = new Buffer(4);
-        fs.readSync(fd, buffer, 0, 4, 6);
-        fs.closeSync(fd);
-        return buffer[3] & 0x7f |
-        ((buffer[2] & 0x7f) << 7) |
-        ((buffer[1] & 0x7f) << 14) |
-        ((buffer[0] & 0x7f) << 21);
-    };
-
-    /*var readTag = function (filename) {
-        //var buffer, fd;
-        if (fs.existsSync(filename)) {
-            var size = getID3size(filename);
-            if (size < 227) { size = 227; }
-            if (size < 1) { return false; }
-            var buffer = new Buffer(size, "utf8");
-            var fd = fs.openSync(filename, "r");
-            fs.readSync(fd, buffer, 0, size, 0);
-            fs.close(fd);
-            return buffer;
-        } else { return false; }
-    };*/
-
-    module.exports.downloadSong = function (req, res) {
+    jps.downloadSong = function (req, res) {
         var id = req.query.id;
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query("SELECT * FROM songs WHERE id = ?", id, function (err, data) {
+        connection.query('SELECT * FROM songs WHERE id = ?', id, function (err, data) {
             if (err) { throw err; }
             connection.end();
             if (data.length < 1) {
-                sys.error("Error serving file.");
-                res.writeHead(500, "Invalid song.");
+                sys.error('Error serving file.');
+                res.writeHead(500, 'Invalid song.');
                 res.end();
                 return;
             }
@@ -78,7 +27,7 @@
             var filename = data[0].filename;
             var fullpath = path.join(data[0].dir, filename);
             if (req.headers.range === undefined) {
-                req.headers.range = "-";
+                req.headers.range = '-';
             }
             var parts = req.headers.range.replace(/bytes=/, "").split("-");
             var start = parts[0] ? parseInt(parts[0], 10) : 0;
@@ -87,46 +36,46 @@
                 'Content-Disposition': 'attachment; filename=' + filename,
                 'Content-Type': 'audio/mpeg',
                 'Content-length': (end - start) + 1,
-                "Connection": "keep-alive",
-                "Accept-Ranges": "bytes",
-                "Content-Range": "bytes " + start + "-" + end + "/" + (filesize - 1)
+                'Connection': 'keep-alive',
+                'Accept-Ranges': 'bytes',
+                'Content-Range': 'bytes ' + start + '-' + end + '/' + (filesize - 1)
             });
             var readStream = fs.createReadStream(fullpath, { start: start, end: end });
-            util.pump(readStream, res, function (err) { });
+            util.pump(readStream, res, function () { });
         });
     };
 
-    module.exports.getRandomSongs = function (req, res) {
+    jps.getRandomSongs = function (req, res) {
         var count = isNaN(req.query.counter - 0) || req.query.counter === undefined ? 1 : req.query.counter;
         console.log(count);
         var connection = mysql.createConnection(options.dbConnection);
-        var qry = connection.query("SELECT * FROM SONGS AS r1 JOIN (SELECT (RAND() * " +
-            "(SELECT MAX(id) FROM songs)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY " +
-            "r1.id ASC LIMIT " + count + ";", function (err, data) {
+        var qry = connection.query('SELECT * FROM SONGS AS r1 JOIN (SELECT (RAND() * ' +
+            '(SELECT MAX(id) FROM songs)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY ' +
+            'r1.id ASC LIMIT ' + count + ';', function (err, data) {
                 connection.end();
                 console.log(qry.sql);
                 res.send(data);
             });
     };
 
-    module.exports.getLyrics = function (req, res) {
+    jps.getLyrics = function (req, res) {
         metalminer.getMetalLyrics(req.query, function (err, data) {
             if (!err) {
                 res.send(data);
             } else {
-                res.send("Lyrics not found: " + err);
+                res.send('Lyrics not found: ' + err);
             }
         });
     };
 
-    module.exports.getImage = function (req, res, next) {
+    jps.getImage = function (req, res) {
         var id = req.query.id;
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query("SELECT cover, dirname FROM dirs WHERE id = ?", id, function (err, data) {
+        connection.query('SELECT cover, dirname FROM dirs WHERE id = ?', id, function (err, data) {
             if (err) { throw err; }
             connection.end();
             if (data.length < 1 || !data[0].cover) {
-                res.sendfile("./public/img/blank.png");
+                res.sendfile('./public/img/blank.png');
                 return;
             }
             var fullpath = path.join(data[0].dirname, data[0].cover);
@@ -134,13 +83,13 @@
             if (fs.existsSync(fullpath)) {
                 res.sendfile(path.normalize(fullpath));
             } else {
-                res.sendfile("./public/img/blank.png");
+                res.sendfile('./public/img/blank.png');
             }
         });
     };
 
-    module.exports.getMusic = function (req, res) {
-        var qry = "SELECT dir, filename, filesize from songs WHERE id = ?";
+    jps.getMusic = function (req, res) {
+        var qry = 'SELECT dir, filename, filesize from songs WHERE id = ?';
         var connection = mysql.createConnection(options.dbConnection);
         connection.query(qry, req.query.id, function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
@@ -149,8 +98,8 @@
             if (data.length < 1) { return; }
             fullpath = path.join(data[0].dir, data[0].filename);
             if (!fs.existsSync(fullpath)) {
-                sys.error("Error serving " + fullpath);
-                res.writeHead(500, "Could not find requested file.");
+                sys.error('Error serving ' + fullpath);
+                res.writeHead(500, 'Could not find requested file.');
                 res.end();
                 return;
             }
@@ -170,20 +119,20 @@
             res.writeHead(206, {
                 'Content-Type': contentType,
                 'Content-length': (end - start) + 1,
-                "Connection": "keep-alive",
-                "Accept-Ranges": "bytes",
-                "Content-Range": "bytes " + start + "-" + end + "/" + filesize
+                'Connection': 'keep-alive',
+                'Accept-Ranges': 'bytes',
+                'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize
             });
             readStream = fs.createReadStream(fullpath, { start: start, end: end });
-            util.pump(readStream, res, function (err) { });
+            util.pump(readStream, res, function () { });
         });
     };
 
-    module.exports.dirtree = function (req, res) {
+    jps.dirtree = function (req, res) {
         getFiles_db(req.query.path, function (err, results) {
             if (err) {
-                sys.error("> Error in dirtree serving " + req + " - " + err.message);
-                res.writeHead(500, "Wrong URL");
+                sys.error('> Error in dirtree serving ' + req + ' - ' + err.message);
+                res.writeHead(500, 'Wrong URL');
                 res.end();
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/json' });
@@ -193,13 +142,13 @@
         });
     };
 
-    module.exports.searchFile = function (req, res) {
+    jps.searchFile = function (req, res) {
         var needle = req.query.needle;
         var searchsettings = req.query.options;
         if (!searchsettings ||
-			(searchsettings.artist !== "true" &&
-			searchsettings.title !== "true" &&
-			searchsettings.album !== "true")) {
+			(searchsettings.artist !== 'true' &&
+			searchsettings.title !== 'true' &&
+			searchsettings.album !== 'true')) {
             res.send({});
             return;
         }
@@ -231,7 +180,7 @@
         });
     };
 
-    module.exports.getIdArray = function (req, res) {
+    jps.getIdArray = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         if (req.query.isdir === true) {
@@ -253,7 +202,7 @@
         }
     };
 
-    module.exports.getSongInfo = function (req, res) {
+    jps.getSongInfo = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query("SELECT * FROM songs WHERE id = ?", req.query.id, function (err, data) {
@@ -263,7 +212,7 @@
         });
     };
 
-    module.exports.addDir = function (req, res) {
+    jps.addDir = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query("SELECT * FROM songs WHERE dirid = ?", req.query.id, function (err, data) {
@@ -276,7 +225,7 @@
         });
     };
 
-    module.exports.setBaseDirId = function () {
+    jps.setBaseDirId = function () {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         var qry = "SELECT id FROM dirs WHERE dirname = ?";
