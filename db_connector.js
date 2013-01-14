@@ -267,10 +267,11 @@ var updateMusic = function (fullpath, stat, connection, callback) {
                 };
                 if (tagsEqual(result, updateObj) === true) {
                     updateObj = false;
+                } else {
+                    console.log("Tag updated: " + fullpath);                
                 }
             }
             if (updateObj !== false) {
-                console.log("Tag updated: " + fullpath);
                 var qry = "UPDATE songs SET ? WHERE hash = " + connection.escape(hash) + ";";
                 connection.query(qry, updateObj, function (err) {
                     if (err) { throw err; }

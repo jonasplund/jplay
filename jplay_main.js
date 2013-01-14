@@ -1,7 +1,7 @@
 (function () {
-    //"use strict";
+    'use strict';
     var MUSIC_DIR = "E:/Musik",
-    //MUSIC_DIR = "C:\\aaa\\music",
+        //MUSIC_DIR = "C:\\aaa\\music",
 		PORT = 8088,
 		jps = require('./jps.js'),
 		express = require('express'),
