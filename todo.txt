@@ -18,6 +18,7 @@
 	* UICHANGE: Do some sort of animation for going to bigscreenmode
 	* UICHANGE: Change container background
 	* UICHANGE: Don't go to fullscreen until cover animation is completed
+	* UICHANGE: Use 10% of cover as lyrics background
 	* FEATURE: Emit important events and document them
 	* FEATURE: Improve playlist/saved playlists
 		* Select multiple

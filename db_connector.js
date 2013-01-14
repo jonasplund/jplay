@@ -214,7 +214,7 @@ var insertNew = function (dir, connection, callback) {
                     insertCover(fullpath, connection, next);
                 } else if (_isMusic(fullpath)) {
 					updateMusic(fullpath, stat, connection, function (hash) {
-						var percentDone = Math.floor((lastDone / songCount) * 100);
+						var percentDone = Math.floor((lastDone / (songCount | 1)) * 100);
 						if (percentDone % 1 === 0 && lastPrint != percentDone) {
 							console.log(percentDone + " %");
 							lastPrint = percentDone;
