@@ -20,35 +20,35 @@
         connection.connect();
         console.log('Buiding database...');
         async.series([
-		    function (callback) {
+            function (callback) {
                 console.log('Destroying tables...');
                 tables.dropAll(connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Tables destroyed. Creating tables...');
                 tables.createAll(connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Tables created. Populating...');
                 populate(undefined, connection, callback);
-		    },
+            },
             function (callback) {
                 console.log('Population done. Creating index...');
                 createIndex(connection, callback);
             },
-		    function (callback) {
+            function (callback) {
                 console.log('Index created. Adding directory references...');
                 addDirRefsToDirs(connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Directory referencess added. Adding song references...');
                 addDirRefsToSongs(connection, callback);
-		    }
-	    ], function () {
+            }
+        ], function () {
             console.log('All references added.');
             console.log('Database complete!');
             connection.end();
-	    });
+        });
     };
 
     var songCount = 0;
@@ -58,35 +58,35 @@
         connection.connect();
         console.log('Updating database...');
         async.series([
-		    function (callback) {
+            function (callback) {
                 getSongCount(connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Current song count: ' + songCount);
                 console.log('Inserting new entries...');
                 insertNew(options.musicDir, connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Removing unused dirs...');
                 removeUnusedDirs(options.musicDir, connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Unused dirs removed. Removing unused songs...');
                 removeUnusedSongs(options.musicDir, connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('New entries inserted. Adding dir references...');
                 addDirRefsToDirs(connection, callback);
-		    },
-		    function (callback) {
+            },
+            function (callback) {
                 console.log('Directory references added. Adding song references...');
                 addDirRefsToSongs(connection, callback);
-		    }
-	    ], function (err, results) {
+            }
+        ], function (err, results) {
             console.log('All references added.');
             console.log('Everything updated!');
             connection.end();
-	    });
+        });
     };
 
     var getSongCount = function (connection, callback) {
@@ -196,9 +196,9 @@
         var id3 = new ID3(readTag(fullpath));
         id3.parse();
         var title = id3.get('title'),
-		artist = id3.get('artist'),
-		year = id3.get('year'),
-		album = id3.get('album');
+        artist = id3.get('artist'),
+        year = id3.get('year'),
+        album = id3.get('album');
         var qry = 'SELECT * FROM songs WHERE hash = ?';
         connection.query(qry, hash, function (err, results) {
             if (err) { throw err; }
@@ -347,9 +347,9 @@
         var id3 = new ID3(readTag(file));
         id3.parse();
         var title = id3.get('title'),
-		artist = id3.get('artist'),
-		year = id3.get('year'),
-		album = id3.get('album');
+        artist = id3.get('artist'),
+        year = id3.get('year'),
+        album = id3.get('album');
         var hash = getHash(file);
         if (hash === false) {
             callback();
@@ -385,8 +385,8 @@
     // Vid problem: Klaga på Simon
     var addDirRefsToSongs = function (connection, callback) {
         var qry = 'UPDATE songs us INNER JOIN (SELECT d.id did, s.id sid FROM ' +
-			'dirs d, songs s WHERE s.dir = d.dirname) x ON x.sid = us.id SET ' +
-			'us.dirid = x.did';
+            'dirs d, songs s WHERE s.dir = d.dirname) x ON x.sid = us.id SET ' +
+            'us.dirid = x.did';
         connection.query(qry, function (err) {
             if (err) { throw err; }
             callback();

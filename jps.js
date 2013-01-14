@@ -110,9 +110,9 @@
             parts = req.headers.range.replace(/bytes=/, "").split("-");
             start = parts[0] ? parseInt(parts[0], 10) : 0;
             end = parts[1] ? parseInt(parts[1], 10) : (data[0].filesize ? data[0].filesize - 1 : 0);
-            for (i = 0; i < options.extensions.length; i++) {
-                if (path.extname(fullpath) === options.extensions[i].extension) {
-                    contentType = options.extensions[i].contenttype;
+            for (i = 0; i < options.musicExtensions.length; i++) {
+                if (path.extname(fullpath) === options.musicExtensions[i].extension) {
+                    contentType = options.musicExtensions[i].contenttype;
                     break;
                 }
             }
@@ -251,7 +251,7 @@
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query(qry, function (err, data) {
-            if (err) { throw err; }
+			if (err) { throw err; }
             connection.end();
             var returnObj = [];
             for (var i = 0; i < data.length; i++) {

@@ -3,8 +3,9 @@
 	* BUG: Long pause bug. Possible solution is to reload the source when resuming play
 	* BUG: isdir check in downloadSong doesn't work
 	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
-	* BUG: Popup should have a maxheight and scroll on overflow
+	* BUG: Lyrics popup should have a maxheight and scroll on overflow
 	* BUG: Error when trying to close the cover after fullscreen mode has been exited manually [element null at cover.js:191]
+	* BUG: Visualization broke again (change in WebAudioAPI implementation?)
 	* IMPROVEMENT: Initing each ui object seems unnecessary
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
@@ -25,17 +26,16 @@
 		* Context menu (containing what?)
 		* Selectable items
 	* FEATURE: Show album cover in notifications [1051]
+	* FEATURE: Control UI with Web Speech API
 	* FEATURE: Advanced linking with checkboxes etc.
 	* FEATURE: ? Song duration in playlist ?
 	* FEATURE: ? Play local files ?
 	* WHATTHEHELL: Find some use case for deferred (maybe in showNotification [1034])
 * Server
 	* BUG: addRandomSong returns a float id instead of the real int id
-	* BUG: Verify that changing an id3 tag updates the correlating db field
+	* BUG: Verify that changing an id3 tag AND moving it updates the correlating db field
 	* IMPROVEMENT: ? Move all DB stuff from jps.js to db_connector.js ?
-	* IMPROVEMENT: Move the chat code to separate file
 	* FEATURE: Add multiple sources to metalminer
-	* FEATURE: Add command line interface
 * General
 	* IMPROVEMENT: Rename player to something more original
 	* FEATURE: ? Video support ?

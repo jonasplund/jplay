@@ -20,7 +20,7 @@
             this.fft = this.element;
             this.fftctx = this.fft.get(0).getContext("2d");
             this.source = o.source;
-            this.volumeNode = this.ctx.createGainNode();
+            this.volumeNode = this.ctx.createGain();
             this.volumeNode.gain.value = o.volume;
             this.source.connect(this.analyser);
             this.source.connect(this.volumeNode);
