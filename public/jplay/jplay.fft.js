@@ -1,43 +1,44 @@
 // FIXME: Convert to jQuery UI 1.9 (Fix destroy/create according to http://wiki.jqueryui.com/w/page/12138135/Widget%20factory)
 (function ($) {
-    $.widget("jplay.fft", {
-        version: "0.1",
+    'use strict';
+    $.widget('jplay.fft', {
+        version: '0.1',
         options: {
             disabled: false,
             player: undefined,
             audioContext: undefined,
             volume: 1,
             source: undefined,
-            colors: ["#A00", "#AA0", "#0A0"]
+            colors: ['#A00', '#AA0', '#0A0']
         },
         _create: function () {
             var o = this.options;
             if (!o.player || !o.audioContext || !o.source) {
-                throw "Options player, source and/or audioContext not supplied";
+                throw 'Options player, source and/or audioContext not supplied';
             }
             this.ctx = o.audioContext;
             this.analyser = this.ctx.createAnalyser();
             this.fft = this.element;
-            this.fftctx = this.fft.get(0).getContext("2d");
+            this.fftctx = this.fft.get(0).getContext('2d');
             this.source = o.source;
             this.volumeNode = this.ctx.createGain();
             this.volumeNode.gain.value = o.volume;
             this.source.connect(this.analyser);
             this.source.connect(this.volumeNode);
             this.volumeNode.connect(this.ctx.destination);
-			//this.fft.click(this.fullscreen);
+            //this.fft.click(this.fullscreen);
             // FIXME: Change setInterval to requestAnimationFrame
             this.ticks = window.setInterval($.proxy(this._tick, this), 50);
         },
         _setOption: function (key, val) {
-            if (key === "volume") {
+            if (key === 'volume') {
                 this.volumeNode.gain.value = val;
             }
             $.Widget.prototype._setOption.apply(this, arguments);
         },
         destroy: function () {
             this.analyser.disconnect();
-			//this.volumeNode.gain.value = this.op;
+            //this.volumeNode.gain.value = this.op;
             this.volumeNode.disconnect();
             this.source.connect(this.ctx.destination);
             window.clearInterval(this.ticks);
@@ -67,9 +68,9 @@
                     sum += freqData[(i * bin_size) + j];
                 }
                 var avg = sum / bin_size;
-				var bar_width = this.fft.width() / num_bars;
+                var bar_width = this.fft.width() / num_bars;
                 var scaled_average = (avg / 256) * this.fft.height();
-				this.fftctx.fillRect(i * bar_width, this.fft.height(), bar_width - 1, -scaled_average);
+                this.fftctx.fillRect(i * bar_width, this.fft.height(), bar_width - 1, -scaled_average);
             }
         },
         _createGradient: function (fftctx) {

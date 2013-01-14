@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     'use strict';
     var path = require('path'),
         fs = require('fs'),
@@ -12,7 +12,9 @@
 
     db.investigate = function () {
         // Find duplicate hashes:
-        // SELECT id, dir, filename, songs.hash FROM songs INNER JOIN (SELECT hash, count(id) as cnt FROM songs GROUP BY hash HAVING cnt > 1) dup ON songs.hash = dup.hash;
+        /*var qry = 'SELECT id, dir, filename, songs.hash FROM songs ' + 
+            'INNER JOIN (SELECT hash, count(id) as cnt FROM songs GROUP BY hash HAVING cnt > 1) ' + 
+            'dup ON songs.hash = dup.hash';*/
     };
 
     db.build = function () {
@@ -82,7 +84,8 @@
                 console.log('Directory references added. Adding song references...');
                 addDirRefsToSongs(connection, callback);
             }
-        ], function (err, results) {
+        ], function (err) {
+            if (err) { throw err; }
             console.log('All references added.');
             console.log('Everything updated!');
             connection.end();
@@ -101,13 +104,14 @@
         var qry = 'SELECT dirname FROM dirs';
         connection.query(qry, function (err, res) {
             if (err) { throw err; }
+            var dbCallback = function (err) {
+                if (err) { throw err; }
+            };
             for (var i = 0, endi = res.length; i < endi; i++) {
                 var dirname = res[i].dirname;
                 if (!fs.existsSync(dirname)) {
                     console.log('Deleting dir: ' + dirname);
-                    connection.query('DELETE FROM dirs WHERE dirname = ?', dirname, function (err) {
-                        if (err) { throw err; }
-                    });
+                    connection.query('DELETE FROM dirs WHERE dirname = ?', dirname, dbCallback);
                 }
             }
             if ((typeof callback) === 'function') { callback(); }
@@ -118,6 +122,9 @@
         var qry = 'SELECT id, dir, filename FROM songs';
         connection.query(qry, function (err, res) {
             if (err) { throw err; }
+            var dbCallback = function (err) {
+                if (err) { throw err; }
+            };
             for (var i = 0, endi = res.length; i < endi; i++) {
                 var dir = res[i].dir;
                 var filename = res[i].filename;
@@ -125,9 +132,7 @@
                 var fullpath = path.join(dir, filename);
                 if (!fs.existsSync(fullpath)) {
                     console.log('Removing song: ' + dir + ' ' + filename);
-                    connection.query('DELETE from songs WHERE id = ?', id, function (err) {
-                        if (err) { throw err; }
-                    });
+                    connection.query('DELETE from songs WHERE id = ?', id, dbCallback);
                 }
             }
             if ((typeof callback) === 'function') { callback(); }
@@ -175,7 +180,7 @@
                         insertCover(fullpath, connection, next);
                     } else if (_isMusic(fullpath)) {
                         updateMusic(fullpath, stat, connection, function () {
-                            var percentDone = Math.floor((lastDone / (songCount | 1)) * 100);
+                            var percentDone = Math.floor((lastDone / (songCount || 1)) * 100);
                             if (percentDone % 1 === 0 && lastPrint !== percentDone) {
                                 console.log(percentDone + ' %');
                                 lastPrint = percentDone;
@@ -193,12 +198,16 @@
 
     var updateMusic = function (fullpath, stat, connection, callback) {
         var hash = getHash(fullpath);
+        if (!hash) {
+            callback(false);
+            return;
+        }
         var id3 = new ID3(readTag(fullpath));
         id3.parse();
         var title = id3.get('title'),
-        artist = id3.get('artist'),
-        year = id3.get('year'),
-        album = id3.get('album');
+            artist = id3.get('artist'),
+            year = id3.get('year'),
+            album = id3.get('album');
         var qry = 'SELECT * FROM songs WHERE hash = ?';
         connection.query(qry, hash, function (err, results) {
             if (err) { throw err; }
@@ -256,7 +265,7 @@
         tag1.artist === tag2.artist &&
         tag1.year === tag2.year.toString() &&
         tag1.album === tag2.album;
-    }
+    };
 
     var depth = 0;
     var populate = function (dir, connection, callback) {
@@ -319,10 +328,11 @@
             if (err) { throw err; }
             if (data.length === 0) {
                 console.log(query.sql);
+                return;
             }
             var id = data[0].id;
-            var query2 = connection.query('UPDATE dirs SET cover = ' + connection.escape(filename) + ' WHERE id = ' + id, function (err, result) {
-                if (err) { console.log(query2.sql); throw err; }
+            connection.query('UPDATE dirs SET cover = ' + connection.escape(filename) + ' WHERE id = ' + id, function (err) {
+                if (err) { throw err; }
                 if ((typeof callback) === 'function') { callback(); }
             });
         });
@@ -397,25 +407,26 @@
             if (err) { throw err; }
             var ids = [];
             var k = 0;
-            for (var i = 0; i < data.length; i++) {
-                ids.push(data[i].id);
-                getAncestors(data[i], connection, function (idarr, data) {
-                    var parent = data.dirname.split(path.sep);
-                    parent = parent.splice(0, parent.length - 1).join(path.sep);
-                    connection.query('SELECT id FROM dirs WHERE dirname = ?', parent, function (err, data2) {
-                        var dataidlocal = ids[k++];
+            var dbCallback = function (idarr, data) {
+                var parent = data.dirname.split(path.sep);
+                parent = parent.splice(0, parent.length - 1).join(path.sep);
+                connection.query('SELECT id FROM dirs WHERE dirname = ?', parent, function (err, data2) {
+                    var dataidlocal = ids[k++];
+                    if (err) { throw err; }
+                    if (data2.length !== 1) { return; }
+                    var qry = "UPDATE dirs SET parent_id = " + data2[0].id + ", ancestors = '" + idarr.join(",") + "' WHERE id = " + dataidlocal + ";";
+                    connection.query(qry, function (err) {
                         if (err) { throw err; }
-                        if (data2.length !== 1) { return; }
-                        var qry = "UPDATE dirs SET parent_id = " + data2[0].id + ", ancestors = '" + idarr.join(",") + "' WHERE id = " + dataidlocal + ";";
-                        connection.query(qry, function (err) {
-                            if (err) { throw err; }
-                            if (k >= ids.length - 1 && callback) {
-                                if ((typeof callback) === "function") { callback(); }
-                                callback = null;
-                            }
-                        });
+                        if (k >= ids.length - 1 && callback) {
+                            if ((typeof callback) === "function") { callback(); }
+                            callback = null;
+                        }
                     });
                 });
+            };
+            for (var i = 0; i < data.length; i++) {
+                ids.push(data[i].id);
+                getAncestors(data[i], connection, dbCallback);
             }
         });
     };
@@ -436,18 +447,19 @@
         }
         var j = 0;
         var idarr = [];
+        var dbCallback = function (err, data) {
+            if (err) { throw err; }
+            j++;
+            if (data[0] && data[0].id) {
+                idarr.push(data[0].id);
+            }
+            if (j === retarr.length) {
+                callback(idarr.sort(), dat);
+            }
+        };
         for (i = 0; i < retarr.length; i++) {
             var qry = "SELECT id FROM dirs WHERE dirname = ?";
-            connection.query(qry, retarr[i], function (err, data) {
-                if (err) { throw err; }
-                j++;
-                if (data[0] && data[0].id) {
-                    idarr.push(data[0].id);
-                }
-                if (j === retarr.length) {
-                    callback(idarr.sort(), dat);
-                }
-            });
+            connection.query(qry, retarr[i], dbCallback);
         }
     };
 

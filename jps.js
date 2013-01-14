@@ -1,11 +1,11 @@
 (function () {
     'use strict';
     var path = require('path'),
-		fs = require('fs'),
-		util = require('util'),
-		sys = require('sys'),
-		mysql = require('mysql'),
-		metalminer = require('metalminer'),
+        fs = require('fs'),
+        util = require('util'),
+        sys = require('sys'),
+        mysql = require('mysql'),
+        metalminer = require('metalminer'),
         options = require('./config.js');
 
 
@@ -146,9 +146,9 @@
         var needle = req.query.needle;
         var searchsettings = req.query.options;
         if (!searchsettings ||
-			(searchsettings.artist !== 'true' &&
-			searchsettings.title !== 'true' &&
-			searchsettings.album !== 'true')) {
+            (searchsettings.artist !== 'true' &&
+            searchsettings.title !== 'true' &&
+            searchsettings.album !== 'true')) {
             res.send({});
             return;
         }
@@ -251,7 +251,7 @@
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query(qry, function (err, data) {
-			if (err) { throw err; }
+            if (err) { throw err; }
             connection.end();
             var returnObj = [];
             for (var i = 0; i < data.length; i++) {
