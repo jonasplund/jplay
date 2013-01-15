@@ -12,9 +12,15 @@
 
     db.investigate = function () {
         // Find duplicate hashes:
-        /*var qry = 'SELECT id, dir, filename, songs.hash FROM songs ' + 
+        var qry = 'SELECT id, dir, filename, songs.hash FROM songs ' + 
             'INNER JOIN (SELECT hash, count(id) as cnt FROM songs GROUP BY hash HAVING cnt > 1) ' + 
-            'dup ON songs.hash = dup.hash';*/
+            'dup ON songs.hash = dup.hash';
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query(qry, function (err, results) {
+            connection.end();
+            console.log('List of duplicate hashes');
+            console.log(results);
+        });
     };
 
     db.build = function () {
@@ -54,7 +60,6 @@
     };
 
     var songCount = 0;
-
     db.update = function () {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
@@ -392,7 +397,7 @@
         });
     };
 
-    // Vid problem: Klaga på Simon
+    // Vid problem: Klaga pÃ¥ Simon
     var addDirRefsToSongs = function (connection, callback) {
         var qry = 'UPDATE songs us INNER JOIN (SELECT d.id did, s.id sid FROM ' +
             'dirs d, songs s WHERE s.dir = d.dirname) x ON x.sid = us.id SET ' +
