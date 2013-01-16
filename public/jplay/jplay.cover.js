@@ -10,7 +10,7 @@
             rotation: 25,           // Rotation during expansion in degrees
             easing: 'swing',        // jQuery easing function
             distanceMultiplier: 1,  // Perspective multiplier in expansion animation
-            fullscreen: true       // Fullscreen during expanded cover
+            fullscreen: true        // Fullscreen during expanded cover
         },
         expanded: false,
         _create: function () {
@@ -20,7 +20,7 @@
             this.img = $('<img></img>').appendTo(this.container).prop('src', this.options.src).css('display', 'none');
             this.img.load(function () {
                 that.img.css({ display: 'block', height: '100%' });
-            }).error(function () {
+            }).on('error', function () {
                 that.img.css('display', 'none');
             }).click(function (e) { that._toggleExpanded(e); });
         },

@@ -8,7 +8,6 @@
         metalminer = require('metalminer'),
         options = require('./config.js');
 
-
     var jps = module.exports = {};
 
     jps.downloadSong = function (req, res) {
@@ -69,7 +68,7 @@
     };
 
     jps.getImage = function (req, res) {
-        var id = req.query.id;
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.query('SELECT cover, dirname FROM dirs WHERE id = ?', id, function (err, data) {
             if (err) { throw err; }
@@ -89,9 +88,10 @@
     };
 
     jps.getMusic = function (req, res) {
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var qry = 'SELECT dir, filename, filesize from songs WHERE id = ?';
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query(qry, req.query.id, function (err, data) {
+        connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
             if (err) { throw err; }
             connection.end();
@@ -181,16 +181,17 @@
     };
 
     jps.getIdArray = function (req, res) {
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         if (req.query.isdir === true) {
-            connection.query("SELECT ancestors FROM dirs WHERE id = ?", req.query.id, function (err, data) {
+            connection.query("SELECT ancestors FROM dirs WHERE id = ?", [id], function (err, data) {
                 if (err) { throw err; }
                 connection.end();
                 res.send(data[0].ancestors);
             });
         } else {
-            connection.query("SELECT dirid FROM songs WHERE id = ?", req.query.id, function (err, dirid) {
+            connection.query("SELECT dirid FROM songs WHERE id = ?", [id], function (err, dirid) {
                 if (err) { throw err; }
                 connection.query("SELECT ancestors FROM dirs WHERE id = ?", dirid[0].dirid, function (err, data) {
                     if (err) { throw err; }
@@ -203,9 +204,10 @@
     };
 
     jps.getSongInfo = function (req, res) {
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query("SELECT * FROM songs WHERE id = ?", req.query.id, function (err, data) {
+        connection.query("SELECT * FROM songs WHERE id = ?", [id], function (err, data) {
             if (err) { throw err; }
             connection.end();
             res.send(data);
@@ -213,11 +215,12 @@
     };
 
     jps.addDir = function (req, res) {
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query("SELECT * FROM songs WHERE dirid = ?", req.query.id, function (err, data) {
+        connection.query("SELECT * FROM songs WHERE dirid = ?", [id], function (err, data) {
             if (err) { throw err; }
-            connection.query("SELECT * FROM dirs WHERE parent_id = ?", req.query.id, function (err, data2) {
+            connection.query("SELECT * FROM dirs WHERE parent_id = ?", [id], function (err, data2) {
                 if (err) { throw err; }
                 connection.end();
                 res.send(data.concat(data2));
@@ -246,11 +249,11 @@
     };
 
     var getSongs = function (dir, callback) {
-        dir = dir ? dir : options.baseDirId;
-        var qry = "SELECT * FROM songs WHERE songs.dirid = " + dir + " ORDER BY filename;";
+        dir = isNumeric(dir) ? dir : options.baseDirId;
+        var qry = "SELECT * FROM songs WHERE songs.dirid = ? ORDER BY filename;";
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query(qry, function (err, data) {
+        connection.query(qry, [dir], function (err, data) {
             if (err) { throw err; }
             connection.end();
             var returnObj = [];
@@ -273,11 +276,11 @@
     };
 
     var getDirs = function (dir, callback) {
-        dir = dir ? dir : options.baseDirId;
+        dir = isNumeric(dir) ? dir : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        var qry = "SELECT * FROM dirs WHERE dirs.parent_id = " + dir + " ORDER BY dirname;";
-        connection.query(qry, function (err, data) {
+        var qry = "SELECT * FROM dirs WHERE dirs.parent_id = ? ORDER BY dirname;";
+        connection.query(qry, [dir], function (err, data) {
             if (err) { throw err; }
             connection.end();
             var returnObj = [];
@@ -299,4 +302,8 @@
             callback(returnObj);
         });
     };
+
+    var isNumeric = function(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
 })();
