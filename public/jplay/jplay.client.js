@@ -636,26 +636,26 @@
             if (!json.title) {
                 json.title = json.filename;
             }
-            html = "<span class='playlist_artist'>" + json.artist + "</span> " +
-				"<span class='playlist_album'>- " + json.album + "</span> " +
-				"<span class='playlist_title'>- " + json.title + "</span> " +
-				"<span class='playlist_year'>- " + json.year + "</span>";
-            title = "";
+            html = '<span class="playlist_artist">' + json.artist + '</span> ' +
+				'<span class="playlist_album">- ' + json.album + '</span> ' +
+				'<span class="playlist_title">- ' + json.title + '</span> ' +
+				'<span class="playlist_year">- ' + json.year + '</span>';
+            title = '';
             if (json.artist) {
-                title += "Artist:\t" + json.artist;
+                title += 'Artist:\t' + json.artist;
             }
             if (json.title) {
-                title += "\nSong:\t" + json.title;
+                title += '\nSong:\t' + json.title;
             }
             if (json.album) {
-                title += "\nAlbum:\t" + json.album;
+                title += '\nAlbum:\t' + json.album;
             }
             if (json.year) {
-                title += "\nYear:\t" + json.year;
+                title += '\nYear:\t' + json.year;
             }
-            node = $("<li/>").addClass('songinplaylist').html(html).attr("title", title).
-				data("attribs", json).data("playlistorder", $("#songinplaylist"));
-            if (position && (position.is("ul") || position.is("li"))) {
+            node = $('<li/>').addClass('songinplaylist').html(html).attr('title', title).
+				data('attribs', json).data('playlistorder', $('#songinplaylist'));
+            if (position && (position.is('ul') || position.is('li'))) {
                 if (before) {
                     node.insertBefore($(position));
                     retval = $(position);
@@ -668,43 +668,43 @@
             return retval;
         },
         togglerepeat: function () {
-            "use strict";
+            'use strict';
             if (jplay.settings.items.repeatall) {
                 jplay.settings.items.repeatall = false;
                 jplay.settings.update();
-                jplay.ui.elements.repeatbutton.removeClass("ui-state-highlight");
+                jplay.ui.elements.repeatbutton.removeClass('ui-state-highlight');
             } else {
                 jplay.settings.items.repeatall = true;
                 jplay.settings.update();
-                jplay.ui.elements.repeatbutton.addClass("ui-state-highlight");
+                jplay.ui.elements.repeatbutton.addClass('ui-state-highlight');
             }
         },
         toggleshuffle: function () {
-            "use strict";
+            'use strict';
             if (jplay.settings.items.shuffle) {
                 jplay.settings.items.shuffle = false;
                 jplay.settings.update();
-                jplay.ui.elements.shufflebutton.removeClass("ui-state-highlight");
+                jplay.ui.elements.shufflebutton.removeClass('ui-state-highlight');
             } else {
                 jplay.settings.items.shuffle = true;
                 jplay.settings.update();
-                jplay.ui.elements.shufflebutton.addClass("ui-state-highlight");
+                jplay.ui.elements.shufflebutton.addClass('ui-state-highlight');
             }
         }
     },
     searchfn: {
         init: function () {
-            "use strict";
+            'use strict';
             jplay.ui.elements.searchsettings.click(function () {
                 jplay.settings.update();
             });
             jplay.ui.elements.searchtext.autocomplete({
                 minLength: 2,
                 source: function (request, response) {
-                    $.get("/search", { needle: request.term, options: jplay.settings.items.searchsettings }, function (data) {
+                    $.get('/search', { needle: request.term, options: jplay.settings.items.searchsettings }, function (data) {
                         response($.map(data, function (item) {
                             if (item.isdir) {
-                                var label = item.dirname.split("\\");
+                                var label = item.dirname.split('\\');
                                 label = label[label.length - 1];
                                 return {
                                     label: label,
@@ -713,7 +713,7 @@
                                 };
                             } else {
                                 return {
-                                    label: item.artist + " - " + item.title,
+                                    label: item.artist + ' - ' + item.title,
                                     value: item,
                                     isdir: false
                                 };
@@ -927,7 +927,7 @@
                 }
                 hashes = jplay.helpfunctions.getHashes();
                 if (hashes.id) {
-                    if (hashes.isdir == "1") {
+                    if (hashes.isdir === "1") {
                         // FIXME: open_node.jstree triggering before everything is visible
                         setTimeout(function () {
                             var el = $("#node_" + hashes.id);
@@ -1035,7 +1035,7 @@
     },
     keybindings: {
         init: function () {
-            "use strict";
+            'use strict';
             $(document).keydown(function (e) {
                 switch (e.which) {
                     case 32: // Space
@@ -1067,11 +1067,11 @@
         list: [],
         index: 0,
         update: function () {
-            "use strict";
+            'use strict';
             var i, endi, tmp, current, top;
             jplay.shuffle.list = [];
             jplay.shuffle.index = 0;
-            for (i = 0, endi = $(".songinplaylist").length; i < endi; i++) {
+            for (i = 0, endi = $('.songinplaylist').length; i < endi; i++) {
                 jplay.shuffle.list[i] = i;
             }
             top = jplay.shuffle.list.length;
@@ -1088,16 +1088,16 @@
 };
 
 $(document).ready(function () {
-    "use strict";
+    'use strict';
     jplay.ui.init();
     jplay.settings.init();
     jplay.player.init();
     jplay.playlist.init();
     jplay.keybindings.init();
 	try {
-		$("#bottomright").chat({ 
-			"header": ["brheader", "Chat"],
-			"url": "jooon.mooo.com:8088"
+		$('#bottomright').chat({ 
+			'header': ['brheader', 'Chat'],
+			'url': 'jooon.mooo.com:8088'
 		});
 	} catch (err) {}
     jplay.filetree.init();

@@ -28,7 +28,7 @@
             if (req.headers.range === undefined) {
                 req.headers.range = '-';
             }
-            var parts = req.headers.range.replace(/bytes=/, "").split("-");
+            var parts = req.headers.range.replace(/bytes=/, '').split('-');
             var start = parts[0] ? parseInt(parts[0], 10) : 0;
             var end = parts[1] ? parseInt(parts[1], 10) : (filesize ? filesize - 1 : 0);
             res.writeHead(206, {
@@ -105,9 +105,9 @@
             }
             filesize = data[0].filesize;
             if (req.headers.range === undefined) {
-                req.headers.range = "-";
+                req.headers.range = '-';
             }
-            parts = req.headers.range.replace(/bytes=/, "").split("-");
+            parts = req.headers.range.replace(/bytes=/, '').split('-');
             start = parts[0] ? parseInt(parts[0], 10) : 0;
             end = parts[1] ? parseInt(parts[1], 10) : (data[0].filesize ? data[0].filesize - 1 : 0);
             for (i = 0; i < options.musicExtensions.length; i++) {
@@ -152,17 +152,17 @@
             res.send({});
             return;
         }
-        var artist = (searchsettings.artist === "true") ? "artist LIKE '%" + [needle] + "%' " : null;
-        var album = (searchsettings.album === "true") ? "album LIKE '%" + [needle] + "%' " : null;
-        var title = (searchsettings.title === "true") ? "title LIKE '%" + [needle] + "%' " : null;
-        var all = [title, artist, album].filter(function (val) { return val !== null; }).join("OR ");
-        var qry = "SELECT * FROM songs WHERE " + all + "LIMIT 20;";
+        var artist = (searchsettings.artist === 'true') ? 'artist LIKE \'%' + [needle] + '%\' ' : null;
+        var album = (searchsettings.album === 'true') ? 'album LIKE \'%' + [needle] + '%\' ' : null;
+        var title = (searchsettings.title === 'true') ? 'title LIKE \'%' + [needle] + '%\' ' : null;
+        var all = [title, artist, album].filter(function (val) { return val !== null; }).join('OR ');
+        var qry = 'SELECT * FROM songs WHERE ' + all + 'LIMIT 20;';
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
             if (searchsettings.artist || searchsettings.album) {
-                qry = "SELECT * FROM dirs WHERE dirname LIKE '%" + [needle] + "%' LIMIT 20";
+                qry = 'SELECT * FROM dirs WHERE dirname LIKE \'%' + [needle] + '%\' LIMIT 20';
                 connection.query(qry, function (err, data2) {
                     if (err) { throw err; }
                     connection.end();
@@ -185,18 +185,18 @@
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         if (req.query.isdir === true) {
-            connection.query("SELECT ancestors FROM dirs WHERE id = ?", [id], function (err, data) {
+            connection.query('SELECT ancestors FROM dirs WHERE id = ?', [id], function (err, data) {
                 if (err) { throw err; }
                 connection.end();
                 res.send(data[0].ancestors);
             });
         } else {
-            connection.query("SELECT dirid FROM songs WHERE id = ?", [id], function (err, dirid) {
+            connection.query('SELECT dirid FROM songs WHERE id = ?', [id], function (err, dirid) {
                 if (err) { throw err; }
-                connection.query("SELECT ancestors FROM dirs WHERE id = ?", dirid[0].dirid, function (err, data) {
+                connection.query('SELECT ancestors FROM dirs WHERE id = ?', dirid[0].dirid, function (err, data) {
                     if (err) { throw err; }
                     connection.end();
-                    var result = data[0].ancestors + "," + dirid[0].dirid.toString();
+                    var result = data[0].ancestors + ',' + dirid[0].dirid.toString();
                     res.send(result);
                 });
             });
@@ -207,7 +207,7 @@
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query("SELECT * FROM songs WHERE id = ?", [id], function (err, data) {
+        connection.query('SELECT * FROM songs WHERE id = ?', [id], function (err, data) {
             if (err) { throw err; }
             connection.end();
             res.send(data);
@@ -218,9 +218,9 @@
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query("SELECT * FROM songs WHERE dirid = ?", [id], function (err, data) {
+        connection.query('SELECT * FROM songs WHERE dirid = ?', [id], function (err, data) {
             if (err) { throw err; }
-            connection.query("SELECT * FROM dirs WHERE parent_id = ?", [id], function (err, data2) {
+            connection.query('SELECT * FROM dirs WHERE parent_id = ?', [id], function (err, data2) {
                 if (err) { throw err; }
                 connection.end();
                 res.send(data.concat(data2));
@@ -231,7 +231,7 @@
     jps.setBaseDirId = function () {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        var qry = "SELECT id FROM dirs WHERE dirname = ?";
+        var qry = 'SELECT id FROM dirs WHERE dirname = ?';
         connection.query(qry, options.musicDir, function (err, data) {
             if (err) { throw err; }
             connection.end();
@@ -250,7 +250,7 @@
 
     var getSongs = function (dir, callback) {
         dir = isNumeric(dir) ? dir : options.baseDirId;
-        var qry = "SELECT * FROM songs WHERE songs.dirid = ? ORDER BY filename;";
+        var qry = 'SELECT * FROM songs WHERE songs.dirid = ? ORDER BY filename;';
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query(qry, [dir], function (err, data) {
@@ -260,15 +260,15 @@
             for (var i = 0; i < data.length; i++) {
                 var entry = data[i];
                 returnObj[i] = {
-                    "data": {
+                    'data': {
                         title: entry.title,
-                        icon: entry.isdir ? "/img/foldericon.png" : "/img/playbutton.png"
+                        icon: entry.isdir ? '/img/foldericon.png' : '/img/playbutton.png'
                     },
-                    "attr": {
-                        "id": "snode_" + entry.id,
-                        "href": "#"
+                    'attr': {
+                        'id': 'snode_' + entry.id,
+                        'href': '#'
                     },
-                    "metadata": entry
+                    'metadata': entry
                 };
             }
             callback(returnObj);
@@ -279,7 +279,7 @@
         dir = isNumeric(dir) ? dir : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        var qry = "SELECT * FROM dirs WHERE dirs.parent_id = ? ORDER BY dirname;";
+        var qry = 'SELECT * FROM dirs WHERE dirs.parent_id = ? ORDER BY dirname;';
         connection.query(qry, [dir], function (err, data) {
             if (err) { throw err; }
             connection.end();
@@ -287,23 +287,23 @@
             for (var i = 0; i < data.length; i++) {
                 var entry = data[i];
                 returnObj[i] = {
-                    "data": {
+                    'data': {
                         title: path.basename(entry.dirname),
-                        icon: entry.isdir ? "/img/foldericon.png" : "/img/playbutton.png"
+                        icon: entry.isdir ? '/img/foldericon.png' : '/img/playbutton.png'
                     },
-                    "attr": {
-                        "id": "node_" + entry.id,
-                        "href": "#"
+                    'attr': {
+                        'id': 'node_' + entry.id,
+                        'href': '#'
                     },
-                    "metadata": entry,
-                    "state": "closed"
+                    'metadata': entry,
+                    'state': 'closed'
                 };
             }
             callback(returnObj);
         });
     };
 
-    var isNumeric = function(n) {
+    var isNumeric = function (n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
-    }
+    };
 })();

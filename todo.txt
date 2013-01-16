@@ -43,4 +43,5 @@
 	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9
 	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
 	* Start using the bug tracking system at GitHub
+	* Use grunt to build
 

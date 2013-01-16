@@ -27,7 +27,7 @@
         _setOption: function (key, val) {
             var that = this, img = this.img, src = img.prop('src');
             switch (key) {
-                case "src":
+                case 'src':
                     if (src) {
                         if (val !== src) {
                             img.prop('src', val).load(function () {
@@ -47,13 +47,10 @@
         },
         _destroy: function () { },
         _toggleExpanded: function (e) {
-            var animateTo,
-                clickBalance,
+            var clickBalance,
                 that = this,
                 container = this.container,
                 $etarget,
-                reqFS,
-                exitFS, 
                 offset;
             if (e) {
                 $etarget = $(e.target);
@@ -178,11 +175,11 @@
             }
             var isFS;
             if (document.hasOwnProperty('fullscreenElement')) {
-                isFS = document.fullScreenElement != null;
+                isFS = document.fullScreenElement !== null;
             } else if (document.hasOwnProperty('webkitFullscreenElement')) {
-                isFS = document.webkitFullscreenElement != null;
+                isFS = document.webkitFullscreenElement !== null;
             } else if (document.hasOwnProperty('mozFullScreenElement')) {
-                isFS = document.mozFullScreenElement != null;
+                isFS = document.mozFullScreenElement !== null;
             } else {
                 callback();
                 return;
@@ -194,19 +191,19 @@
                         element.webkitRequestFullscreen ||
                         element.mozRequestFullscreen ||
                         $.noop;
-                    $(document).on("webkitfullscreenchange", function () {
-                        $(document).off("webkitfullscreenchange");
+                    $(document).on('webkitfullscreenchange', function () {
+                        $(document).off('webkitfullscreenchange');
                         callback();
                     });
                     element.reqFS();
-                } else callback();
+                } else { callback(); }
             } else {
                 document.exitFS = document.exitFullscreen ||
                     document.webkitCancelFullScreen ||
                     document.mozCancelFullscreen ||
                     $.noop;
-                $(document).on("webkitfullscreenchange", function () {
-                    $(document).off("webkitfullscreenchange");
+                $(document).on('webkitfullscreenchange', function () {
+                    $(document).off('webkitfullscreenchange');
                     callback();
                 });
                 document.exitFS();

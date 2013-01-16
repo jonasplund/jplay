@@ -10,7 +10,7 @@
         { extension: '.ogg', contentType: 'audio/ogg' },
         { extension: '.oga', contentType: 'audio/ogg' }
     ];
-    config.pictureExtensions = [".jpg", '.jpeg', ".png", ".gif"];
+    config.pictureExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
     config.dbConnection = {
         host: 'localhost',
         user: 'root',

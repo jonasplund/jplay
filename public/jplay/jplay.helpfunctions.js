@@ -1,18 +1,18 @@
 (function (jplay) {
+    'use strict';
     jplay.helpfunctions = {
         getShowDir: function () {
-            "use strict";
             var hashes = jplay.helpfunctions.getHashes();
             var returnval;
             if (hashes.id) {
                 $.ajax({
-                    url: "/getAncestors",
+                    url: '/getAncestors',
                     data: { id: hashes.id, isdir: hashes.isdir },
                     async: false,
                     success: function (results) {
-                        results = results.split(",");
+                        results = results.split(',');
                         for (var i = 0, endi = results.length; i < endi; i++) {
-                            results[i] = "#node_" + results[i];
+                            results[i] = '#node_' + results[i];
                         }
                         returnval = results;
                     }
@@ -21,13 +21,12 @@
             }
         },
         getHashes: function () {
-            "use strict";
             var vars, hashes, i, endi, hash;
             vars = [];
             hashes = window.location.toString();
             if (hashes.indexOf('#') > -1) {
                 hashes = hashes.substring(hashes.indexOf('#') + 1);
-                hashes = hashes.split("&");
+                hashes = hashes.split('&');
                 for (i = 0, endi = hashes.length; i < endi; i++) {
                     hash = hashes[i].split('=');
                     vars.push(hash[0]);
@@ -37,14 +36,12 @@
             return vars;
         },
         toTimeString: function (seconds) {
-            "use strict";
             var minutes, secs;
-            minutes = Math.floor((seconds / 60) % 60).toString().lpad("0", 2);
-            secs = Math.floor(seconds % 60).toString().lpad("0", 2);
-            return minutes + ":" + secs;
+            minutes = Math.floor((seconds / 60) % 60).toString().lpad('0', 2);
+            secs = Math.floor(seconds % 60).toString().lpad('0', 2);
+            return minutes + ':' + secs;
         },
         showNotification: function (data) {
-            "use strict";
             var artist, title, image;
             if (!jplay.settings.items.notifications) {
                 return false;
@@ -76,36 +73,33 @@
             }
         },
         toId: function (str) {
-            "use strict";
             if (!str) {
-                return "";
+                return '';
             }
-            return "node_" + str.replace(/[\[\]\(\)\.&,\']/g, "").replace(/ /g, "_").toLowerCase();
+            return 'node_' + str.replace(/[\[\]\(\)\.&,\']/g, "").replace(/ /g, "_").toLowerCase();
         },
         warning: function (str) {
-            "use strict";
-            $("#warning").text(str).css("color", "red");
+            $('#warning').text(str).css('color', 'red');
             setTimeout(function () {
-                $("#warning").text("").css("color", "");
+                $('#warning').text('').css('color', '');
             }, 5000);
         },
         popup: function (o) {
             var overlay = $('<div>').addClass('overlay'),
                 popup = $('<div>').addClass('popup'),
-                head = o.header ? $("<h1>").text(o.header) : $(),
-                text = o.text ? $("<p>").html(o.text) : $();
+                head = o.header ? $('<h1>').text(o.header) : $(),
+                text = o.text ? $('<p>').html(o.text) : $();
             popup.append(head).append(text);
-            $("body").append(overlay).append(popup);
+            $('body').append(overlay).append(popup);
             overlay.click(function (e) {
                 e.stopPropagation();
                 overlay.remove();
                 popup.remove();
             });
         }
-    }
+    };
 
     String.prototype.lpad = function (padString, length) {
-        "use strict";
         var str = this;
         while (str.length < length) {
             str = padString + str;

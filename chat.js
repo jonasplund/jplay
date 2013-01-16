@@ -19,14 +19,15 @@
                 };
                 client.broadcast.emit('msg', msg);
             });
-            client.on('set_nickname', function () {
+            /*client.on('set_nickname', function () {
                 for (var i = 0; i < users.length; i++) {
+                    var id = users[i].id;
                     //if (users[i].id === 
                 }
-            });
+            });*/
             client.on('disconnect', function () {
                 clearInterval(users);
             });
         });
-    }
+    };
 })();

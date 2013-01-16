@@ -419,11 +419,11 @@
                     var dataidlocal = ids[k++];
                     if (err) { throw err; }
                     if (data2.length !== 1) { return; }
-                    var qry = "UPDATE dirs SET parent_id = " + data2[0].id + ", ancestors = '" + idarr.join(",") + "' WHERE id = " + dataidlocal + ";";
+                    var qry = 'UPDATE dirs SET parent_id = ' + data2[0].id + ', ancestors = \'' + idarr.join(',') + '\' WHERE id = ' + dataidlocal + ';';
                     connection.query(qry, function (err) {
                         if (err) { throw err; }
                         if (k >= ids.length - 1 && callback) {
-                            if ((typeof callback) === "function") { callback(); }
+                            if ((typeof callback) === 'function') { callback(); }
                             callback = null;
                         }
                     });
@@ -437,7 +437,7 @@
     };
 
     var getAncestors = function (dat, connection, callback) {
-        var dirname = dat.dirname.replace(options.musicDir, "");
+        var dirname = dat.dirname.replace(options.musicDir, '');
         dirname = dirname.split(path.sep).filter(String);
         if (dirname.length === 0) {
             callback([], dat);
@@ -463,16 +463,16 @@
             }
         };
         for (i = 0; i < retarr.length; i++) {
-            var qry = "SELECT id FROM dirs WHERE dirname = ?";
+            var qry = 'SELECT id FROM dirs WHERE dirname = ?';
             connection.query(qry, retarr[i], dbCallback);
         }
     };
 
     var createIndex = function (connection, callback) {
-        var qry = "ALTER TABLE dirs ADD INDEX dirname_index (dirname)";
+        var qry = 'ALTER TABLE dirs ADD INDEX dirname_index (dirname)';
         connection.query(qry, function (err) {
             if (err) { throw err; }
-            if ((typeof callback) === "function") { callback(); }
+            if ((typeof callback) === 'function') { callback(); }
         });
     };
 
@@ -486,31 +486,31 @@
 
     var tables = {
         sql: {
-            songs: "CREATE TABLE songs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-            "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,filename VARCHAR(255)," +
-            "dir VARCHAR(2000),filesize INT,title VARCHAR(255),artist VARCHAR(100),year VARCHAR(100)," +
-            "album VARCHAR(255),contenttype VARCHAR(20),dirid INT,isdir BOOL,hash VARCHAR(32));",
-            dirs: "CREATE TABLE dirs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-            "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,dirname VARCHAR(2000)," +
-            "cover VARCHAR(100),parent_id INT,ancestors VARCHAR(200),isdir BOOL);"
+            songs: 'CREATE TABLE songs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
+            'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,filename VARCHAR(255),' +
+            'dir VARCHAR(2000),filesize INT,title VARCHAR(255),artist VARCHAR(100),year VARCHAR(100),' +
+            'album VARCHAR(255),contenttype VARCHAR(20),dirid INT,isdir BOOL,hash VARCHAR(32));',
+            dirs: 'CREATE TABLE dirs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
+            'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,dirname VARCHAR(2000),' +
+            'cover VARCHAR(100),parent_id INT,ancestors VARCHAR(200),isdir BOOL);'
         },
         dropAll: function (connection, callback) {
-            connection.query("DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS hashes;", function (err) {
+            connection.query('DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS hashes;', function (err) {
                 if (err) { throw err; }
-                if ((typeof callback) === "function") { callback(); }
+                if ((typeof callback) === 'function') { callback(); }
             });
         },
         createAll: function (connection, callback) {
             var qry = tables.sql.songs + tables.sql.dirs;
             connection.query(qry, function (err) {
                 if (err) { throw err; }
-                if ((typeof callback) === "function") { callback(); }
+                if ((typeof callback) === 'function') { callback(); }
             });
         }
     };
 
     var getID3size = function (filename) {
-        var fd = fs.openSync(filename, "r");
+        var fd = fs.openSync(filename, 'r');
         var buffer = new Buffer(4);
         fs.readSync(fd, buffer, 0, 4, 6);
         fs.closeSync(fd);
@@ -525,8 +525,8 @@
             var size = getID3size(filename);
             if (size < 227) { size = 227; }
             if (size < 1) { return false; }
-            var buffer = new Buffer(size, "utf8");
-            var fd = fs.openSync(filename, "r");
+            var buffer = new Buffer(size, 'utf8');
+            var fd = fs.openSync(filename, 'r');
             fs.readSync(fd, buffer, 0, size, 0);
             fs.close(fd);
             return buffer;

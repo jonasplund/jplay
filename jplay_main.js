@@ -44,8 +44,8 @@
 
     require('./chat.js').init(server);
 
-    /*require('fs').watch("C:\\aaa\\music", { persistent: true }, function (event, filename) {
-    console.log(event + ": " + filename);
+    /*require('fs').watch('C:\\aaa\\music', { persistent: true }, function (event, filename) {
+    console.log(event + ': ' + filename);
     });*/
 
     console.log('Server listening at port ' + server.address().port);
