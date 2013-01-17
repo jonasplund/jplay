@@ -204,7 +204,7 @@
                 jplay.player.mesource = jplay.player.audioContext.createMediaElementSource(jplay.player.domobj);
             }
             if (items.fft && !jplay.ui.elements.fft && jplay.player.audioContext && jplay.player.mesource) {
-                jplay.ui.elements.fft = $("<canvas></canvas>").prop("width", "200px").prop("height", "100px").prop("id", "fft");
+                jplay.ui.elements.fft = $("<canvas></canvas>").attr("width", "200px").attr("height", "100px").prop("id", "fft");
                 jplay.ui.elements.fft.insertBefore(jplay.ui.elements.covercontainer);
                 jplay.ui.elements.fft.fft({
                     player: jplay.player.jqobj,

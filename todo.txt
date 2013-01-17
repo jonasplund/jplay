@@ -2,10 +2,9 @@
 	* BUG: In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
 	* BUG: Long pause bug. Possible solution is to reload the source when resuming play
 	* BUG: isdir check in downloadSong doesn't work
-	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js)
+	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js. Respond with 201 when image doesn't exist?)
 	* BUG: Lyrics popup should have a maxheight and scroll on overflow
 	* BUG: Error when trying to close the cover after fullscreen mode has been exited manually [element null at cover.js:191]
-	* BUG: Visualization broke again (change in WebAudioAPI implementation?)
 	* IMPROVEMENT: Initing each ui object seems unnecessary
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
@@ -18,8 +17,7 @@
 	* UICHANGE: Use jstree theme instead of custom icons
 	* UICHANGE: Do some sort of animation for going to bigscreenmode
 	* UICHANGE: Change container background
-	* UICHANGE: Don't go to fullscreen until cover animation is completed
-	* UICHANGE: Use 10% of cover as lyrics background
+	* UICHANGE: Use 10% of cover as lyrics background (make specific lyrics widget?)
 	* FEATURE: Emit important events and document them
 	* FEATURE: Improve playlist/saved playlists
 		* Select multiple
@@ -40,7 +38,7 @@
 * General
 	* IMPROVEMENT: Rename player to something more original
 	* FEATURE: ? Video support ?
-	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9
+	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9 [jquery.jstree.js:1799]
 	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
 	* Start using the bug tracking system at GitHub
 	* Use grunt to build
