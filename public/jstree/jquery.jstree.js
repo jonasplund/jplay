@@ -1796,7 +1796,8 @@
 					if(!js.length) { return false; }
 					for(i = 0, j = js.length; i < j; i++) {
 						tmp = this._parse_json(js[i], obj, true);
-						if(tmp.length) { d = d.add(tmp); }
+                        // JA: Fix for jQuery 1.9
+						if(tmp.length) { /* d = d.add(tmp); */ $.merge(d, tmp); }
 					}
 				}
 				else {

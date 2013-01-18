@@ -38,7 +38,6 @@
 * General
 	* IMPROVEMENT: Rename player to something more original
 	* FEATURE: ? Video support ?
-	* WHATTHEHELL: Figure out why the sort order in jstree fails in jQuery 1.9 [jquery.jstree.js:1799]
 	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
 	* Start using the bug tracking system at GitHub
 	* Use grunt to build
