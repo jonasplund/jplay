@@ -185,7 +185,7 @@
                 return;
             }
             if (!isFS) {
-                if (element.length > 0) {
+                if (element && element.length > 0) {
                     element = element[0];
                     element.reqFS = element.requestFullscreen ||
                         element.webkitRequestFullscreen ||

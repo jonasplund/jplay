@@ -970,25 +970,25 @@
             }
         },
         downloadSongs: function (sel) {
-            "use strict";
+            'use strict';
             var data, src;
             if (sel.length === 1) {
                 data = $(sel[0]).data();
-                if (!data.isDir) {
-                    src = "/downloadSong?id=" + data.id;
-                    $("<iframe />").attr("src", src).css("display", "none").appendTo("body");
+                if (!data.isdir) {
+                    src = '/downloadSong?id=' + data.id;
+                    $('<iframe />').attr('src', src).css('display', 'none').appendTo('body');
                 } else {
-                    jplay.helpfunctions.warning("Can only download individual songs");
+                    jplay.helpfunctions.warning('Can only download individual songs');
                 }
             } else {
                 data = [];
                 $.each(sel, function (key, file) {
                     data.push($(file).data());
                 });
-                $.post("/downloadSongs", JSON.stringify(data), function () {
+                $.post('/downloadSongs', JSON.stringify(data), function () {
                     //alert("success");
-                }, "text");
-                jplay.helpfunctions.warning("Can only download one at a time at the moment");
+                }, 'text');
+                jplay.helpfunctions.warning('Can only download one at a time at the moment');
             }
         }
     },

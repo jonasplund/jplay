@@ -1,10 +1,8 @@
 * Client/UI
 	* BUG: In FFT, make new audio node when disconnecting the visualization. Should be handled in widget if possible.
 	* BUG: Long pause bug. Possible solution is to reload the source when resuming play
-	* BUG: isdir check in downloadSong doesn't work
 	* BUG: When there is no cover, you should not be able to expand it (jplay.cover.js. Respond with 201 when image doesn't exist?)
 	* BUG: Lyrics popup should have a maxheight and scroll on overflow
-	* BUG: Error when trying to close the cover after fullscreen mode has been exited manually [element null at cover.js:191]
 	* IMPROVEMENT: Initing each ui object seems unnecessary
 	* IMPROVEMENT: Remove the attribs thingy in data() for playlist items
 	* IMPROVEMENT: Should the shuffle object be in the playlist object for semantic correctness?
