@@ -58,7 +58,7 @@
     };
 
     jps.getLyrics = function (req, res) {
-        metalminer.getMetalLyrics(req.query, function (err, data) {
+        metalminer.getLyrics(req.query, function (err, data) {
             if (!err) {
                 res.send(data);
             } else {

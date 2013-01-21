@@ -26,8 +26,7 @@
             this.source.connect(this.analyser);
             this.source.connect(this.volumeNode);
             this.volumeNode.connect(this.ctx.destination);
-            //this.fft.click(this.fullscreen);
-            // FIXME: Change setInterval to requestAnimationFrame
+            // FIXME: Change setInterval to requestAnimationFrame?
             this.ticks = window.setInterval($.proxy(this._tick, this), 50);
         },
         _setOption: function (key, val) {
@@ -38,7 +37,7 @@
         },
         destroy: function () {
             this.analyser.disconnect();
-            //this.volumeNode.gain.value = this.op;
+            //this.volumeNode.gain.value = this.options;
             this.volumeNode.disconnect();
             this.source.connect(this.ctx.destination);
             window.clearInterval(this.ticks);
