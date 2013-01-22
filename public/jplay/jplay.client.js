@@ -1094,17 +1094,17 @@ $(document).ready(function () {
     jplay.player.init();
     jplay.playlist.init();
     jplay.keybindings.init();
-	try {
-		$('#bottomright').chat({ 
-			'header': ['brheader', 'Chat'],
-			'url': 'jooon.mooo.com:8088'
-		});
-	} catch (err) {}
+    try {
+        $('#bottomright').chat({
+            'header': ['brheader', 'Chat'],
+            'url': 'jooon.mooo.com:8088'
+        });
+    } catch (err) { }
     jplay.filetree.init();
     jplay.customplaylists.update();
     jplay.shuffle.update();
     jplay.searchfn.init();
-
+    $("*").on("overflow", function (e) { console.log(e) });
     /*var now = new Date().getTime();
     var loadtime = now - performance.timing.navigationStart;
     console.log("test " + loadtime);*/
