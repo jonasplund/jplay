@@ -184,7 +184,7 @@
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        if (req.query.isdir === true) {
+        if (req.query.isdir === '1') {
             connection.query('SELECT ancestors FROM dirs WHERE id = ?', [id], function (err, data) {
                 if (err) { throw err; }
                 connection.end();
