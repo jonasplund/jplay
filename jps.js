@@ -6,9 +6,48 @@
         sys = require('sys'),
         mysql = require('mysql'),
         metalminer = require('metalminer'),
+        async = require('async'),
         options = require('./config.js');
 
     var jps = module.exports = {};
+
+    jps.getSimilarArtists = function (req, res) {
+        if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
+            res.writeHead(500, 'Invalid song.');
+            res.end();
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs WHERE id = ?', [req.query.id], function (err, data) {
+            if (err) { throw err; }
+            if (data.length < 1) {
+                res.writeHead(500, 'Invalid song.');
+                res.end();
+                return;
+            }
+            metalminer.getSimilarArtists(data[0], function (err, results) {
+                if (err) {
+                    res.writeHead(500, 'Similar artists not found.');
+                    res.end();
+                    return;
+                }
+                async.map(results, function (item, callback) {
+                    connection.query('SELECT dirid FROM songs WHERE artist = ? LIMIT 1', item, function (err, data2) {
+                        if (err) { callback(err); throw err; }
+                        if (data2 && data2.length > 0 && data2[0] && data2[0].dirid) {
+                            callback(null, { item: item, dirid: data2[0].dirid });
+                        } else {
+                            callback(null, { item: item });
+                        }
+                    });
+                }, function (err, sendobj) {
+                    connection.end();
+                    if (err) { throw err; }
+                    res.send(sendobj);
+                });
+            });
+        });
+    };
 
     jps.downloadSong = function (req, res) {
         var id = req.query.id;
