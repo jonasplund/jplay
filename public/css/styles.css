@@ -131,4 +131,4 @@ h2#settingsheader { cursor:pointer; }
             
 #bigscreen { display: none; position: absolute; height:100%; width:100%; top:0; left:0; z-index:2000; }
 
-#sidebar { width:500px; background-color: #EEE; -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; }
+#sidebar { -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; }

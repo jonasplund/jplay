@@ -1,6 +1,6 @@
 (function ($, jplay) {
     'use strict';
-    /*$(jplay.player).on('newsong', function (){
+    /*jplay.player.jqobj.on('newsong', function (){
         console.log('newsongsidebar')
     });*/
     $(document).on('click', '#sidebar .ui-tabs-panel a.tabcontent', function(e) {
@@ -14,13 +14,14 @@
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 ui.panel.html('No active song.');
                 event.stopPropagation();
+                event.preventDefault();
                 return;
             }
             var data = jplay.player.activeSong.data().attribs;
             ui.ajaxSettings.url = ui.tab.find('a').attr('href').split("?")[0];
             ui.ajaxSettings.url += '?artist=' + data.artist + '&title=' + data.title + '&album=' + data.album + '&id=' + data.id;
             ui.ajaxSettings.dataType = 'json';
-            ui.ajaxSettings.dataFilter = function (data, type) {
+            ui.ajaxSettings.dataFilter = function (data) {
                 try {
                     return $.map($.parseJSON(data), function (item) { 
                         if (item.dirid) {
