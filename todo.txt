@@ -25,6 +25,7 @@
 	* FEATURE: Show album cover in notifications [1051]
 	* FEATURE: Control UI with Web Speech API
 	* FEATURE: Advanced linking with checkboxes etc.
+	* FEATURE: Implement getSimilar
 	* FEATURE: ? Song duration in playlist ?
 	* FEATURE: ? Play local files ?
 	* WHATTHEHELL: Find some use case for deferred (maybe in showNotification [1034])
@@ -32,13 +33,14 @@
 	* BUG: addRandomSong returns a float id instead of the real int id
 	* BUG: Verify that adding an id3v2 tag to existing id3v1 tag works without adding new entry in db
 	* IMPROVEMENT: Bulk inserts
+	* IMPROVEMENT: getSimilarArtists should somehow get the best match for bandname instead of the first one. Use metaInfo.album?
 	* IMPROVEMENT: Reduce the amount of data sent in a song package to what is used
 	* IMPROVEMENT: ? Move all DB stuff from jps.js to db_connector.js ?
-	* FEATURE: Recommended artists. Pull from Metal-Archives
 * General
 	* IMPROVEMENT: Rename player to something more original
 	* FEATURE: ? Video support ?
 	* Delete the beta version, but save the fullscreen mode (and the less file). Make a new beta branch
 	* Start using the bug tracking system at GitHub
 	* Use grunt to build
+	* Make metalminer a subproject on GitHub
 
