@@ -11,7 +11,12 @@
 
     var jps = module.exports = {};
 
-    jps.getSimilarArtists = function (req, res) {
+    // Test version
+    jps.getSimilarArtists = function (req, res) { 
+        res.send(JSON.stringify([ { item: 'Metallica', dirid: '4' } ]));
+    };
+
+    /*jps.getSimilarArtists = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
             res.writeHead(500, 'Invalid song.');
             res.end();
@@ -43,11 +48,11 @@
                 }, function (err, sendobj) {
                     connection.end();
                     if (err) { throw err; }
-                    res.send(sendobj);
+                    res.send(JSON.stringify(sendobj));
                 });
             });
         });
-    };
+    };*/
 
     jps.downloadSong = function (req, res) {
         var id = req.query.id;

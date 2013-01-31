@@ -12,7 +12,9 @@ input[type=number] { margin:3px 5px 3px 4px; }
 
 .button { margin:0px 2px; width:15px; height:15px;  }
 
-#maincontainer { display:-webkit-box; -webkit-box-orient:vertical; display:-moz-box; -moz-box-orient:vertical; height:100%; width:100%; }
+body { display:-webkit-box; -webkit-box-orient:horizontal; display:-moz-box; -moz-box-orient:horizontal; }
+
+#maincontainer { display:-webkit-box; -webkit-box-orient:vertical; display:-moz-box; -moz-box-orient:vertical; height:100%; -webkit-box-flex:1; -moz-box-flex:1; }
 h2 { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
      background:-moz-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
 	 background:-ms-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
@@ -128,3 +130,5 @@ h2#settingsheader { cursor:pointer; }
             text-shadow:5px 5px 5px #CCC; background:-webkit-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
             
 #bigscreen { display: none; position: absolute; height:100%; width:100%; top:0; left:0; z-index:2000; }
+
+#sidebar { width:500px; background-color: #EEE; -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; }

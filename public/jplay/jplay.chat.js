@@ -14,7 +14,7 @@
             this.container = $('<div></div>').addClass('chatcontainer').appendTo(this.element);
             this.content = $('<div></div>').addClass('chatcontent').appendTo(this.container);
             this.input = $('<input></input>').addClass('chatinput').appendTo(this.container);
-			this.socket = window.io.connect(this.options.url);
+            this.socket = window.io.connect(this.options.url);
             this.socket.on('msg', $.proxy(this._receivemsg, this));
             this.socket.on('userlist', $.proxy(this._receiveuserlist, this));
             this.input.keyup($.proxy(this._keyupeh, this));
@@ -31,17 +31,17 @@
         },
         _sendmsg: function () {
             var p = $('<p></p>').addClass('mychat'),
-				msg = {},
-				localmsg = '';
-			if (this.options.timestamp) {
-				localmsg += '[' + this._formattime(new Date()) + '] ';
-			}
-			localmsg += '<You> ' + this.input.val();
+                msg = {},
+                localmsg = '';
+            if (this.options.timestamp) {
+                localmsg += '[' + this._formattime(new Date()) + '] ';
+            }
+            localmsg += '<You> ' + this.input.val();
             p.text(localmsg);
             this.content.append(p);
             msg.message = this.input.val();
             msg.time = new Date();
-			this.socket.emit('msg', msg);
+            this.socket.emit('msg', msg);
             this.input.val('');
             this.content.scrollTop(this.content.height());
         },
@@ -50,7 +50,7 @@
         },
         _receivemsg: function (data) {
             var message = '';
-			if (this.options.timestamp) {
+            if (this.options.timestamp) {
                 message += '[' + this._formattime(new Date(data.time)) + '] ';
             }
             message += '<' + data.address + '> ' + data.message;
