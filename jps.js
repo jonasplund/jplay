@@ -12,28 +12,27 @@
     var jps = module.exports = {};
 
     // Test version
-    jps.getSimilarArtists = function (req, res) { 
+    /*jps.getSimilarArtists = function (req, res) { 
         res.send(JSON.stringify([ { item: 'Metallica', dirid: '4' } ]));
-    };
+    };*/
 
-    /*jps.getSimilarArtists = function (req, res) {
+    jps.getSimilarArtists = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
-            res.writeHead(500, 'Invalid song.');
-            res.end();
+            res.send('Invalid id.');
             return;
         }
         var connection = mysql.createConnection(options.dbConnection);
         connection.query('SELECT * FROM songs WHERE id = ?', [req.query.id], function (err, data) {
             if (err) { throw err; }
             if (data.length < 1) {
-                res.writeHead(500, 'Invalid song.');
-                res.end();
+                connection.end();
+                res.send('Invalid id.');
                 return;
             }
             metalminer.getSimilarArtists(data[0], function (err, results) {
                 if (err) {
-                    res.writeHead(500, 'Similar artists not found.');
-                    res.end();
+                    connection.end();
+                    res.send('Similar artists not found.');
                     return;
                 }
                 async.map(results, function (item, callback) {
@@ -52,7 +51,7 @@
                 });
             });
         });
-    };*/
+    };
 
     jps.downloadSong = function (req, res) {
         var id = req.query.id;
