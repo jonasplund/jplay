@@ -227,7 +227,7 @@
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        if (req.query.isdir === '1') {
+        if (req.query.isdir === '1' || req.query.isdir === true || req.query.isdir === 'true') {
             connection.query('SELECT ancestors FROM dirs WHERE id = ?', [id], function (err, data) {
                 if (err) { throw err; }
                 connection.end();
@@ -236,6 +236,11 @@
         } else {
             connection.query('SELECT dirid FROM songs WHERE id = ?', [id], function (err, dirid) {
                 if (err) { throw err; }
+                if (dirid.length === 0) {
+                    connection.end();
+                    res.send([]);
+                    return;
+                }
                 connection.query('SELECT ancestors FROM dirs WHERE id = ?', dirid[0].dirid, function (err, data) {
                     if (err) { throw err; }
                     connection.end();
