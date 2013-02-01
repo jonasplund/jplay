@@ -1,8 +1,9 @@
 (function ($, jplay) {
     'use strict';
-    /*jplay.player.jqobj.on('newsong', function (){
-        console.log('newsongsidebar')
-    });*/
+    $(document).on('jplay.newsong', function (event) {
+        console.log(event);
+        $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
+    });
     $(document).on('click', '#sidebar .ui-tabs-panel a.tabcontent', function(e) {
         e.preventDefault();
         var id = $(e.target).attr('href').match(/id=([0-9]+)/)[1];

@@ -459,17 +459,19 @@
             }
         },
         setActiveSong: function (playlistentry) {
-            "use strict";
-            var ple, plcontainer, data, scrollto, relpos;
+            'use strict';
+            var ple, plcontainer, data, scrollto, relpos, oldSong;
             ple = $(playlistentry);
             plcontainer = jplay.ui.elements.playlistcontainer;
-            data = ple.data("attribs");
+            data = ple.data('attribs');
+            console.log(jplay.player.activeSong);
+            oldSong = jplay.player.activeSong;
             jplay.player.activeSong = playlistentry;
-            $(".songinplaylist").removeClass("activesong");
-            ple.addClass("activesong");
-            jplay.ui.elements.playinfo.find(".title").text(data.title);
-            jplay.ui.elements.playinfo.find(".artist").text(data.artist);
-            document.title = data.artist + " - " + data.title;
+            $('.songinplaylist').removeClass('activesong');
+            ple.addClass('activesong');
+            jplay.ui.elements.playinfo.find('.title').text(data.title);
+            jplay.ui.elements.playinfo.find('.artist').text(data.artist);
+            document.title = data.artist + ' - ' + data.title;
             relpos = ple.offset().top - plcontainer.offset().top;
             if (relpos + ple.height() >= plcontainer.height()) {
                 scrollto = ple.offset().top + (2 * ple.height()) - plcontainer.height() - plcontainer.offset().top + plcontainer.scrollTop();
@@ -483,11 +485,12 @@
                 }, jplay.settings.items.animationspeed);
             }
             jplay.helpfunctions.showNotification(data);
-            jplay.ui.elements.covercontainer.cover({ "src": "/getImage?id=" + data.dirid });
-            jplay.ui.elements.bscover.css("background-image", "url('/getImage?id=" + data.dirid + "')");
+            jplay.ui.elements.covercontainer.cover({ 'src': '/getImage?id=' + data.dirid });
+            jplay.ui.elements.bscover.css('background-image', 'url("/getImage?id=' + data.dirid + '")');
             jplay.player.mesource = null;
             jplay.player.createInstance();
-            jplay.player.jqobj.prop("src", "/getMusic?id=" + data.id).get(0).play();
+            jplay.player.jqobj.prop('src', '/getMusic?id=' + data.id).get(0).play();
+            $(document).trigger({ type: 'jplay.newsong', from: oldSong, to: data });
             // FIXME: muted doesn't work after changing songs. Temporary solution:
             setTimeout(function () {
                 jplay.player.togglemute();
@@ -495,7 +498,7 @@
             }, 10);
         },
         changeVolume: function (diff) {
-            "use strict";
+            'use strict';
             var player, vol;
             player = jplay.player.domobj;
             vol = (player.volume + diff) > 1 ? 1 : (player.volume + diff);
@@ -510,27 +513,27 @@
                 }
             }
             jplay.player.setVolume(vol);
-            jplay.ui.elements.volumeslider.slider("option", "value", vol * 100);
+            jplay.ui.elements.volumeslider.slider('option', 'value', vol * 100);
         },
         setVolume: function (value) {
-            "use strict";
+            'use strict';
             jplay.settings.items.volume = value;
             jplay.player.domobj.volume = value;
 
             jplay.ui.elements.volumeslider.slider.value = 100 * value;
             if (jplay.settings.items.fft && jplay.ui.elements.fft) {
-                jplay.ui.elements.fft.fft({ "volume": value });
+                jplay.ui.elements.fft.fft({ 'volume': value });
             }
         },
         togglemute: function () {
-            "use strict";
+            'use strict';
             var player = jplay.player.domobj;
             player.muted = !(player.muted);
             if (player.muted) {
-                jplay.ui.elements.mutebutton.button("option", "icons", { primary: "ui-icon-volume-off" }).addClass("ui-state-highlight");
+                jplay.ui.elements.mutebutton.button('option', 'icons', { primary: 'ui-icon-volume-off' }).addClass('ui-state-highlight');
                 jplay.settings.update();
             } else {
-                jplay.ui.elements.mutebutton.button("option", "icons", { primary: "ui-icon-volume-on" }).removeClass("ui-state-highlight");
+                jplay.ui.elements.mutebutton.button('option', 'icons', { primary: 'ui-icon-volume-on' }).removeClass('ui-state-highlight');
                 jplay.settings.update();
             }
         }
