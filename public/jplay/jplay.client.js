@@ -553,7 +553,7 @@
             });
             jplay.ui.elements.playlist.sortable();
             if (jplay.settings.items.saveplaylist &&
-					localStorage.getItem("playlist")) {
+                    localStorage.getItem("playlist")) {
                 jplay.playlist.items = $.parseJSON(localStorage.getItem("playlist"));
                 if (jplay.playlist.items) {
                     $.each(jplay.playlist.items, function () {
@@ -587,16 +587,17 @@
             });
         },
         save: function () {
-            "use strict";
+            'use strict';
             var songs, tmp;
             jplay.playlist.items = [];
-            songs = $("#playlist li");
+            songs = $('#playlist li');
             $.each(songs, function () {
                 tmp = $(this).data();
                 jplay.playlist.items.push($(this).data("attribs"));
             });
             jplay.shuffle.update();
-            localStorage.setItem("playlist", JSON.stringify(jplay.playlist.items));
+            $(document).trigger('jplay.playlistsave');
+            localStorage.setItem('playlist', JSON.stringify(jplay.playlist.items));
         },
         clear: function () {
             "use strict";
@@ -605,7 +606,7 @@
         },
         dirCounter: 0, // For addDir()
         addDir: function (dirObj, position, before, callback) {
-            "use strict";
+            'use strict';
             this.dirCounter++;
             var obj = (dirObj instanceof $) ? dirObj.data() : dirObj;
             $.get("/addDir", { "id": obj.id }, $.proxy(function (results) {
@@ -619,14 +620,15 @@
                             jplay.playlist.addFile(value);
                         }
                     } else {
-                        // FIXME: Add dirs recursively on server? Pros/cons?
                         jplay.playlist.addDir(value, null, null, callback);
                     }
                     if (i === endi - 1) {
                         this.dirCounter--;
-                        if (callback && this.dirCounter === 0) {
-                            this.dirCounter = 0;
+                        if (this.dirCounter === 0) {
                             jplay.playlist.save();
+                            this.dirCounter = 0;
+                        }
+                        if (callback) {
                             callback(firstnode);
                         }
                     }
@@ -634,15 +636,15 @@
             }, this));
         },
         addFile: function (json, position, before) {
-            "use strict";
+            'use strict';
             var html, title, node, retval;
             if (!json.title) {
                 json.title = json.filename;
             }
             html = '<span class="playlist_artist">' + json.artist + '</span> ' +
-				'<span class="playlist_album">- ' + json.album + '</span> ' +
-				'<span class="playlist_title">- ' + json.title + '</span> ' +
-				'<span class="playlist_year">- ' + json.year + '</span>';
+                '<span class="playlist_album">- ' + json.album + '</span> ' +
+                '<span class="playlist_title">- ' + json.title + '</span> ' +
+                '<span class="playlist_year">- ' + json.year + '</span>';
             title = '';
             if (json.artist) {
                 title += 'Artist:\t' + json.artist;
@@ -657,7 +659,7 @@
                 title += '\nYear:\t' + json.year;
             }
             node = $('<li/>').addClass('songinplaylist').html(html).attr('title', title).
-				data('attribs', json).data('playlistorder', $('#songinplaylist'));
+                data('attribs', json).data('playlistorder', $('#songinplaylist'));
             if (position && (position.is('ul') || position.is('li'))) {
                 if (before) {
                     node.insertBefore($(position));
@@ -727,7 +729,6 @@
                 select: function (event, ui) {
                     if (ui.item.value.isdir) {
                         /*jplay.playlist.addDir(ui.item.value, null, null, function (first) {
-							
                         });*/
                         //jplay.ui.elements.searchtext.val(ui.item.label);
                     } else {
@@ -753,8 +754,8 @@
             };*/
         },
         gotodir: function (data, callback) {
-            "use strict";
-            jplay.filetree.jqnode.jstree("close_all");
+            'use strict';
+            jplay.filetree.jqnode.jstree('close_all');
             $.get("/getAncestors", { id: data.id, isdir: data.isdir }, function (result) {
                 var dirarray = result.split(",").sort(function (a, b) { return parseInt(a, 10) - parseInt(b, 10); });
                 if (data.isdir) {
@@ -762,14 +763,14 @@
                 }
                 jplay.filetree.opendir(dirarray, 0, function () {
                     var el, scrollto;
-                    el = data.isdir ? $("#node_" + data.id) : $("#snode_" + data.id);
-                    jplay.filetree.jqnode.jstree("deselect_all");
-                    jplay.filetree.jqnode.jstree("select_node", el);
-                    scrollto = el.offset().top - $("#filesouter").offset().top + $("#filesouter").scrollTop();
-                    $("#filesouter").animate({
+                    el = data.isdir ? $('#node_' + data.id) : $('#snode_' + data.id);
+                    jplay.filetree.jqnode.jstree('deselect_all');
+                    jplay.filetree.jqnode.jstree('select_node', el);
+                    scrollto = el.offset().top - $('#filesouter').offset().top + $('#filesouter').scrollTop();
+                    $('#filesouter').animate({
                         scrollTop: scrollto
                     }, jplay.settings.items.animationspeed, callback);
-                    jplay.ui.elements.searchtext.val("").blur();
+                    jplay.ui.elements.searchtext.val('').blur();
                 });
             });
         },
@@ -785,33 +786,33 @@
     filetree: {
         jqnode: {},
         init: function () {
-            "use strict";
-            jplay.filetree.jqnode = $("#filescontainer");
+            'use strict';
+            jplay.filetree.jqnode = $('#filescontainer');
             jplay.filetree.jqnode.jstree({
-                "plugins": ["json_data", "themes", "ui", "dnd", "crrm"],
-                "themes": {
-                    theme: "classic"
+                'plugins': ['json_data', 'themes', 'ui', 'dnd', 'crrm'],
+                'themes': {
+                    theme: 'classic'
                 },
-                "json_data": {
-                    "ajax": {
-                        "url": "/dirtree",
-                        "data": function (n) {
+                'json_data': {
+                    'ajax': {
+                        'url': '/dirtree',
+                        'data': function (n) {
                             return {
-                                "path": n.data ? n.data("id") : ""
+                                'path': n.data ? n.data('id') : ''
                             };
                         }
                     },
-                    "progressive_unload": true
+                    'progressive_unload': true
                 },
-                "dnd": {
-                    "drop_target": "#playlistcontainer,#playlistheader",
-                    "drop_finish": function (data) {
+                'dnd': {
+                    'drop_target': '#playlistcontainer,#playlistheader',
+                    'drop_finish': function (data) {
                         var i, endi, dropped, position, before;
                         for (i = 0, endi = data.o.length; i < endi; i++) {
                             dropped = $((data.o)[i]);
-                            position = $(data.r).closest("li");
-                            before = data.e.offsetY < $(data.e.target).closest("li").height() / 2;
-                            if (dropped.data("isdir")) {
+                            position = $(data.r).closest('li');
+                            before = data.e.offsetY < $(data.e.target).closest('li').height() / 2;
+                            if (dropped.data('isdir')) {
                                 jplay.playlist.addDir(dropped, position, before);
                                 jplay.playlist.save();
                             } else {
@@ -821,60 +822,60 @@
                         }
                     }
                 },
-                "crrm": {
-                    "move": {
-                        "check_move": function () {
+                'crrm': {
+                    'move': {
+                        'check_move': function () {
                             return false;
                         }
                     }
                 },
-                "ui": { "disable_selecting_children": true },
-                "core": {
-                    "load_open": true,
-                    "animation": jplay.settings.items.animationspeed,
-                    "initially_open": jplay.helpfunctions.getShowDir()
+                'ui': { "disable_selecting_children": true },
+                'core': {
+                    'load_open': true,
+                    'animation': jplay.settings.items.animationspeed,
+                    'initially_open': jplay.helpfunctions.getShowDir()
                 }
-            }).on("dblclick.jstree", function (e) {
+            }).on('dblclick.jstree', function (e) {
                 e.preventDefault();
-                var node = $(e.target).closest("li");
+                var node = $(e.target).closest('li');
                 if (node.data().isdir) {
-                    jplay.filetree.jqnode.jstree("toggle_node", node);
+                    jplay.filetree.jqnode.jstree('toggle_node', node);
                 } else {
                     jplay.player.setActiveSong(jplay.playlist.addFile(node.data()));
                     jplay.playlist.save();
                 }
-            }).on("contextmenu", function (e) {
+            }).on('contextmenu', function (e) {
                 e.preventDefault();
-                if (jplay.filetree.jqnode.jstree("get_selected").length < 2) {
-                    jplay.filetree.jqnode.jstree("deselect_all");
-                    jplay.filetree.jqnode.jstree("select_node", e.target, false);
+                if (jplay.filetree.jqnode.jstree('get_selected').length < 2) {
+                    jplay.filetree.jqnode.jstree('deselect_all');
+                    jplay.filetree.jqnode.jstree('select_node', e.target, false);
                 }
-                if ($("#jst_contextmenu").css("display") === "block") {
-                    $("#jst_contextmenu").hide();
+                if ($('#jst_contextmenu').css('display') === 'block') {
+                    $('#jst_contextmenu').hide();
                 }
-                $("#jst_contextmenu").css({
+                $('#jst_contextmenu').css({
                     top: e.pageY + 'px',
                     left: e.pageX + 'px'
                 }).fadeIn(jplay.settings.items.animationspeed);
             });
-            $("#jst_contextmenu li").click(function (e) {
-                var rel = $(e.target).attr("rel"), sel, isDir, started = false;
-                sel = jplay.filetree.jqnode.jstree("get_selected");
+            $('#jst_contextmenu li').click(function (e) {
+                var rel = $(e.target).attr('rel'), sel, isDir, started = false;
+                sel = jplay.filetree.jqnode.jstree('get_selected');
                 switch (rel) {
-                    case "download":
+                    case 'download':
                         jplay.filetree.downloadSongs(sel);
                         break;
-                    case "link":
+                    case 'link':
                         if (sel.length === 1) {
-                            isDir = $(sel).data("isdir");
+                            isDir = $(sel).data('isdir');
                             var data = $(sel).data();
-                            var id = "id=" + data.id;
-                            var isdir = "isdir=" + (data.isdir ? "1" : "0");
-                            var arr = [id, isdir].join("&");
+                            var id = 'id=' + data.id;
+                            var isdir = 'isdir=' + (data.isdir ? '1' : '0');
+                            var arr = [id, isdir].join('&');
                             jplay.helpfunctions.popup({ text: 'http://' + window.location.host + '/#' + arr });
                         }
                         break;
-                    case "add":
+                    case 'add':
                         $.each(sel, function (key, val) {
                             val = $(val);
                             if (val.data().isdir) {
@@ -886,7 +887,7 @@
                             }
                         });
                         break;
-                    case "addplay":
+                    case 'addplay':
                         // Define callback outside of loop
                         var callback = function (first) {
                             if (!started) {
@@ -915,32 +916,32 @@
                 }
             });
             $(document).click(function (e) {
-                $("#jst_contextmenu").fadeOut(jplay.settings.items.animationspeed);
+                $('#jst_contextmenu').fadeOut(jplay.settings.items.animationspeed);
                 if (jplay.ui.elements.searchlinksbutton.has(e.target).length === 0 &&
                     (jplay.ui.elements.searchlinksmenu.has(e.target).length === 0 ||
-                    $(e.target).closest("li").has("ul").length === 0)) {
+                    $(e.target).closest('li').has('ul').length === 0)) {
                     jplay.ui.elements.searchlinksmenu.fadeOut(jplay.settings.items.animationspeed / 3);
                 }
                 return true;
             });
-            jplay.filetree.jqnode.on("open_node.jstree", function () {
+            jplay.filetree.jqnode.on('open_node.jstree', function () {
                 var hashes;
                 if (jplay.inited === true) {
                     return;
                 }
                 hashes = jplay.helpfunctions.getHashes();
                 if (hashes.id) {
-                    if (hashes.isdir === "1") {
+                    if (hashes.isdir === '1') {
                         // FIXME: open_node.jstree triggering before everything is visible
                         setTimeout(function () {
-                            var el = $("#node_" + hashes.id);
-                            jplay.filetree.jqnode.jstree("select_node", el);
+                            var el = $('#node_' + hashes.id);
+                            jplay.filetree.jqnode.jstree('select_node', el);
                             jplay.playlist.addDir(el, false, false, function (firstnode) {
                                 jplay.player.setActiveSong(firstnode);
                             });
                         }, 200);
                     } else {
-                        $.get("/getSongInfo", { id: hashes.id, isdir: false }, function (results) {
+                        $.get('/getSongInfo', { id: hashes.id, isdir: false }, function (results) {
                             if (results.length > 0) {
                                 jplay.player.setActiveSong(jplay.playlist.addFile(results[0]));
                             }
@@ -951,9 +952,9 @@
             });
         },
         opendir: function (dirs, index, callback) {
-            "use strict";
+            'use strict';
             var dirscopy = dirs.slice();
-            var node = $("#node_" + dirs[index]);
+            var node = $('#node_' + dirs[index]);
             if (node.size() < 1) {
                 if (index < dirscopy.length - 1) {
                     jplay.filetree.opendir(dirscopy, index + 1, callback);
@@ -962,7 +963,7 @@
                     callback(dirs);
                 }
             } else {
-                jplay.filetree.jqnode.jstree("open_node", $("#node_" + dirs[index]), function () {
+                jplay.filetree.jqnode.jstree('open_node', $('#node_' + dirs[index]), function () {
                     if (index < dirscopy.length - 1) {
                         jplay.filetree.opendir(dirscopy, index + 1, callback);
                     }
