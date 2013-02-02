@@ -464,7 +464,6 @@
             ple = $(playlistentry);
             plcontainer = jplay.ui.elements.playlistcontainer;
             data = ple.data('attribs');
-            console.log(jplay.player.activeSong);
             oldSong = jplay.player.activeSong;
             jplay.player.activeSong = playlistentry;
             $('.songinplaylist').removeClass('activesong');
@@ -895,7 +894,6 @@
                                 jplay.player.setActiveSong(first);
                             }
                         };
-                        // Use syncronous loop to be able to save after.
                         for (var i = 0; i < sel.length; i++) {
                             var val = $(sel[i]);
                             if (val.data().isdir) {
@@ -1108,7 +1106,6 @@ $(document).ready(function () {
     jplay.customplaylists.update();
     jplay.shuffle.update();
     jplay.searchfn.init();
-    $("*").on("overflow", function (e) { console.log(e) });
     /*var now = new Date().getTime();
     var loadtime = now - performance.timing.navigationStart;
     console.log("test " + loadtime);*/
