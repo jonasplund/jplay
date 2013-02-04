@@ -111,7 +111,7 @@ h2#settingsheader { cursor:pointer; }
 #customplaylists li:nth-child(2n) { background-color:rgba(220,220,220,1); }
 
 .chatcontainer { -webkit-box-flex:1; display:-webkit-box; -webkit-box-orient:vertical; 
-				-moz-box-flex:1; display:-moz-box; -moz-box-orient:vertical; }
+                -moz-box-flex:1; display:-moz-box; -moz-box-orient:vertical; }
 .chatcontent { -webkit-box-flex:1; -moz-box-flex:1; overflow:auto; -webkit-user-select:text; -moz-user-select:text; }
 .chatcontent p { margin:1px 0; }
 .chatcontent .mychat { color:Green; }
@@ -131,4 +131,5 @@ h2#settingsheader { cursor:pointer; }
             
 #bigscreen { display: none; position: absolute; height:100%; width:100%; top:0; left:0; z-index:2000; }
 
-#sidebar { -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; }
+#sidebar { -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; 
+            max-width:40%; overflow-y:auto; max-height:100%; }

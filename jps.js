@@ -13,8 +13,33 @@
 
     // Test version
     /*jps.getSimilarArtists = function (req, res) { 
-        res.send(JSON.stringify([ { item: 'Metallica', dirid: '4' } ]));
+    res.send(JSON.stringify([ { item: 'Metallica', dirid: '4' } ]));
     };*/
+
+    jps.getBandInfo = function (req, res) {
+        console.log(req.query);
+        if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
+            res.send('Invalid id: 1');
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs WHERE id = ?', [req.query.id], function (err, data) {
+            connection.end();
+            if (err) { throw err; }
+            if (data.length < 1) {
+                connection.end();
+                res.send('Invalid id: 2');
+                return;
+            }
+            metalminer.getBandInfo(data[0], function (err, results) {
+                if (err) {
+                    res.send('No info found.');
+                    return;
+                }
+                res.send(results);
+            });
+        });
+    }
 
     jps.getSimilarArtists = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
@@ -89,7 +114,6 @@
 
     jps.getRandomSongs = function (req, res) {
         var count = isNaN(req.query.counter - 0) || req.query.counter === undefined ? 1 : req.query.counter;
-        console.log(count);
         var connection = mysql.createConnection(options.dbConnection);
         var qry = connection.query('SELECT * FROM SONGS AS r1 JOIN (SELECT (RAND() * ' +
             '(SELECT MAX(id) FROM songs)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY ' +
