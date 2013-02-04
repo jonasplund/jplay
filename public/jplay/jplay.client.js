@@ -463,8 +463,10 @@
             var ple, plcontainer, data, scrollto, relpos, oldSong;
             ple = $(playlistentry);
             plcontainer = jplay.ui.elements.playlistcontainer;
-            data = ple.data('attribs');
-            oldSong = jplay.player.activeSong;
+            data = ple.data('attribs') || {};
+            if (jplay.player.activeSong) {
+                oldSong = $(jplay.player.activeSong).data().attribs;
+            }
             jplay.player.activeSong = playlistentry;
             $('.songinplaylist').removeClass('activesong');
             ple.addClass('activesong');

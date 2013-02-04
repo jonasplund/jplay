@@ -17,9 +17,8 @@
     };*/
 
     jps.getBandInfo = function (req, res) {
-        console.log(req.query);
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
-            res.send('Invalid id: 1');
+            res.send('Invalid id');
             return;
         }
         var connection = mysql.createConnection(options.dbConnection);
@@ -27,8 +26,7 @@
             connection.end();
             if (err) { throw err; }
             if (data.length < 1) {
-                connection.end();
-                res.send('Invalid id: 2');
+                res.send('No songs matching id');
                 return;
             }
             metalminer.getBandInfo(data[0], function (err, results) {

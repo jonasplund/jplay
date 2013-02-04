@@ -1,7 +1,24 @@
 (function ($, jplay) {
     'use strict';
     $(document).on('jplay.newsong', function (event) {
-        $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
+        switch ($('#sidebar .ui-tabs-active').text()) {
+            case 'Band Info':
+            case 'Similar Artists':
+                if (!event.from || !event.to || event.from.artist !== event.to.artist) {
+                    $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
+                }
+                break;
+            case 'Lyrics':
+                if (!event.from || 
+                    !event.to || 
+                    event.from.artist !== event.to.artist || 
+                    event.from.title !== event.to.title) {
+                    $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
+                }
+                break;
+            default:
+                break;
+        }
     });
     $(document).on('click', '#sidebar .ui-tabs-panel a.tabcontent', function(e) {
         e.preventDefault();
@@ -24,36 +41,29 @@
             ui.ajaxSettings.dataFilter = function (data) {
                 switch (ui.tab.text()) {
                     case 'Band Info':
-                        var $data = $('<div>').append($(data));
-                        $data.find('a').contents().unwrap();
-                        data = $data.html();
+                        try {
+                            var $data = $('<div>').append($(data));
+                            $data.find('a').contents().unwrap();
+                            data = $data.html();
+                        } catch (e) { }
                         break;
                     case 'Similar Artists':
-                        data = $.map($.parseJSON(data), function (item) { 
-                            if (item.dirid) {
-                                return '<a class="tabcontent" href="#id=' + item.dirid + '">' + item.item + '</a>';
-                            }
-                            return item.item;
-                        }).join('<br />');
+                        try {
+                            data = $.map($.parseJSON(data), function (item) { 
+                                if (item.dirid) {
+                                    return '<a class="tabcontent" href="#id=' + item.dirid + '">' + decodeURI(item.item) + '</a>';
+                                }
+                                return decodeURI(item.item);
+                            }).join('<br />');
+                        } catch (ex) { }
                         break;
                     default:
                         break;
                 }
-                try {
-                    return $.map($.parseJSON(data), function (item) { 
-                        if (item.dirid) {
-                            return '<a class="tabcontent" href="#id=' + item.dirid + '">' + item.item + '</a>';
-                        }
-                        return item.item;
-                    }).join('<br />');
-                } catch (e) {
-                    return data;
-                }
+                return data;
             };
             ui.jqXHR.error(function () {
                 ui.panel.html('An error occurred.');
-            });
-            ui.jqXHR.success(function (data) {
             });
         }
     });
