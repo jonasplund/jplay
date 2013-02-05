@@ -54,7 +54,7 @@
             }
             metalminer.getLyrics(data[0], function (err, data) {
                 if (err) {
-                    res.send('Lyrics not found: ' + err);
+                    res.send(err);
                 } else {
                     res.send(data);
                 }
@@ -78,7 +78,7 @@
             metalminer.getSimilarArtists(data[0], function (err, results) {
                 if (err) {
                     connection.end();
-                    res.send('Similar artists not found.');
+                    res.send(err);
                     return;
                 }
                 async.map(results, function (item, callback) {
@@ -101,7 +101,7 @@
                             return -1;
                         if (!a.dirid && b.dirid)
                             return 1;
-                        return a.item > b.item;
+                        return a.item > b.item ? 1 : -1;
                     });
                     res.send(JSON.stringify(sendobj));
                 });

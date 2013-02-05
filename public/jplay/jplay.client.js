@@ -321,22 +321,22 @@
                 type = item.prop('id');
                 switch (type) {
                     case 'search_google_instant':
-                        url = 'https://www.google.se/search?q=' + safeUrl(activeSong.artist) + '&btnI=1';
+                        url = 'https://www.google.se/search?q=' + encodeURI(activeSong.artist) + '&btnI=1';
                         break;
                     case 'search_google':
-                        url = 'https://www.google.se/search?q=' + safeUrl(activeSong.artist);
+                        url = 'https://www.google.se/search?q=' + encodeURI(activeSong.artist);
                         break;
                     case 'search_youtube_band':
-                        url = 'http://www.youtube.com/results?search_query=' + safeUrl(activeSong.artist);
+                        url = 'http://www.youtube.com/results?search_query=' + encodeURI(activeSong.artist);
                         break;
                     case 'search_youtube_song':
-                        url = 'http://www.youtube.com/results?search_query=' + safeUrl(activeSong.artist + '+' + activeSong.title.replace(/^[0-9]{1,3} -/, ""));
+                        url = 'http://www.youtube.com/results?search_query=' + encodeURI(activeSong.artist + '+' + activeSong.title.replace(/^[0-9]{1,3} -/, ""));
                         break;
                     case 'search_wikipedia':
-                        url = 'http://en.wikipedia.com/w/index.php?search=' + safeUrl(activeSong.artist);
+                        url = 'http://en.wikipedia.com/w/index.php?search=' + encodeURI(activeSong.artist);
                         break;
                     case 'search_darklyrics':
-                        url = 'http://www.google.se/search?q=' + safeUrl(activeSong.artist + '+' + activeSong.album) + '+site%3Awww.darklyrics.com&btnI=1';
+                        url = 'http://www.google.se/search?q=' + encodeURI(activeSong.artist + '+' + activeSong.album) + '+site%3Awww.darklyrics.com&btnI=1';
                         break;
                 }
                 item.find('a').prop({
@@ -395,14 +395,14 @@
             var nextSong;
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 if (jplay.settings.items.shuffle) {
-                    jplay.player.setActiveSong($("#playlist .songinplaylist:eq(" + (jplay.shuffle.list[jplay.shuffle.index]) + ")"));
+                    jplay.player.setActiveSong($('#playlist .songinplaylist:eq(' + (jplay.shuffle.list[jplay.shuffle.index]) + ')'));
                     jplay.shuffle.index += 1;
                 } else {
-                    jplay.player.setActiveSong(jplay.ui.elements.playlist.children().first(".songinplaylist"));
+                    jplay.player.setActiveSong(jplay.ui.elements.playlist.children().first('.songinplaylist'));
                 }
             } else {
                 if (jplay.settings.items.shuffle) {
-                    nextSong = $("#playlist .songinplaylist:eq(" + (jplay.shuffle.list[jplay.shuffle.index]) + ")");
+                    nextSong = $('#playlist .songinplaylist:eq(' + (jplay.shuffle.list[jplay.shuffle.index]) + ')');
                     jplay.shuffle.index += 1;
                 } else {
                     nextSong = jplay.player.activeSong.next(".songinplaylist");
