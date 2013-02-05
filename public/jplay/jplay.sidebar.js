@@ -1,18 +1,19 @@
 (function ($, jplay) {
     'use strict';
     $(document).on('jplay.newsong', function (event) {
+        if (!event.from || !event.to) {
+            $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
+            return;
+        }
         switch ($('#sidebar .ui-tabs-active').text()) {
             case 'Band Info':
             case 'Similar Artists':
-                if (!event.from || !event.to || event.from.artist !== event.to.artist) {
+                if (event.from.artist !== event.to.artist) {
                     $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
                 }
                 break;
             case 'Lyrics':
-                if (!event.from || 
-                    !event.to || 
-                    event.from.artist !== event.to.artist || 
-                    event.from.title !== event.to.title) {
+                if (event.from.artist !== event.to.artist || event.from.title !== event.to.title) {
                     $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
                 }
                 break;
@@ -27,6 +28,7 @@
     });
     $('#sidebar').tabs({
         beforeLoad: function(event, ui) {
+            var ajaxSettings = ui.ajaxSettings, data;
             ui.panel.html('Loading...');
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 ui.panel.html('No active song.');
@@ -34,18 +36,19 @@
                 event.preventDefault();
                 return;
             }
-            var data = jplay.player.activeSong.data().attribs;
-            ui.ajaxSettings.url = ui.tab.find('a').attr('href').split("?")[0];
-            ui.ajaxSettings.url += '?artist=' + data.artist + '&title=' + data.title + '&album=' + data.album + '&id=' + data.id;
-            ui.ajaxSettings.dataType = 'json';
-            ui.ajaxSettings.dataFilter = function (data) {
+            data = jplay.player.activeSong.data().attribs;
+            ajaxSettings.url = ui.tab.find('a').attr('href').split("?")[0];
+            ajaxSettings.url += '?id=' + data.id;
+            ajaxSettings.dataType = 'json';
+            ajaxSettings.dataFilter = function (data) {
+                var $data;
                 switch (ui.tab.text()) {
                     case 'Band Info':
                         try {
-                            var $data = $('<div>').append($(data));
+                            $data = $('<div>').append($(data));
                             $data.find('a').contents().unwrap();
                             data = $data.html();
-                        } catch (e) { }
+                        } catch (ex) { }
                         break;
                     case 'Similar Artists':
                         try {
@@ -57,13 +60,17 @@
                             }).join('<br />');
                         } catch (ex) { }
                         break;
+                    case 'Lyrics':
+                        if (jplay.player.activeSong) {
+                            data = '<h1>' + jplay.player.activeSong.data().attribs.title + '</h1>' + data; 
+                        }
                     default:
                         break;
                 }
                 return data;
             };
-            ui.jqXHR.error(function () {
-                ui.panel.html('An error occurred.');
+            ui.jqXHR.error(function (err) {
+                ui.panel.html('An error occurred: ' + err);
             });
         }
     });

@@ -285,7 +285,7 @@
             jplay.player.setVolume(jplay.settings.items.volume);
         },
         init: function () {
-            "use strict";
+            'use strict';
             var elements = jplay.ui.elements;
             jplay.player.createInstance();
             if (!jplay.player.audioContext && window.webkitAudioContext) {	// Only allowed to create one per page
@@ -303,45 +303,45 @@
                 elements.searchlinksbutton.fadeOut(jplay.settings.items.animationspeed / 3);
             });
             elements.searchlinksbutton.click(function () {
-                elements.searchlinksmenu.css("display", "block"); //.fadeIn(jplay.settings.items.animationspeed / 3);
+                elements.searchlinksmenu.css('display', 'block'); //.fadeIn(jplay.settings.items.animationspeed / 3);
                 elements.searchlinksmenu.position({
-                    my: "left+2px top",
-                    at: "right top",
+                    my: 'left+2px top',
+                    at: 'right top',
                     of: elements.searchlinksbutton,
                     within: window
                 });
             });
             elements.searchlinksmenu.on("menuselect", function (event, ui) {
                 var item = ui.item, url, type, activeSong, safeUrl;
-                safeUrl = function (url) { return url.replace(/\\w/gi, "+").replace(/&/gi, "%26"); };
-                if (item.has("ul").length > 0 || $.isEmptyObject(jplay.player.activeSong)) {
+                safeUrl = function (url) { return url.replace(/\\w/gi, '+').replace(/&/gi, '%26'); };
+                if (item.has('ul').length > 0 || $.isEmptyObject(jplay.player.activeSong)) {
                     return true;
                 }
                 activeSong = jplay.player.activeSong.data("attribs");
-                type = item.prop("id");
+                type = item.prop('id');
                 switch (type) {
-                    case "search_google_instant":
-                        url = "https://www.google.se/search?q=" + safeUrl(activeSong.artist) + "&btnI=1";
+                    case 'search_google_instant':
+                        url = 'https://www.google.se/search?q=' + safeUrl(activeSong.artist) + '&btnI=1';
                         break;
-                    case "search_google":
-                        url = "https://www.google.se/search?q=" + safeUrl(activeSong.artist);
+                    case 'search_google':
+                        url = 'https://www.google.se/search?q=' + safeUrl(activeSong.artist);
                         break;
-                    case "search_youtube_band":
-                        url = "http://www.youtube.com/results?search_query=" + safeUrl(activeSong.artist);
+                    case 'search_youtube_band':
+                        url = 'http://www.youtube.com/results?search_query=' + safeUrl(activeSong.artist);
                         break;
-                    case "search_youtube_song":
-                        url = "http://www.youtube.com/results?search_query=" + safeUrl(activeSong.artist + "+" + activeSong.title.replace(/^[0-9]{1,3} -/, ""));
+                    case 'search_youtube_song':
+                        url = 'http://www.youtube.com/results?search_query=' + safeUrl(activeSong.artist + '+' + activeSong.title.replace(/^[0-9]{1,3} -/, ""));
                         break;
-                    case "search_wikipedia":
-                        url = "http://en.wikipedia.com/w/index.php?search=" + safeUrl(activeSong.artist);
+                    case 'search_wikipedia':
+                        url = 'http://en.wikipedia.com/w/index.php?search=' + safeUrl(activeSong.artist);
                         break;
-                    case "search_darklyrics":
-                        url = "http://www.google.se/search?q=" + safeUrl(activeSong.artist + "+" + activeSong.album) + "+site%3Awww.darklyrics.com&btnI=1";
+                    case 'search_darklyrics':
+                        url = 'http://www.google.se/search?q=' + safeUrl(activeSong.artist + '+' + activeSong.album) + '+site%3Awww.darklyrics.com&btnI=1';
                         break;
                 }
-                item.find("a").prop({
-                    "href": url,
-                    "target": "_blank"
+                item.find('a').prop({
+                    'href': url,
+                    'target': '_blank'
                 });
                 return true;
             });
@@ -352,21 +352,21 @@
             elements.volumeslider.slider({
                 value: jplay.settings.items.volume * 100,
                 slide: function () {
-                    jplay.player.setVolume($(this).slider("option", "value") / 100);
+                    jplay.player.setVolume($(this).slider('option', 'value') / 100);
                     jplay.settings.update();
                 },
                 change: function () { // click
-                    jplay.player.setVolume($(this).slider("option", "value") / 100);
+                    jplay.player.setVolume($(this).slider('option', 'value') / 100);
                     jplay.settings.update();
                 }
             });
             elements.covercontainer.cover({});
             elements.lyricsbutton.click(function () {
                 if ($.isEmptyObject(jplay.player.activeSong)) { return; }
-                var attribs = jplay.player.activeSong.data("attribs");
-                elements.lyricsbutton.button("option", "disabled", true);
-                $.get("/getLyrics", attribs, function (data) {
-                    elements.lyricsbutton.button("option", "disabled", false);
+                var attribs = jplay.player.activeSong.data('attribs');
+                elements.lyricsbutton.button('option', 'disabled', true);
+                $.get('/getLyrics', attribs, function (data) {
+                    elements.lyricsbutton.button('option', 'disabled', false);
                     jplay.helpfunctions.popup({
                         header: attribs.artist + ' - ' + attribs.title,
                         text: data
@@ -374,12 +374,12 @@
                 });
             });
             elements.bigscreenbutton.click(function () {
-                $("#bigscreencontainer").toggle();
+                $('#bigscreencontainer').toggle();
             });
             elements.addrandombutton.click(jplay.searchfn.addRandom);
         },
         toggleplay: function () {
-            "use strict";
+            'use strict';
             var playerdom = jplay.player.domobj;
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 jplay.player.next();
@@ -391,7 +391,7 @@
             }
         },
         next: function () {
-            "use strict";
+            'use strict';
             var nextSong;
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 if (jplay.settings.items.shuffle) {

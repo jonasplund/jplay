@@ -39,6 +39,29 @@
         });
     }
 
+    jps.getLyrics = function (req, res) {
+        if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
+            res.send('Invalid id');
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs WHERE id = ?', [req.query.id], function (err, data) {
+            connection.end();
+            if (err) { throw err; }
+            if (data.length < 1) {
+                res.send('No songs matching id');
+                return;
+            }
+            metalminer.getLyrics(data[0], function (err, data) {
+                if (err) {
+                    res.send('Lyrics not found: ' + err);
+                } else {
+                    res.send(data);
+                }
+            });
+        });
+    };
+
     jps.getSimilarArtists = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
             res.send('Invalid id.');
@@ -120,16 +143,6 @@
                 console.log(qry.sql);
                 res.send(data);
             });
-    };
-
-    jps.getLyrics = function (req, res) {
-        metalminer.getLyrics(req.query, function (err, data) {
-            if (!err) {
-                res.send(data);
-            } else {
-                res.send('Lyrics not found: ' + err);
-            }
-        });
     };
 
     jps.getImage = function (req, res) {
