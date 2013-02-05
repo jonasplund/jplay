@@ -83,7 +83,10 @@
                 }
                 async.map(results, function (item, callback) {
                     connection.query('SELECT dirid FROM songs WHERE artist = ? LIMIT 1', item, function (err, data2) {
-                        if (err) { callback(err); throw err; }
+                        if (err) {
+                            callback(err);
+                            throw err;
+                        }
                         if (data2 && data2.length > 0 && data2[0] && data2[0].dirid) {
                             callback(null, { item: item, dirid: data2[0].dirid });
                         } else {
@@ -93,6 +96,13 @@
                 }, function (err, sendobj) {
                     connection.end();
                     if (err) { throw err; }
+                    sendobj.sort(function (a, b) {
+                        if (a.dirid && !b.dirid)
+                            return -1;
+                        if (!a.dirid && b.dirid)
+                            return 1;
+                        return a.item > b.item;
+                    });
                     res.send(JSON.stringify(sendobj));
                 });
             });
