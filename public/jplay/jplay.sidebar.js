@@ -37,9 +37,7 @@
                 return;
             }
             data = jplay.player.activeSong.data().attribs;
-            ajaxSettings.url = ui.tab.find('a').attr('href').split("?")[0];
-            ajaxSettings.url += '?id=' + data.id;
-            ajaxSettings.dataType = 'json';
+            ajaxSettings.url = ui.tab.find('a').attr('href').split("?")[0] + '?id=' + data.id;
             ajaxSettings.dataFilter = function (data) {
                 var $data;
                 switch (ui.tab.text()) {
@@ -54,7 +52,8 @@
                         try {
                             data = $.map($.parseJSON(data), function (item) { 
                                 if (item.dirid) {
-                                    return '<a class="tabcontent" href="#id=' + item.dirid + '">' + decodeURI(item.item) + '</a>';
+                                    return '<a class="tabcontent" href="#id=' + 
+                                        item.dirid + '">' + decodeURI(item.item) + '</a>';
                                 }
                                 return decodeURI(item.item);
                             }).join('<br />');
@@ -62,7 +61,7 @@
                         break;
                     case 'Lyrics':
                         if (jplay.player.activeSong) {
-                            data = '<h1>' + jplay.player.activeSong.data().attribs.title + '</h1>' + data; 
+                            data = '<h1>' + jplay.player.activeSong.data().attribs.title.replace(/[0-9]{2,3} - /, '') + '</h1>' + data; 
                         }
                     default:
                         break;
