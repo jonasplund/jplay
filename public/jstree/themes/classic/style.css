@@ -12,7 +12,7 @@
 .jstree-classic .jstree-closed > ins { background-position:-54px 0; }
 .jstree-classic .jstree-leaf > ins { background-position:-36px 0; }
 
-.jstree-classic .jstree-hovered { /*background:#e7f4f9; border:1px solid #e7f4f9;*/ background:rgba(240,245,255,1); border:1px solid #ccc; padding:0 2px 0 1px; }
+.jstree-classic .jstree-hovered { /*background:#e7f4f9; border:1px solid #e7f4f9;*/ background:rgba(240,245,255,1); /* border:1px solid #ccc; padding:0 2px 0 1px; */ }
 .jstree-classic .jstree-clicked { background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1)));  background:-moz-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1)); border:1px solid #CCC; padding:0 2px 0 1px; font-weight:bold; }
 .jstree-classic a .jstree-icon { background-position:-56px -19px; }
 .jstree-classic .jstree-open > a .jstree-icon { background-position:-56px -36px; }
