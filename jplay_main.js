@@ -20,7 +20,6 @@
     app.get('/getImage', jps.getImage);
     app.get('/downloadSong', jps.downloadSong);
     app.get('/downloadSongs', jps.downloadSongs);
-    app.get('/dbUpdate', jps.dbUpdate);
     app.get('/search', jps.searchFile);
     app.get('/getAncestors', jps.getIdArray);
     app.get('/getSongInfo', jps.getSongInfo);

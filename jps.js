@@ -142,6 +142,8 @@
             util.pump(readStream, res, function () { });
         });
     };
+    
+    jps.downloadSongs = function (req, res) {};
 
     jps.getRandomSongs = function (req, res) {
         var count = isNaN(req.query.counter - 0) || req.query.counter === undefined ? 1 : req.query.counter;
