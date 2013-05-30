@@ -16,6 +16,29 @@
     res.send(JSON.stringify([ { item: 'Metallica', dirid: '4' } ]));
     };*/
 
+    jps.getVideo = function (req, res) {
+        if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
+            res.send('Invalid id');
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs WHERE id = ?', [req.query.id], function (err, data) {
+            connection.end();
+            if (err) { throw err; }
+            if (data.length < 1) {
+                res.send('No songs matching id');
+                return;
+            }
+            metalminer.getVideo(data[0], function (err, results) {
+                if (err) {
+                    res.send('No info found.');
+                    return;
+                }
+                res.send(results);
+            });
+        });
+    }
+
     jps.getBandInfo = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
             res.send('Invalid id');

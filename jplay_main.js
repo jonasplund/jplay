@@ -27,6 +27,7 @@
     app.get('/getLyrics', jps.getLyrics);
     app.get('/getSimilar', jps.getSimilarArtists);
     app.get('/getBandInfo', jps.getBandInfo);
+    app.get('/getVideo', jps.getVideo);
 
     var args = process.argv.slice(2);
     switch (args[0]) {

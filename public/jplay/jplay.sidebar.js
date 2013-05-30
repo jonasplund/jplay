@@ -17,6 +17,8 @@
                     $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
                 }
                 break;
+            case 'Video':
+                $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
             default:
                 break;
         }
@@ -63,6 +65,19 @@
                         if (jplay.player.activeSong) {
                             data = '<h1>' + jplay.player.activeSong.data().attribs.title.replace(/[0-9]{2,3} - /, '') + '</h1>' + data; 
                         }
+                        break;
+                    case 'Video':
+                        if (jplay.player.activeSong) {
+                            data = $('<iframe>').attr({
+                                'width': '420',
+                                'height': '315',
+                                'src': 'http://www.youtube.com/embed/' + data,
+                                'frameborder': '0',
+                                'allowfullscreen': ''
+                            });
+                            return data[0].outerHTML;
+                        }
+                        break;
                     default:
                         break;
                 }
