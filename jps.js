@@ -207,7 +207,10 @@
         connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
             if (err) { throw err; }
-            connection.end();
+            qry = 'UPDATE songs SET playcount = playcount + 1 WHERE id = ?';
+            connection.query(qry, [id], function (err, data) {
+                connection.end();
+            });
             if (data.length < 1) { return; }
             fullpath = path.join(data[0].dir, data[0].filename);
             if (!fs.existsSync(fullpath)) {
@@ -237,7 +240,7 @@
                 'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize
             });
             readStream = fs.createReadStream(fullpath, { start: start, end: end });
-            util.pump(readStream, res, function () { });
+            readStream.pipe(res);
         });
     };
 
@@ -269,13 +272,13 @@
         var album = (searchsettings.album === 'true') ? 'album LIKE \'%' + [needle] + '%\' ' : null;
         var title = (searchsettings.title === 'true') ? 'title LIKE \'%' + [needle] + '%\' ' : null;
         var all = [title, artist, album].filter(function (val) { return val !== null; }).join('OR ');
-        var qry = 'SELECT * FROM songs WHERE ' + all + 'LIMIT 20;';
+        var qry = 'SELECT * FROM songs WHERE ' + all + 'LIMIT 100;';
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
-            if (searchsettings.artist || searchsettings.album) {
-                qry = 'SELECT * FROM dirs WHERE dirname LIKE \'%' + [needle] + '%\' LIMIT 20';
+            if (searchsettings.album) {
+                qry = 'SELECT * FROM dirs WHERE dirname LIKE \'%' + [needle] + '%\' LIMIT 100';
                 connection.query(qry, function (err, data2) {
                     if (err) { throw err; }
                     connection.end();
@@ -356,6 +359,17 @@
             options.baseDirId = data[0].id;
         });
     };
+    
+    jps.getPopular = function (req, res) {
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        var qry = 'SELECT * FROM dirs, (SELECT dirid, SUM(playcount) AS pc FROM songs GROUP BY dirid ORDER BY pc DESC LIMIT 10) pop WHERE pop.dirid = dirs.id';
+        connection.query(qry, function (err, data) {
+            if (err) { throw err; }
+            connection.end();
+            res.send(data);
+        });
+    }
 
     var getFiles_db = function (dir, callback) {
         getSongs(dir, function (res_songs) {

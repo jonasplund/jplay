@@ -486,10 +486,21 @@
 
     var tables = {
         sql: {
-            songs: 'CREATE TABLE songs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
-            'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,filename VARCHAR(255),' +
-            'dir VARCHAR(2000),filesize INT,title VARCHAR(255),artist VARCHAR(100),year VARCHAR(100),' +
-            'album VARCHAR(255),contenttype VARCHAR(20),dirid INT,isdir BOOL,hash VARCHAR(32));',
+            songs: 'CREATE TABLE songs (' + 
+                'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
+                'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' + 
+                'filename VARCHAR(255),' +
+                'dir VARCHAR(2000),' + 
+                'filesize INT,' + 
+                'title VARCHAR(255),' + 
+                'artist VARCHAR(100),' + 
+                'year VARCHAR(100),' +
+                'album VARCHAR(255),' + 
+                'contenttype VARCHAR(20),' + 
+                'dirid INT,' + 
+                'isdir BOOL,' + 
+                'hash VARCHAR(32),' +
+                'playcount INT NOT NULL DEFAULT 0);',
             dirs: 'CREATE TABLE dirs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
             'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,dirname VARCHAR(2000),' +
             'cover VARCHAR(100),parent_id INT,ancestors VARCHAR(200),isdir BOOL);'
