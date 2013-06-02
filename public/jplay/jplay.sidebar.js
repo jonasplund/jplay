@@ -18,9 +18,7 @@
                 }
                 break;
             case 'Video':
-                if (event.from.artist !== event.to.artist || event.from.title !== event.to.title) {
-                    $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
-                }
+                $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
             default:
                 break;
         }
