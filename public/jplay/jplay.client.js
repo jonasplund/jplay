@@ -114,8 +114,7 @@
             elements.addrandombutton.button({
                 icons: { primary: "ui-icon-transfer-e-w" },
                 text: false,
-                title: "Add random song to playlist",
-                disabled: true
+                title: "Add random song to playlist"
             });
         }
     },
@@ -777,7 +776,7 @@
         },
         addRandom: function (data, callback) {
             'use strict';
-            $.get('/getRandomSongs', { count: 1 }, function (result) {
+            $.get('/getRandom', { count: 1 }, function (result) {
                 $.each(result, function (key, val) {
                     jplay.playlist.addFile(val);
                 });

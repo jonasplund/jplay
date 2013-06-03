@@ -87,8 +87,9 @@
 
     jps.getRandom = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT 1', [req.query.id], function (err, data) {
+        connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT ?', parseInt(req.query.count) || 1, function (err, data) {
             if (err) { throw err; }
+            connection.end();
             res.send(data);
         });
     };

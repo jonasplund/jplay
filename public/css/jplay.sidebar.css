@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'ghost';
+  src: url('ghost.ttf');
+}
+
+#sidebar { -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; 
+            max-width:40%; overflow-y:auto; max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; border-right: 0; }
+
+/* Tab styling */
+
+#tabs { 
+    background: transparent; 
+    border: none; 
+    padding-top: 0;
+} 
+#sidebar .ui-widget-header { 
+    background: transparent; 
+    border: none; 
+    border-bottom: 1px solid #c0c0c0; 
+    -moz-border-radius: 0px; 
+    -webkit-border-radius: 0px; 
+    border-radius: 0px; 
+} 
+#sidebar .ui-tabs-nav .ui-state-default { 
+    background: transparent; 
+    border: none; 
+    border-radius: 0;
+    border-right: 1px solid #c0c0c0;
+    margin-right: 0;
+} 
+#sidebar .ui-tabs-nav .ui-state-active { 
+    background: transparent url(uitabsarrow.png) no-repeat bottom center; 
+    border: none; 
+    border-right: 1px solid #c0c0c0;
+    margin-right: 0;
+} 
+#sidebar .ui-tabs-nav .ui-state-default a { 
+    color: #c0c0c0; 
+} 
+#sidebar .ui-tabs-nav .ui-state-active a { 
+    color: #000; 
+}
+#sidebar .ui-tabs-nav .ui-state-focus a { 
+    outline-color: transparent; 
+}
+
+/* Styles for specific tabs */
+#ui-tabs-2 h1 {
+  font-family: 'ghost', serif;
+  font-weight: normal;
+  font-size: 42px;
+  margin-top:0;
+  padding-top: 0;
+  background: -webkit-linear-gradient(top, rgba(25,25,25,0.4) 0%, rgba(25,25,25,0.5), rgba(25,25,25,0.4) 100%), url('textured_paper.png');
+  color:transparent;
+  text-shadow:0 0 1px #E22, -3px -4px 2px #353, 3px 7px 3px #400, -6px 1px 5px #100;
+  margin:0 -15px 10px -15px;
+  text-align: center;
+  box-shadow: 0 3px 3px #555 inset, 0 -3px 3px #555 inset;
+}
