@@ -37,7 +37,7 @@
                 res.send(results);
             });
         });
-    }
+    };
 
     jps.getBandInfo = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
@@ -60,7 +60,7 @@
                 res.send(results);
             });
         });
-    }
+    };
 
     jps.getLyrics = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
@@ -82,6 +82,14 @@
                     res.send(data);
                 }
             });
+        });
+    };
+
+    jps.getRandom = function (req, res) {
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT 1', [req.query.id], function (err, data) {
+            if (err) { throw err; }
+            res.send(data);
         });
     };
 

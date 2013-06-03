@@ -29,6 +29,7 @@
     app.get('/getBandInfo', jps.getBandInfo);
     app.get('/getVideo', jps.getVideo);
     app.get('/getPopular', jps.getPopular);
+    app.get('/getRandom', jps.getRandom);
 
     var args = process.argv.slice(2);
     switch (args[0]) {
