@@ -16,6 +16,7 @@
             bigscreenbutton: {},
             playlistcontainer: {},
             playlist: {},
+            repeatbutton: {},
             searchsettings: {},
             searchtext: {},
             mutebutton: {},
@@ -298,8 +299,6 @@
             elements.nextbutton.click(jplay.player.next);
             elements.prevbutton.click(jplay.player.prev);
             elements.playpausebutton.click(jplay.player.toggleplay);
-            elements.repeatbutton.click(jplay.playlist.togglerepeat);
-            elements.shufflebutton.click(jplay.playlist.toggleshuffle);
             elements.mutebutton.click(jplay.player.togglemute);
             elements.playinfo.hover(function () {
                 elements.searchlinksbutton.fadeIn(jplay.settings.items.animationspeed / 3);
@@ -528,165 +527,6 @@
             } else {
                 jplay.ui.elements.mutebutton.button('option', 'icons', { primary: 'ui-icon-volume-on' }).removeClass('ui-state-highlight');
                 jplay.settings.update();
-            }
-        }
-    },
-    playlist: {
-        init: function () {
-            "use strict";
-            $(document).on("keydown", "input:text", function (e) {
-                e.stopPropagation();
-            }).on("contextmenu", ".songinplaylist", function (e) {
-                e.preventDefault();
-                $(this).remove();
-                jplay.playlist.save();
-            }).on("dblclick", ".songinplaylist", function (e) {
-                e.preventDefault();
-                jplay.player.setActiveSong($(this));
-            });
-            jplay.ui.elements.playlist.sortable();
-            if (jplay.settings.items.saveplaylist &&
-                    localStorage.getItem("playlist")) {
-                jplay.playlist.items = $.parseJSON(localStorage.getItem("playlist"));
-                if (jplay.playlist.items) {
-                    $.each(jplay.playlist.items, function () {
-                        jplay.playlist.addFile(this);
-                    });
-                }
-            }
-            $("#playlistnameinput").dialog({
-                autoOpen: false,
-                height: 120,
-                width: 250,
-                modal: false,
-                resizable: false,
-                title: "Save playlist as",
-                buttons: {
-                    "Save": function () {
-                        var name = $("#playlistnameinput #name").get(0).value;
-                        if (name === "") {
-                            return;
-                        }
-                        jplay.customplaylists.saveNew($("#playlistnameinput #name").get(0).value);
-                        $(this).dialog("close");
-                    }
-                }
-            });
-            $("#saveplaylistbutton").click(function () {
-                $("#playlistnameinput").dialog("open");
-            });
-            $("#clearplaylistbutton").click(function () {
-                jplay.playlist.clear();
-            });
-        },
-        save: function () {
-            'use strict';
-            var songs, tmp;
-            jplay.playlist.items = [];
-            songs = $('#playlist li');
-            $.each(songs, function () {
-                tmp = $(this).data();
-                jplay.playlist.items.push($(this).data("attribs"));
-            });
-            jplay.shuffle.update();
-            $(document).trigger('jplay.playlistsave');
-            localStorage.setItem('playlist', JSON.stringify(jplay.playlist.items));
-        },
-        clear: function () {
-            "use strict";
-            jplay.ui.elements.playlist.children("li").remove();
-            jplay.playlist.save();
-        },
-        dirCounter: 0, // For addDir()
-        addDir: function (dirObj, position, before, callback) {
-            'use strict';
-            this.dirCounter++;
-            var obj = (dirObj instanceof $) ? dirObj.data() : dirObj;
-            $.get("/addDir", { "id": obj.id }, $.proxy(function (results) {
-                var firstnode;
-                for (var i = 0, endi = results.length; i < endi; i++) {
-                    var value = results[i];
-                    if (!value.isdir) {
-                        if (!firstnode) {
-                            firstnode = jplay.playlist.addFile(value);
-                        } else {
-                            jplay.playlist.addFile(value);
-                        }
-                    } else {
-                        jplay.playlist.addDir(value, null, null, callback);
-                    }
-                    if (i === endi - 1) {
-                        this.dirCounter--;
-                        if (this.dirCounter === 0) {
-                            jplay.playlist.save();
-                            this.dirCounter = 0;
-                        }
-                        if (callback) {
-                            callback(firstnode);
-                        }
-                    }
-                }
-            }, this));
-        },
-        addFile: function (json, position, before) {
-            'use strict';
-            var html, title, node, retval;
-            if (!json.title) {
-                json.title = json.filename;
-            }
-            html = '<span class="playlist_artist">' + json.artist + '</span> ' +
-                '<span class="playlist_album">- ' + json.album + '</span> ' +
-                '<span class="playlist_title">- ' + json.title + '</span> ' +
-                '<span class="playlist_year">- ' + json.year + '</span>';
-            title = '';
-            if (json.artist) {
-                title += 'Artist:\t' + json.artist;
-            }
-            if (json.title) {
-                title += '\nSong:\t' + json.title;
-            }
-            if (json.album) {
-                title += '\nAlbum:\t' + json.album;
-            }
-            if (json.year) {
-                title += '\nYear:\t' + json.year;
-            }
-            node = $('<li/>').addClass('songinplaylist').html(html).attr('title', title).
-                data('attribs', json).data('playlistorder', $('#songinplaylist'));
-            if (position && (position.is('ul') || position.is('li'))) {
-                if (before) {
-                    node.insertBefore($(position));
-                    retval = $(position);
-                } else {
-                    retval = node.insertAfter($(position));
-                }
-            } else {
-                retval = node.appendTo(jplay.ui.elements.playlist);
-            }
-            return retval;
-        },
-        togglerepeat: function () {
-            'use strict';
-            if (jplay.settings.items.repeatall) {
-                jplay.settings.items.repeatall = false;
-                jplay.settings.update();
-                jplay.ui.elements.repeatbutton.removeClass('ui-state-highlight');
-            } else {
-                jplay.settings.items.repeatall = true;
-                jplay.settings.update();
-                jplay.ui.elements.repeatbutton.addClass('ui-state-highlight');
-            }
-        },
-        toggleshuffle: function () {
-            'use strict';
-            if (jplay.settings.items.shuffle) {
-                jplay.settings.items.shuffle = false;
-                jplay.settings.update();
-                jplay.ui.elements.shufflebutton.removeClass('ui-state-highlight');
-            } else {
-                jplay.settings.items.shuffle = true;
-                jplay.settings.update();
-                jplay.ui.elements.shufflebutton.addClass('ui-state-highlight');
             }
         }
     },
@@ -1084,7 +924,6 @@ $(document).ready(function () {
     jplay.ui.init();
     jplay.settings.init();
     jplay.player.init();
-    jplay.playlist.init();
     jplay.keybindings.init();
     try {
         $('#bottomright').chat({
@@ -1094,8 +933,8 @@ $(document).ready(function () {
     } catch (err) { }
     jplay.filetree.init();
     jplay.customplaylists.update();
-    jplay.shuffle.update();
     jplay.searchfn.init();
+    $(document).trigger('jplay.inited');
     /*var now = new Date().getTime();
     var loadtime = now - performance.timing.navigationStart;
     console.log("test " + loadtime);*/
