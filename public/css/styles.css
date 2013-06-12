@@ -1,9 +1,9 @@
 html { background:rgba(210,235,249,1); margin:0; padding:0; height:100%; }
 body { -webkit-user-select:none; -moz-user-select:-moz-none; font-family:Verdana, Geneva, sans-serif; font-size:10px; margin:0; padding:0; 
-       background:-webkit-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%);
-       background:-moz-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
-	   background:-ms-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%);
-	   height:100%; }
+       background-image:-moz-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%); 
+	   background-image:-ms-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%);
+     background-image:-webkit-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(215,215,215,0.94) 100%);
+	   height:100%; background-size:contain; background-repeat: no-repeat; background-position: center; }
     
 div.clear { clear:both; }
 
@@ -62,7 +62,7 @@ h2#settingsheader { cursor:pointer; }
 #midrowright {  height:500px; }
 
 #playlistcontainer { padding:0; margin:0 auto; height:456px; overflow-y:auto; }
-#playlistcontrols { background:#FFF; box-shadow:#333 -1px -1px 2px inset; padding:3px 4px; }
+#playlistcontrols { background:#FFF; padding:3px 4px; border-bottom:2px ridge #FFF; height:17px; }
 .playlistbutton { /*float:left; cursor:pointer;*/ }
 #playlist { list-style:none; padding-left:0px; margin:0 0 0 0; }
 #playlistcontainer ul { clear:both; }
@@ -84,7 +84,7 @@ h2#settingsheader { cursor:pointer; }
 
 #filesouter { padding:0; margin:0 auto; height:456px; overflow-y:auto; }
 
-#searchcontainer { background:#FFF; box-shadow:#333 -1px -1px 2px inset; padding:3px 4px; height:19px; }
+#searchcontainer { background:#FFF; padding:3px 4px; height:17px; border-bottom:2px ridge #FFF; }
 #searchcontainer * { float:left; }
 #searchcontainer #searchtext { width:250px; height:14px; padding:0 2px; font-size:11px; float:left; 
 							  border:1px solid #888; border-radius:2px; box-shadow:1px 1px 2px rgba(128,128,128,0.5) inset; }

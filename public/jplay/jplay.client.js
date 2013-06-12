@@ -13,7 +13,6 @@
             volumeslider: {},
             covercontainer: {},
             time: {},
-            lyricsbutton: {},
             bigscreenbutton: {},
             playlistcontainer: {},
             playlist: {},
@@ -51,7 +50,6 @@
             elements.covercontainer = $("#covercontainer");
             elements.bscover = $("#bs_coverrow");
             elements.time = $("#time");
-            elements.lyricsbutton = $("#lyrics_button");
             elements.bigscreenbutton = $("#bigscreen_button").add("#bigscreen #bs_toggle");
             elements.playlistcontainer = $("#playlistcontainer");
             elements.playlist = $("#playlist");
@@ -84,14 +82,9 @@
                 text: false
             });
             elements.searchlinksmenu.menu();
-            elements.lyricsbutton.button({
-                icons: { primary: "ui-icon-script" },
-                label: "Get lyrics",
-                text: false
-            });
             elements.bigscreenbutton.filter(elements.smallscreen.find("*")).button({
                 icons: { primary: "ui-icon-arrow-4-diag" },
-                label: "Go to big screen mode (not implemented)",
+                label: "Go to big screen mode (sucky)",
                 text: false
             });
             elements.saveplaylistbutton.button({
@@ -115,6 +108,18 @@
                 icons: { primary: "ui-icon-transfer-e-w" },
                 text: false,
                 title: "Add random song to playlist"
+            });
+
+            $(document).on('jplay.newsong', function (e) {
+                var bgimg = $('body').css('background-image');
+                if (e.to) {
+                    if (/src\(/.test(bgimg)) {
+                        bgimg = bgimg.replace(/src\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')');
+                    } else {
+                        bgimg += ', url(getImage?id=' + e.to.dirid + ')'; 
+                    }
+                    $('body').css('background-image', bgimg);
+                }
             });
         }
     },
@@ -360,18 +365,6 @@
                 }
             });
             elements.covercontainer.cover({});
-            elements.lyricsbutton.click(function () {
-                if ($.isEmptyObject(jplay.player.activeSong)) { return; }
-                var attribs = jplay.player.activeSong.data('attribs');
-                elements.lyricsbutton.button('option', 'disabled', true);
-                $.get('/getLyrics', attribs, function (data) {
-                    elements.lyricsbutton.button('option', 'disabled', false);
-                    jplay.helpfunctions.popup({
-                        header: attribs.artist + ' - ' + attribs.title,
-                        text: data
-                    });
-                });
-            });
             elements.bigscreenbutton.click(function () {
                 $('#bigscreencontainer').toggle();
             });
@@ -728,10 +721,6 @@
                 },
                 select: function (event, ui) {
                     if (ui.item.value.isdir) {
-                        /*jplay.playlist.addDir(ui.item.value, null, null, function (first) {
-                        });*/
-                        //jplay.ui.elements.searchtext.val(ui.item.label);
-                    } else {
                         jplay.player.setActiveSong(jplay.playlist.addFile(ui.item.value));
                     }
                     jplay.searchfn.gotodir(ui.item.value);
@@ -774,9 +763,9 @@
                 });
             });
         },
-        addRandom: function (data, callback) {
+        addRandom: function () {
             'use strict';
-            $.get('/getRandom', { count: 1 }, function (result) {
+            $.get('/getRandom', { count: 10 }, function (result) {
                 $.each(result, function (key, val) {
                     jplay.playlist.addFile(val);
                 });
