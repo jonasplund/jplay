@@ -114,7 +114,7 @@
             $(document).on('jplay.newsong', function (e) {
                 var bgimg = $('body').css('background-image');
                 if (e.to) {
-                    if (/src\(/.test(bgimg)) {
+                    if (/url\(/.test(bgimg)) {
                         bgimg = bgimg.replace(/src\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')');
                     } else {
                         bgimg += ', url(getImage?id=' + e.to.dirid + ')'; 
