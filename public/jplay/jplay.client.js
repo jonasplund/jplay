@@ -115,7 +115,7 @@
                 var bgimg = $('body').css('background-image');
                 if (e.to) {
                     if (/url\(/.test(bgimg)) {
-                        bgimg = bgimg.replace(/src\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')');
+                        bgimg = bgimg.replace(/url\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')');
                     } else {
                         bgimg += ', url(getImage?id=' + e.to.dirid + ')'; 
                     }
