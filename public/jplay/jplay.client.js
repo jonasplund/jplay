@@ -113,12 +113,10 @@
 
             $(document).on('jplay.newsong', function (e) {
                 var bgimg = $('body').css('background-image');
-                if (e.to) {
-                    if (/url\(/.test(bgimg)) {
-                        bgimg = bgimg.replace(/url\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')');
-                    } else {
-                        bgimg += ', url(getImage?id=' + e.to.dirid + ')'; 
-                    }
+                if (!e.from || (e.to && (e.to.dirid !== e.from.dirid))) {
+                    bgimg = /url\(/.test(bgimg) ?
+                        bgimg.replace(/url\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')') :
+                        bgimg + ', url(getImage?id=' + e.to.dirid + ')';
                     $('body').css('background-image', bgimg);
                 }
             });
