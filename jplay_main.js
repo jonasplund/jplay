@@ -16,7 +16,6 @@
     app.get('/', function () { });
     app.get('/dirtree', jps.dirtree);
     app.get('/getMusic', jps.getMusic);
-    app.get('/getRandomSongs', jps.getRandomSongs);
     app.get('/getImage', jps.getImage);
     app.get('/downloadSong', jps.downloadSong);
     app.get('/downloadSongs', jps.downloadSongs);
@@ -29,6 +28,7 @@
     app.get('/getBandInfo', jps.getBandInfo);
     app.get('/getVideo', jps.getVideo);
     app.get('/getPopular', jps.getPopular);
+    app.get('/getPopular2', jps.getPopular2);
     app.get('/getRandom', jps.getRandom);
 
     var args = process.argv.slice(2);

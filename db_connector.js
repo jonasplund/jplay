@@ -503,7 +503,12 @@
                 'playcount INT NOT NULL DEFAULT 0);',
             dirs: 'CREATE TABLE dirs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
             'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,dirname VARCHAR(2000),' +
-            'cover VARCHAR(100),parent_id INT,ancestors VARCHAR(200),isdir BOOL);'
+            'cover VARCHAR(100),parent_id INT,ancestors VARCHAR(200),isdir BOOL);',
+            songplays: 'CREATE TABLE songplays (' +
+                'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
+                'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' +
+                'ip_number VARCHAR(20),' +
+                'song_id INT);'
         },
         dropAll: function (connection, callback) {
             connection.query('DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS hashes;', function (err) {

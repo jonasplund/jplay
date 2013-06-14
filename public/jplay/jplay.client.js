@@ -558,7 +558,7 @@
                     });
                 },
                 select: function (event, ui) {
-                    if (ui.item.value.isdir) {
+                    if (!ui.item.value.isdir) {
                         jplay.player.setActiveSong(jplay.playlist.addFile(ui.item.value));
                     }
                     jplay.searchfn.gotodir(ui.item.value);
@@ -643,6 +643,7 @@
                                 jplay.playlist.addDir(dropped, position, before);
                                 jplay.playlist.save();
                             } else {
+                                console.log(jplay.playlist);
                                 jplay.playlist.addFile(dropped.data(), position, before);
                                 jplay.playlist.save();
                             }
@@ -923,12 +924,12 @@ $(document).ready(function () {
     jplay.settings.init();
     jplay.player.init();
     jplay.keybindings.init();
-    try {
+    /*try {
         $('#bottomright').chat({
             'header': ['brheader', 'Chat'],
             'url': 'jooon.mooo.com:8088'
         });
-    } catch (err) { }
+    } catch (err) { }*/
     jplay.filetree.init();
     jplay.customplaylists.update();
     jplay.searchfn.init();

@@ -1,8 +1,7 @@
 {
   "name"          : "jplay",
-  "version"       : "0.3.0",
+  "version"       : "0.4.0",
   "description"   : "music player",
-  "url"           : "http://github.com/cantremember",
   "keywords"      : ["music", "mp3"],
   "author"        : { 
     "name": "Jon Asplund",
@@ -23,5 +22,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sjaak666/jplay.git"
-  }
+  },
+  "main"          : "./index.js"
 }

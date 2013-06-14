@@ -1,0 +1,18 @@
+@-webkit-keyframes shade {
+  0% { box-shadow: 0 0 0 #000; }
+  50% { box-shadow: 0 0 20px #000; }
+  100% { box-shadow: 0 0 0 #000; }
+}
+
+@keyframes shade {
+  0% { box-shadow: 0 0 0 #000; }
+  50% { box-shadow: 0 0 20px #000; }
+  100% { box-shadow: 0 0 0 #000; }
+}
+
+
+.popular { }
+
+.popular img { width:18%; margin:2px; vertical-align:top; max-height:45%; }
+
+.popular img.shadeanim { -webkit-animation-duration:1s; -webkit-animation-name:shade; animation-duration:1s; animation-name:shade; }
