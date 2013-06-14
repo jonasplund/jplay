@@ -131,10 +131,10 @@ h2#settingsheader { cursor:pointer; }
             
 #bigscreen { display: none; position: absolute; height:100%; width:100%; top:0; left:0; z-index:2000; }
 
-#sidebar { -webkit-box-flex:1; -moz-box-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; 
-            max-width:40%; overflow-y:auto; max-height:100%; }
-
 /* JQUI overwrites */
+.ui-state-default { background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); 
+    background-image: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(220,220,220,1) 50%, rgba(255,255,255,1) 100%);
+    background-image: linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); }
 .ui-state-highlight { box-shadow:1px 1px 3px #000 inset; border:1px solid #CCC;
     background-image:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
     background-image:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
