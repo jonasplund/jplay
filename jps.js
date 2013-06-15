@@ -194,7 +194,7 @@
 
     jps.getMusic = function (req, res) {
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
-        var qry = 'SELECT dir, filename, filesize from songs WHERE id = ?';
+        var qry = 'SELECT dir, filename, filesize, dirid from songs WHERE id = ?';
         var connection = mysql.createConnection(options.dbConnection);
         connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
@@ -203,7 +203,7 @@
             connection.query(qry, [id], function (err, data) {
                 connection.end();
             });
-            recSongPlay(req);
+            recSongPlay(req, data[0].dirid);
             if (data.length < 1) { return; }
             fullpath = path.join(data[0].dir, data[0].filename);
             if (!fs.existsSync(fullpath)) {
@@ -350,15 +350,27 @@
             res.send(data);
         });
     }
-    
+        
     jps.getPopular2 = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         var interval = (req.query && req.query.interval && isNumeric(req.query.interval)) ? req.query.interval : 7; 
-        var qry = 'SELECT song_id, COUNT(song_id) AS cnt_song_id FROM songplays WHERE time >= DATE_SUB(NOW(), INTERVAL ' + 
-                interval + ' DAY) GROUP BY song_id ORDER BY cnt_song_id DESC LIMIT 100';
-        qry = 'SELECT dirid FROM songs, (' + qry + ') pop WHERE pop.song_id = songs.id GROUP BY dirid';
-        qry = 'SELECT * FROM dirs, (' + qry + ') popsongs WHERE popsongs.dirid = dirs.id LIMIT 10;';
+        var qry = 'SELECT album_id, COUNT(album_id) AS cnt_album_id FROM songplays WHERE time >= DATE_SUB(NOW(), INTERVAL ' + 
+                interval + ' DAY) GROUP BY album_id ORDER BY cnt_album_id DESC LIMIT 10';
+        qry = 'SELECT * FROM dirs, (' + qry + ') popalbums WHERE popalbums.album_id = dirs.id LIMIT 10;';
+        connection.query(qry, function (err, data) {
+            if (err) { throw err; }
+            connection.end();
+            res.send(data);
+        });
+    }
+    
+    jps.getNewest = function (req, res) {
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        var qry = 'SELECT * FROM dirs, ' + 
+            '(SELECT dirid FROM songs GROUP BY dirid ORDER BY last_modified DESC LIMIT 10) news ' + 
+            'WHERE news.dirid = dirs.id;';
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
             connection.end();
@@ -366,15 +378,15 @@
         });
     }
 
-    var recSongPlay = function (req) {
+    var recSongPlay = function (req, dirid) {
         if (!req.query.id || !isNumeric(req.query.id)) {
             return;
         }
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        var qry = 'INSERT INTO songplays (ip_number, song_id) VALUES ("' + req.connection.remoteAddress + '",' + req.query.id + ');';
+        var qry = 'INSERT INTO songplays (ip_number, song_id, album_id) VALUES ("' + req.connection.remoteAddress + '",' + req.query.id + ',' + dirid + ');';
         var query = connection.query(qry, function (err) {
-            if (err) { console.log(query.sql); throw err; }
+            if (err) { throw err; }
             connection.end();
         });
     }

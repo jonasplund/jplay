@@ -271,18 +271,25 @@
                     elements.time.text("--:--/--:--");
                     return;
                 }
-                elements.progressmeter.progressbar("option", "value", 100 * this.currentTime / this.duration);
-                elements.time.text(jplay.helpfunctions.toTimeString(this.currentTime) + "/" +
-					jplay.helpfunctions.toTimeString(this.duration));
+                elements.progressmeter.progressbar('option', 'value', 100 * this.currentTime / this.duration);
+                var newTime = jplay.helpfunctions.toTimeString(this.currentTime) + '/' + 
+                    jplay.helpfunctions.toTimeString(this.duration);
+                // Avoid 3 of 4 full layouts per second
+                if (elements.time.text() !== newTime) {
+                    elements.time.text(newTime);
+                }
             }).on("play", function () {
                 elements.playpausebutton.button("option", "icons", { primary: "ui-icon-pause" }).addClass("ui-state-highlight");
             }).on("pause", function () {
                 elements.playpausebutton.button("option", "icons", { primary: "ui-icon-play" }).removeClass("ui-state-highlight");
             }).on("error", function (e) {
-                // jplay.helpfunctions.warning("Error code: " + e.target.error.code);
-                if (e.target.error.code === 2) {
-                    jplay.player.errorTime = jplay.player.domobj.currentTime;
-                    jplay.player.domobj.load();
+                if (e && e.target && e.target.error) {
+                    if (e.target.error.code === 2) {
+                        jplay.player.errorTime = jplay.player.domobj.currentTime;
+                        jplay.player.domobj.load();
+                    } else {
+                        jplay.player.next();
+                    }
                 }
             });
             jplay.player.setVolume(jplay.settings.items.volume);

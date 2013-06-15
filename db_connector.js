@@ -508,7 +508,8 @@
                 'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
                 'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' +
                 'ip_number VARCHAR(20),' +
-                'song_id INT);'
+                'song_id INT,' +
+                'album_id INT);'
         },
         dropAll: function (connection, callback) {
             connection.query('DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS hashes;', function (err) {

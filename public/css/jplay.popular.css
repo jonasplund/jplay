@@ -13,6 +13,6 @@
 
 .popular { }
 
-.popular img { width:18%; margin:2px; vertical-align:top; max-height:45%; }
+.popular img { width:18%; margin:2px; vertical-align:top; max-height:45%; cursor:pointer; }
 
 .popular img.shadeanim { -webkit-animation-duration:1s; -webkit-animation-name:shade; animation-duration:1s; animation-name:shade; }
