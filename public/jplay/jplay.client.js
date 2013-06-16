@@ -61,7 +61,7 @@
             elements.shufflebutton = $("#shufflebutton");
             elements.repeatbutton = $("#repeatbutton");
             elements.addrandombutton = $("#addrandom");
-
+            
             elements.mutebutton.button({
                 icons: { primary: "ui-icon-volume-on" },
                 text: false
@@ -110,17 +110,27 @@
                 text: false,
                 title: "Add random song to playlist"
             });
-
-            $(document).on('jplay.newsong', function (e) {
+            $(document).on('jplay.newsong', jplay.ui.setBGCover);
+        },        
+        setBGCover: function (e) {
+            var to = null;
+            if (e && e.to && e.to.dirid) {
+                to = e.to.dirid;
+            } else {
+                to = jplay.player.activeSong && jplay.player.activeSong.data('attribs').dirid ? 
+                    jplay.player.activeSong.data('attribs').dirid : null;
+            }
+            if (to === null) { return; }
+            if (jplay.settings.items.bgcover === true) {
                 var bgimg = $('body').css('background-image');
-                if (!e.from || (e.to && (e.to.dirid !== e.from.dirid))) {
+                if (!e || !e.from || (to && (to !== e.from.dirid))) {
                     bgimg = /url\(/.test(bgimg) ?
-                        bgimg.replace(/url\(.*?\)/, 'url(getImage?id=' + e.to.dirid + ')') :
-                        bgimg + ', url(getImage?id=' + e.to.dirid + ')';
+                        bgimg.replace(/url\(.*?\)/, 'url(getImage?id=' + to + ')') :
+                        bgimg + ', url(getImage?id=' + to + ')';
                     $('body').css('background-image', bgimg);
                 }
-            });
-        }
+            }
+        },
     },
     settings: {
         items: {},
@@ -141,6 +151,9 @@
                 }
                 if (items.hasOwnProperty("notifications")) {
                     $("#notifications").get(0).checked = items.notifications;
+                }
+                if (items.hasOwnProperty("bgcover")) {
+                    $("#bgcover").get(0).checked = items.bgcover;
                 }
                 if (items.hasOwnProperty("fft")) {
                     $("#fftsetting").get(0).checked = items.fft;
@@ -187,14 +200,21 @@
         update: function () {
             "use strict";
             var items = jplay.settings.items;
-            items.notifications = $("#notifications").get(0).checked;
-            items.saveplaylist = $("#saveplaylist").get(0).checked;
-            items.animations = $("#animations").get(0).checked;
-            items.animationspeed = Number($("#animationspeed").get(0).value);
-            items.fft = $("#fftsetting").get(0).checked;
+            items.notifications = $('#notifications').get(0).checked;
+            items.bgcover = $('#bgcover').get(0).checked;
+            items.saveplaylist = $('#saveplaylist').get(0).checked;
+            items.animations = $('#animations').get(0).checked;
+            items.animationspeed = Number($('#animationspeed').get(0).value);
+            items.fft = $('#fftsetting').get(0).checked;
             $.fx.off = !(items.animations);
             if (!items.saveplaylist) {
-                localStorage.setItem("playlist", null);
+                localStorage.setItem('playlist', null);
+            }
+            if (items.bgcover) {
+                jplay.ui.setBGCover();
+            } else {
+                var body = $('body');
+                body.css('background-image', body.css('background-image').replace(/,?\s?url\(.*?\)/, ''));
             }
             if (!items.fft && jplay.ui.elements.fft) {
                 // FIXME: Should be called automatically?

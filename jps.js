@@ -179,7 +179,7 @@
             if (err) { throw err; }
             connection.end();
             if (data.length < 1 || !data[0].cover) {
-                res.sendfile('./public/img/blank.png');
+                res.sendfile(options.defaultAlbumCover);
                 return;
             }
             var fullpath = path.join(data[0].dirname, data[0].cover);

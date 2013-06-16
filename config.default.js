@@ -11,6 +11,7 @@
         { extension: '.oga', contentType: 'audio/ogg' }
     ];
     config.pictureExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+    config.defaultAlbumCover = './public/img/album_unknown.jpg';
     config.dbConnection = {
         host: 'localhost',
         user: 'root',

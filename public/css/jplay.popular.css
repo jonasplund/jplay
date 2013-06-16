@@ -3,16 +3,16 @@
   50% { box-shadow: 0 0 20px #000; }
   100% { box-shadow: 0 0 0 #000; }
 }
-
 @keyframes shade {
   0% { box-shadow: 0 0 0 #000; }
   50% { box-shadow: 0 0 20px #000; }
   100% { box-shadow: 0 0 0 #000; }
 }
-
-
-.popular { }
-
-.popular img { width:18%; margin:2px; vertical-align:top; max-height:45%; cursor:pointer; }
-
+.popular { display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column; }
+.coverRow { -webkit-flex:1; display:-webkit-flex; }
+.coverRow img { margin:2px; cursor:pointer; -webkit-flex:1; }
+.coverRow:nth-of-type(1) img { margin-top:0; }
+.coverRow:last-child img { margin-bottom:0; }
+.coverRow img:first-child { margin-left:0; }
+.coverRow img:last-child { margin-right:0; }
 .popular img.shadeanim { -webkit-animation-duration:1s; -webkit-animation-name:shade; animation-duration:1s; animation-name:shade; }
