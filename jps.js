@@ -354,10 +354,12 @@
     jps.getPopular2 = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        var interval = (req.query && req.query.interval && isNumeric(req.query.interval)) ? req.query.interval : 7; 
+        var interval = (req.query && req.query.interval && isNumeric(req.query.interval)) ? req.query.interval : 7;
+        var count = (req.query && req.query.count && isNumeric(req.query.count)) ? req.query.count : 15;
+        count = Math.min(count, 100);
         var qry = 'SELECT album_id, COUNT(album_id) AS cnt_album_id FROM songplays WHERE time >= DATE_SUB(NOW(), INTERVAL ' + 
-                interval + ' DAY) GROUP BY album_id ORDER BY cnt_album_id DESC LIMIT 10';
-        qry = 'SELECT * FROM dirs, (' + qry + ') popalbums WHERE popalbums.album_id = dirs.id LIMIT 10;';
+                interval + ' DAY) GROUP BY album_id ORDER BY cnt_album_id DESC LIMIT ' + count;
+        qry = 'SELECT * FROM dirs, (' + qry + ') popalbums WHERE popalbums.album_id = dirs.id LIMIT ' + count + ';';
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
             connection.end();

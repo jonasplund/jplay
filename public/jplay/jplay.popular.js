@@ -7,26 +7,29 @@
         this.header.text("Most popular");
         this.elem.addClass('popular');
 
-        $.get('/getPopular2', function (results) {
+        $.get('/getPopular2', { 'count': 15 }, function (results) {
             var title, row, half, img, frag;
             frag = document.createDocumentFragment();
-            for (var i = 0; i < 2; i++) {
+            for (var i = 0; i < 3; i++) {
                 row = document.createElement('div');
                 row.classList.add('coverRow');
-                half = Math.floor(results.length / 2);
+                half = Math.floor(results.length / 3);
                 for (var j = i * half, endj = i * half + half; j < endj; j++) {
-                    img = document.createElement('img');
-                    img.setAttribute('src', '/getImage?id=' + results[j].id);
+                    img = document.createElement('div');
+                    img.classList.add('popCover');
                     title = results[j].dirname.split('\\');
                     title = title[title.length - 1];
                     img.setAttribute('title', title);
-                    $(img).addClass('popCover').data('data', results[j]);
+                    img.setAttribute('style', 'background-image: url(/getImage?id=' + results[j].id + ')');
+                    $(img).data('data', results[j]);
                     row.appendChild(img);
                 };
                 frag.appendChild(row);
             }
             elem[0].appendChild(frag);
         });
+        
+        $(document).trigger('jplay.popularInited');
 
         $(document).on('click', '.popCover', function () {
             jplay.searchfn.gotodir($(this).data('data'));

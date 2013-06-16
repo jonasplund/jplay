@@ -1,4 +1,4 @@
-html { background:#000; margin:0; padding:0; height:100%; }
+﻿html { background:#000; margin:0; padding:0; height:100%; overflow:hidden; }
 body { -webkit-user-select:none; -moz-user-select:-moz-none; font-family:Verdana, Geneva, sans-serif; font-size:10px; margin:0; padding:0; 
        background-image:-moz-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%); 
 	   background-image:-ms-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%);
@@ -109,7 +109,7 @@ h2#settingsheader { cursor:pointer; }
 #customplaylists li { padding-left:10px; }
 #customplaylists li:nth-child(2n) { background-color:rgba(220,220,220,1); }
 
-.chatcontainer { -webkit-box-flex:1; display:-webkit-box; -webkit-box-orient:vertical; 
+/*.chatcontainer { -webkit-box-flex:1; display:-webkit-box; -webkit-box-orient:vertical; 
                 -moz-box-flex:1; display:-moz-box; -moz-box-orient:vertical; }
 .chatcontent { -webkit-box-flex:1; -moz-box-flex:1; overflow:auto; -webkit-user-select:text; -moz-user-select:text; }
 .chatcontent p { margin:1px 0; }
@@ -117,9 +117,9 @@ h2#settingsheader { cursor:pointer; }
 .chatcontent .otherchat { color:red; }
 .chatinput { height:14px; background:#FFF; border:1px solid #888; width:100%; }
 .chatcontainer .userlist { float:right; height:100%; background:#FFF; }
-.chatcontainer .userlist .user { }
+.chatcontainer .userlist .user { } */
 
-#settingscontainer { display:none; padding-bottom:20px; }
+/* #settingscontainer { display:none; padding-bottom:20px; } */
 
 .overlay { position:absolute; width:100%; height:100%; z-index:3; top:0; left:0; background:#000; opacity:0.4; }
 .popup { position:fixed; width:500px; left:50%; top:50px; margin-left:-250px; 
@@ -129,6 +129,12 @@ h2#settingsheader { cursor:pointer; }
             text-shadow:5px 5px 5px #CCC; background:-webkit-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
             
 #bigscreen { display: none; position: absolute; height:100%; width:100%; top:0; left:0; z-index:2000; }
+
+#settings { position:absolute; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9; }
+#settings:hover { -webkit-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
+#settingstab { width:200px; border-radius:0 20px 0 0; float:left; margin-top:-20px; height:20px; }
+#settingstab .ui-icon { float:left; margin-right:10px; }
+#settingscontainer { clear:left; height:150px; background:#FFF; border-top:2px ridge #FFF; }
 
 /* JQUI overwrites */
 .ui-state-default { background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); 

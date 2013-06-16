@@ -117,7 +117,7 @@
             if (e && e.to && e.to.dirid) {
                 to = e.to.dirid;
             } else {
-                to = jplay.player.activeSong && jplay.player.activeSong.data('attribs').dirid ? 
+                to = (!$.isEmptyObject(jplay.player.activeSong) && jplay.player.activeSong.data('attribs').dirid) ? 
                     jplay.player.activeSong.data('attribs').dirid : null;
             }
             if (to === null) { return; }

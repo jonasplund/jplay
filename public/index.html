@@ -23,6 +23,26 @@
 </head>
 
 <body>
+	<div id="settings">
+		<h2 id="settingstab"><div class="ui-icon ui-icon-gear"></div>Settings</h2>
+		<div id="settingscontainer">
+			<input type="checkbox" name="notifications" id="notifications" /><label for="notifications">Desktop notifications</label><br />
+			<input type="checkbox" name="saveplaylist" checked="checked" id="saveplaylist" /><label for="saveplaylist">Save playlist between sessions</label><br />
+			<input type="checkbox" name="animations" checked="checked" id="animations" /><label for="animations">Animations</label><br />
+			<input type="checkbox" name="fftsetting" id="fftsetting" /><label for="fftsetting">Visualisation (buggy)</label><br />
+			<input type="checkbox" name="bgcover" id="bgcover" /><label for="bgcover">Show album cover in background (low performance)</label><br />
+			<input type="number" name="animationspeed" id="animationspeed" value="300" maxlength="4" size="4" /><label for="animationspeed">Animation speed (ms)</label>
+		</div>
+	</div>
+	<!-- <h2 id="settingsheader">Settings</h2>
+	<div id="settingscontainer">
+		<input type="checkbox" name="notifications" id="notifications" /><label for="notifications">Desktop notifications</label><br />
+		<input type="checkbox" name="saveplaylist" checked="checked" id="saveplaylist" /><label for="saveplaylist">Save playlist between sessions</label><br />
+		<input type="checkbox" name="animations" checked="checked" id="animations" /><label for="animations">Animations</label><br />
+		<input type="checkbox" name="fftsetting" id="fftsetting" /><label for="fftsetting">Visualisation (buggy)</label><br />
+		<input type="checkbox" name="bgcover" id="bgcover" /><label for="bgcover">Show album cover in background (low performance)</label><br />
+		<input type="number" name="animationspeed" id="animationspeed" value="300" maxlength="4" size="4" /><label for="animationspeed">Animation speed (ms)</label>
+	</div> -->
 	<div id="maincontainer">
 		<div id="playercontainer">
 			<div id="playerleft">
@@ -118,15 +138,6 @@
                 <h2 id="brheader"></h2>
             </div>
         </div>
-        <h2 id="settingsheader">Settings</h2>
-		<div id="settingscontainer">
-			<input type="checkbox" name="notifications" id="notifications" /><label for="notifications">Desktop notifications</label><br />
-			<input type="checkbox" name="saveplaylist" checked="checked" id="saveplaylist" /><label for="saveplaylist">Save playlist between sessions</label><br />
-			<input type="checkbox" name="animations" checked="checked" id="animations" /><label for="animations">Animations</label><br />
-			<input type="checkbox" name="fftsetting" id="fftsetting" /><label for="fftsetting">Visualisation (buggy)</label><br />
-			<input type="checkbox" name="bgcover" id="bgcover" /><label for="bgcover">Show album cover in background (low performance)</label><br />
-            <input type="number" name="animationspeed" id="animationspeed" value="300" maxlength="4" size="4" /><label for="animationspeed">Animation speed (ms)</label>
-		</div>
         <div id="debug"></div>
         <div id="warning"></div>
 	</div>
