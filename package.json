@@ -15,7 +15,8 @@
     "id3": "*",
     "metalminer": "*",
     "mysql": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "imagemagick": "0.1.x"
   },
   "lib"           : "lib",
   "engines"       : { "node": ">= 0.8" },

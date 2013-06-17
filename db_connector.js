@@ -6,7 +6,8 @@
         mysql = require('mysql'),
         crypto = require('crypto'),
         async = require('async'),
-        options = require('./config.js');
+        options = require('./config.js'),
+        im = require('imagemagick');
 
     var db = module.exports = {};
 
@@ -329,6 +330,7 @@
     var insertCover = function (file, connection, callback) {
         var dir = path.dirname(file);
         var filename = path.basename(file);
+        var small = filename.indexOf('-small') >= 0;
         var query = connection.query('SELECT id FROM dirs WHERE dirname = ?', dir, function (err, data) {
             if (err) { throw err; }
             if (data.length === 0) {
@@ -336,12 +338,31 @@
                 return;
             }
             var id = data[0].id;
-            connection.query('UPDATE dirs SET cover = ' + connection.escape(filename) + ' WHERE id = ' + id, function (err) {
-                if (err) { throw err; }
+            if (!small) {
+                var smallname = path.basename(file).split('.')[0] + '-small' + path.extname(file);
+                smallname = path.join(path.dirname(file), smallname);
+                if (!path.existsSync(smallname)) {
+                    createSmallCover(file, smallname);
+                }
+            }
+            var qry = 'UPDATE dirs SET ' + (small ? 'cover_small=' : 'cover=') + connection.escape(filename) + ' WHERE id = ' + id;
+            var query = connection.query(qry, function (err) {
+                if (err) { console.log(query.sql); throw err; }
                 if ((typeof callback) === 'function') { callback(); }
             });
         });
     };
+
+    var createSmallCover = function (large, small) {
+        im.convert.path = options.imageMagickPath;
+        im.resize({
+            srcData: fs.readFileSync(large, 'binary'),
+            width: 150
+        }, function (err, stdout, stdin) {
+            if (err) { throw err; }
+            fs.writeFileSync(small, stdout, 'binary');
+        });
+    }
 
     var getHash = function (file) {
         var filesize = fs.statSync(file).size;
@@ -501,9 +522,15 @@
                 'isdir BOOL,' + 
                 'hash VARCHAR(32),' +
                 'playcount INT NOT NULL DEFAULT 0);',
-            dirs: 'CREATE TABLE dirs (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
-            'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,dirname VARCHAR(2000),' +
-            'cover VARCHAR(100),parent_id INT,ancestors VARCHAR(200),isdir BOOL);',
+            dirs: 'CREATE TABLE dirs (' + 
+                'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
+                'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' + 
+                'dirname VARCHAR(2000),' +
+                'cover VARCHAR(100),' + 
+                'parent_id INT,' + 
+                'ancestors VARCHAR(200),' + 
+                'isdir BOOL,' + 
+                'cover_small VARCHAR(106));',
             songplays: 'CREATE TABLE songplays (' +
                 'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
                 'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' +
@@ -512,13 +539,13 @@
                 'album_id INT);'
         },
         dropAll: function (connection, callback) {
-            connection.query('DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS hashes;', function (err) {
+            connection.query('DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS songplays;', function (err) {
                 if (err) { throw err; }
                 if ((typeof callback) === 'function') { callback(); }
             });
         },
         createAll: function (connection, callback) {
-            var qry = tables.sql.songs + tables.sql.dirs;
+            var qry = tables.sql.songs + tables.sql.dirs + tables.sql.songplays;
             connection.query(qry, function (err) {
                 if (err) { throw err; }
                 if ((typeof callback) === 'function') { callback(); }

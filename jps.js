@@ -173,21 +173,23 @@
     jps.downloadSongs = function (req, res) {};
 
     jps.getImage = function (req, res) {
-        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId,
+            small = req.query && (req.query.small == '1');
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query('SELECT cover, dirname FROM dirs WHERE id = ?', id, function (err, data) {
+        var qry = 'SELECT ' + (small ? 'cover_small' : 'cover') + ', dirname FROM dirs WHERE id = ?';
+        connection.query(qry, id, function (err, data) {
             if (err) { throw err; }
             connection.end();
-            if (data.length < 1 || !data[0].cover) {
+            if (data.length < 1 || !(data[0].cover || data[0].cover_small)) {
                 res.sendfile(options.defaultAlbumCover);
                 return;
             }
-            var fullpath = path.join(data[0].dirname, data[0].cover);
+            var fullpath = path.join(data[0].dirname, data[0].cover || data[0].cover_small);
             fullpath = path.normalize(fullpath);
             if (fs.existsSync(fullpath)) {
                 res.sendfile(path.normalize(fullpath));
             } else {
-                res.sendfile('./public/img/blank.png');
+                res.sendfile(options.defaultAlbumCover);
             }
         });
     };

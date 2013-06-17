@@ -20,7 +20,7 @@
                     title = results[j].dirname.split('\\');
                     title = title[title.length - 1];
                     img.setAttribute('title', title);
-                    img.setAttribute('style', 'background-image: url(/getImage?id=' + results[j].id + ')');
+                    img.setAttribute('style', 'background-image: url(/getImage?id=' + results[j].id + '&small=1)');
                     $(img).data('data', results[j]);
                     row.appendChild(img);
                 };

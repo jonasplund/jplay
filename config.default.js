@@ -12,6 +12,7 @@
     ];
     config.pictureExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
     config.defaultAlbumCover = './public/img/album_unknown.jpg';
+    config.imageMagickPath = 'C:\\Program Files (x86)\\ImageMagick-6.8.6-Q16\\convertim.exe';
     config.dbConnection = {
         host: 'localhost',
         user: 'root',
