@@ -633,6 +633,7 @@
             $.get('/getRandom', { count: 10 }, function (result) {
                 $.each(result, function (key, val) {
                     jplay.playlist.addFile(val);
+                    jplay.playlist.save();
                 });
             });
         }

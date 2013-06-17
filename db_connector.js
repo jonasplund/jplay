@@ -345,7 +345,7 @@
                     createSmallCover(file, smallname);
                 }
             }
-            var qry = 'UPDATE dirs SET ' + (small ? 'cover_small=' : 'cover=') + connection.escape(filename) + ' WHERE id = ' + id;
+            var qry = 'UPDATE dirs SET ' + (small ? 'cover_small=' : 'cover=') + connection.escape(filename) + ' WHERE id = ' + id + ';';
             var query = connection.query(qry, function (err) {
                 if (err) { console.log(query.sql); throw err; }
                 if ((typeof callback) === 'function') { callback(); }
@@ -355,6 +355,7 @@
 
     var createSmallCover = function (large, small) {
         im.convert.path = options.imageMagickPath;
+        console.log('Creating image: ' + small);
         im.resize({
             srcData: fs.readFileSync(large, 'binary'),
             width: 150

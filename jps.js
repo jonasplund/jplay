@@ -321,9 +321,9 @@
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query('SELECT * FROM songs WHERE dirid = ?', [id], function (err, data) {
+        connection.query('SELECT * FROM songs WHERE dirid = ?;', [id], function (err, data) {
             if (err) { throw err; }
-            connection.query('SELECT * FROM dirs WHERE parent_id = ?', [id], function (err, data2) {
+            connection.query('SELECT * FROM dirs WHERE parent_id = ?;', [id], function (err, data2) {
                 if (err) { throw err; }
                 connection.end();
                 res.send(data.concat(data2));
@@ -345,7 +345,7 @@
     jps.getPopular = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        var qry = 'SELECT * FROM dirs, (SELECT dirid, SUM(playcount) AS pc FROM songs GROUP BY dirid ORDER BY pc DESC LIMIT 10) pop WHERE pop.dirid = dirs.id';
+        var qry = 'SELECT * FROM dirs, (SELECT dirid, SUM(playcount) AS pc FROM songs GROUP BY dirid ORDER BY pc DESC LIMIT 10) pop WHERE pop.dirid = dirs.id;';
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
             connection.end();
