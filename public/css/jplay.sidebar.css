@@ -5,9 +5,21 @@
 
 @media (max-width: 1337px) { #sidebar { display:none; } }
 
+@-webkit-keyframes spin {
+  from { -webkit-transform: rotate(0deg);   opacity: 0.8; }
+  50%  { -webkit-transform: rotate(180deg); opacity: 1.0; }
+  to   { -webkit-transform: rotate(360deg); opacity: 0.8; }
+}
+
 #sidebar { -webkit-flex:1; -moz-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; 
             max-width:40%; min-width: 450px; overflow-y:auto; max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; 
             border-right: 0; background:transparent; }
+
+.ajaxloader {  }
+
+.ajaxloader { -webkit-animation: spin 1s linear infinite; width: 100px; height:100px; 
+  background:#FFF; margin:30px auto; border: 30px solid #000; border-right: 0 none; border-right-color: transparent;
+  border-radius: 50%; box-shadow: 0 0 100px 2px #333; }
 
 /* Tab styling */
 

@@ -31,7 +31,7 @@
     $('#sidebar').tabs({
         beforeLoad: function(event, ui) {
             var ajaxSettings = ui.ajaxSettings, data;
-            ui.panel.html('Loading...');
+            ui.panel.html('<div class="ajaxloader" />');
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 ui.panel.html('No active song.');
                 event.stopPropagation();

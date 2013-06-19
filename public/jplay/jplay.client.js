@@ -671,7 +671,6 @@
                                 jplay.playlist.addDir(dropped, position, before);
                                 jplay.playlist.save();
                             } else {
-                                console.log(jplay.playlist);
                                 jplay.playlist.addFile(dropped.data(), position, before);
                                 jplay.playlist.save();
                             }

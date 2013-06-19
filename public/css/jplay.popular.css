@@ -3,16 +3,21 @@
   50% { box-shadow: 0 0 20px #000; }
   100% { box-shadow: 0 0 0 #000; }
 }
+@-moz-keyframes shade {
+  0% { box-shadow: 0 0 0 #000; }
+  50% { box-shadow: 0 0 20px #000; }
+  100% { box-shadow: 0 0 0 #000; }
+}
 @keyframes shade {
   0% { box-shadow: 0 0 0 #000; }
   50% { box-shadow: 0 0 20px #000; }
   100% { box-shadow: 0 0 0 #000; }
 }
-.popular { display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column; }
-.coverRow { -webkit-flex:1; display:-webkit-flex; }
-.coverRow div { margin:2px; cursor:pointer; -webkit-flex:1; background-size:contain; background-position:center center; background-repeat:no-repeat; }
+.popular { display:-webkit-flex; -webkit-flex-direction:column; display:-moz-flex; -moz-flex-direction:column; display:flex; flex-direction:column; }
+.coverRow { -webkit-flex:1; display:-webkit-flex; -moz-flex:1; display:-moz-flex; flex:1; display:flex; }
+.coverRow div { margin:2px; cursor:pointer; -webkit-flex:1; -moz-flex:1; flex:1; background-size:contain; background-position:center center; background-repeat:no-repeat; }
 .coverRow:nth-of-type(1) div { margin-top:0; }
 .coverRow:last-child div { margin-bottom:0; }
 .coverRow div:first-child { margin-left:0; }
 .coverRow div:last-child { margin-right:0; }
-.popular div.shadeanim { -webkit-animation-duration:1s; -webkit-animation-name:shade; animation-duration:1s; animation-name:shade; }
+.popular div.shadeanim { -webkit-animation-duration:1s; -webkit-animation-name:shade; -moz-animation-duration:1s; -moz-animation-name:shade; animation-duration:1s; animation-name:shade; }

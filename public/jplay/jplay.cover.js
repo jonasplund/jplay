@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
     $.widget('jplay.cover', {
-        version: '0.3.2',
+        version: '0.3.3',
         options: {
             animationspeed: 300,    // Animation duration in ms
             zindex: 1000,           // zIndex while expanded/animating
@@ -10,14 +10,18 @@
             rotation: 25,           // Rotation during expansion in degrees
             easing: 'swing',        // jQuery easing function
             distanceMultiplier: 1,  // Perspective multiplier in expansion animation
-            fullscreen: false       // Fullscreen during expanded cover
+            fullscreen: false,      // Fullscreen during expanded cover
+            showFormer: false       // Show former album cover of former song (not working yet)
         },
         expanded: false,
         _create: function () {
             var height = this.element.height(),
                 that = this;
             this.container = $('<div></div>').appendTo(this.element).css('height', height + 'px');
-            this.img = $('<img></img>').appendTo(this.container).prop('src', this.options.src).css('display', 'none');
+            if (this.options.showFormer) {
+                this.imgLast = $('<img></img>').appendTo(this.container).addClass('coverLast').prop('src', '/getImage?id=4&small=1').css('display', 'none');
+            }
+            this.img = $('<img></img>').appendTo(this.container).addClass('coverCurrent').prop('src', this.options.src).css('display', 'none');
             this.img.load(function () {
                 that.img.css({ display: 'block', height: '100%' });
             }).on('error', function () {
@@ -29,12 +33,16 @@
             switch (key) {
                 case 'src':
                     if (src) {
+                        this.lastCover = src;
                         if (val !== src) {
                             img.prop('src', val).load(function () {
                                 if (that.expanded === true) {
                                     that.container.css(that._positionExpanded(img));
                                 }
                             });
+                        }
+                        if (this.options.showFormer && (this.lastCover !== this.imgLast.prop('src'))) {
+
                         }
                     } else {
                         this.img.prop('src', val);

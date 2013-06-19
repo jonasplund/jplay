@@ -1,8 +1,9 @@
 ﻿html { background:#000; margin:0; padding:0; height:100%; overflow:hidden; }
-body { -webkit-user-select:none; -moz-user-select:-moz-none; font-family:Verdana, Geneva, sans-serif; font-size:10px; margin:0; padding:0; 
+body { -webkit-user-select:none; -moz-user-select:-moz-none; user-select:none; font-family:Verdana, Geneva, sans-serif; font-size:10px; margin:0; padding:0; 
        background-image:-moz-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%); 
 	   background-image:-ms-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%);
      background-image:-webkit-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(215,215,215,0.94) 100%);
+     background-image:linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(215,215,215,0.94) 100%);
 	   height:100%; background-size:contain; background-repeat: no-repeat; background-position: center; }
     
 div.clear { clear:both; }
@@ -21,7 +22,7 @@ h2 { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,2
 	 background:-ms-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
 	 background:linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
      margin:0; clear:both; padding-bottom:2px; padding-top:2px; padding-left:10px; color:#111; 
-     font-size:12px; height:14px; cursor:default; }
+     font-size:12px; height:14px; cursor:default; white-space:nowrap;}
 h2#settingsheader { cursor:pointer; }
 
 #playercontainer { padding:10px; margin:0; height:100px; }
@@ -49,18 +50,18 @@ h2#settingsheader { cursor:pointer; }
 #volumeslider a { box-shadow:-2px -2px 3px #777 inset; border-radius:5px; height:12px; width:12px; background:#EEE; border:0; outline:none; }
 #mutebutton { float:left; margin-left:10px;}
 #fft { height:100px; width:200px; float:left; margin-left:5px; background:#000; }
-#covercontainer { height:100px; width:100px; float:left; margin-left:5px; }
 #searchlinksbutton { width:16px; height:16px; display:none; float:right; margin-top:2px; }
 #searchlinksmenu { display:none; position:absolute; z-index:1001; float:none; width:100px; }
 #lyrics_button { float:right; height:25px; width:25px; }
 #bigscreen_button { float:right; height:25px; width:25px; margin-right:5px; }
 
-.row { display:-webkit-flex; display:-moz-flex; -webkit-flex-direction:row; -moz-flex-direction:row; width:100%; }
+.row { display:-webkit-flex; display:-moz-flex; display:flex; -webkit-flex-direction:row; -moz-flex-direction:row; flex-direction:row; width:100%; }
 .rowleft { max-width:600px; min-width:400px; }
 .rowright { -webkit-flex:1; -moz-flex:1; flex:1; border-left:2px groove #FFF; overflow-y:auto; overflow-x:hidden;}
 
 #midrow { height:500px; }
-#midrowleft { max-width:600px; min-width:400px; height:100%; display:-webkit-flex; -webkit-flex-direction:column; }
+#midrowleft { max-width:600px; min-width:400px; height:100%; display:-webkit-flex; -webkit-flex-direction:column; 
+    display:-moz-flex; -moz-flex-direction:column; display:flex; flex-direction:column; }
 #midrowright {  height:500px; }
 
 #playlistcontainer { padding:0; margin:0; height:456px; overflow-y:auto; }
@@ -82,11 +83,12 @@ h2#settingsheader { cursor:pointer; }
 #jst_contextmenu li { padding:2px; padding-right:10px; }
 #jst_contextmenu li:hover { background:-webkit-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1));
                             background:-moz-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1)); 
-							background:-ms-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1)); }
+							background:-ms-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1));
+              background:linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1)); }
 
 #filesouter { padding:0; margin:0 auto; height:456px; overflow-y:auto; }
 
-#searchcontainer { background:#FFF; padding:3px 4px; height:17px; border-bottom:2px ridge #FFF; }
+#searchcontainer { background:#FFF; padding:3px 4px; height:17px; border-bottom:2px ridge #FFF; white-space:nowrap; }
 #searchcontainer * { float:left; }
 #searchcontainer #searchtext { width:250px; height:14px; padding:0 2px; font-size:11px; float:left; 
 							  border:1px solid #888; border-radius:2px; box-shadow:1px 1px 2px rgba(128,128,128,0.5) inset; }
@@ -128,12 +130,16 @@ h2#settingsheader { cursor:pointer; }
          background:white; border:1px solid #888; -moz-user-select:text; -webkit-user-select:text; padding:3px; 
          z-index:4; }
 .popup h1 { margin:0; padding:0; border-bottom:2px ridge #CCC; text-align:center; padding:5px; margin:-3px -3px 10px -3px; 
-            text-shadow:5px 5px 5px #CCC; background:-webkit-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
+            text-shadow:5px 5px 5px #CCC; background:-webkit-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
+            background:-moz-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
+            background:-ms-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
+            background:linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
             
 #bigscreen { display: none; position: absolute; height:100%; width:100%; top:0; left:0; z-index:2000; }
 
-#settings { position:absolute; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9; }
-#settings:hover { -webkit-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
+#settings { position:absolute; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9;
+  -moz-transition:all 300ms ease; -moz-transform:translateZ(0); transition:all 300ms ease; transform:translateZ(0); }
+#settings:hover { -webkit-transform:translateY(calc(20px - 100%)); -moz-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
 #settingstab { width:200px; border-radius:0 20px 0 0; float:left; margin-top:-20px; height:20px; }
 #settingstab .ui-icon { float:left; margin-right:10px; }
 #settingscontainer { clear:left; height:150px; background:#FFF; border-top:2px ridge #FFF; }
@@ -141,7 +147,8 @@ h2#settingsheader { cursor:pointer; }
 /* JQUI overwrites */
 .ui-state-default { background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); 
     background-image: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(220,220,220,1) 50%, rgba(255,255,255,1) 100%);
-    background-image: linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); }
+    background-image: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%);
+    background-image: linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
 .ui-state-highlight { box-shadow:1px 1px 3px #000 inset; border:1px solid #CCC;
     background-image:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
     background-image:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
