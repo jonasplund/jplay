@@ -342,7 +342,7 @@
                 var smallname = path.basename(file).split('.')[0] + '-small' + path.extname(file);
                 smallname = path.join(path.dirname(file), smallname);
                 if (!path.existsSync(smallname)) {
-                    createSmallCover(file, smallname);
+                    createSmallCover(file, smallname, connection);
                 }
             }
             var qry = 'UPDATE dirs SET ' + (small ? 'cover_small=' : 'cover=') + connection.escape(filename) + ' WHERE id = ' + id + ';';
@@ -353,7 +353,7 @@
         });
     };
 
-    var createSmallCover = function (large, small) {
+    var createSmallCover = function (large, small, connection) {
         im.convert.path = options.imageMagickPath;
         console.log('Creating image: ' + small);
         im.resize({
@@ -363,7 +363,11 @@
             if (err) { throw err; }
             fs.writeFileSync(small, stdout, 'binary');
         });
-    }
+        var qry = 'UPDATE dirs SET cover_small=' + connection.escape(small) + ' WHERE id = ' + id + ';';
+        connection.query(qry, function (err) {
+            if (err) { throw err; }
+        });
+    };
 
     var getHash = function (file) {
         var filesize = fs.statSync(file).size;
