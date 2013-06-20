@@ -406,7 +406,7 @@
                 playerdom.pause();
             }
         },
-        next: function () {
+        next: function (getInfo) {
             'use strict';
             var nextSong;
             if ($.isEmptyObject(jplay.player.activeSong)) {
@@ -414,7 +414,11 @@
                     jplay.player.setActiveSong($('#playlist .songinplaylist:eq(' + (jplay.shuffle.list[jplay.shuffle.index]) + ')'));
                     jplay.shuffle.index += 1;
                 } else {
-                    jplay.player.setActiveSong(jplay.ui.elements.playlist.children().first('.songinplaylist'));
+                    if (getInfo === true) {
+                        return jplay.ui.elements.playlist.children().first('.songinplaylist');
+                    } else {
+                        jplay.player.setActiveSong(jplay.ui.elements.playlist.children().first('.songinplaylist'));
+                    }
                 }
             } else {
                 if (jplay.settings.items.shuffle) {
@@ -427,17 +431,29 @@
                     if (jplay.settings.items.repeatall) {
                         if (jplay.settings.items.shuffle) {
                             jplay.shuffle.index = 0;
-                            jplay.player.setActiveSong($("#playlist .songinplaylist:eq(" + jplay.shuffle.list[jplay.shuffle.index] + ")"));
-                            jplay.shuffle.index += 1;
+                            if (getInfo === true) {
+                                return $("#playlist .songinplaylist:eq(" + jplay.shuffle.list[jplay.shuffle.index] + ")");
+                            } else {
+                                jplay.player.setActiveSong($("#playlist .songinplaylist:eq(" + jplay.shuffle.list[jplay.shuffle.index] + ")"));
+                                jplay.shuffle.index += 1;
+                            }
                         } else {
                             var children = jplay.ui.elements.playlist.children();
                             if (children.length > 0) {
-                                jplay.player.setActiveSong(jplay.ui.elements.playlist.children().first(".songinplaylist"));
+                                if (getInfo === true) {
+                                    return jplay.ui.elements.playlist.children().first(".songinplaylist");
+                                } else {
+                                    jplay.player.setActiveSong(jplay.ui.elements.playlist.children().first(".songinplaylist"));
+                                }
                             }
                         }
                     }
                 } else {
-                    jplay.player.setActiveSong(nextSong);
+                    if (getInfo === true) { 
+                        return nextSong; 
+                    } else { 
+                        jplay.player.setActiveSong(nextSong); 
+                    }
                 }
             }
         },
@@ -507,7 +523,7 @@
             jplay.player.mesource = null;
             jplay.player.createInstance();
             jplay.player.jqobj.prop('src', '/getMusic?id=' + data.id).get(0).play();
-            $(document).trigger({ type: 'jplay.newsong', from: oldSong, to: data });
+            $(document).trigger({ type: 'jplay.newsong', from: oldSong, to: data, next: jplay.player.next(true).data('attribs') });
             // FIXME: muted doesn't work after changing songs. Temporary solution:
             setTimeout(function () {
                 jplay.player.togglemute();
