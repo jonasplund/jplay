@@ -10,16 +10,24 @@
   50%  { -webkit-transform: rotate(180deg); opacity: 1.0; }
   to   { -webkit-transform: rotate(360deg); opacity: 0.8; }
 }
+@-moz-keyframes spin {
+  from { transform: rotate(0deg);   opacity: 0.8; }
+  50%  { transform: rotate(180deg); opacity: 1.0; }
+  to   { transform: rotate(360deg); opacity: 0.8; }
+}
+@keyframes spin {
+  from { transform: rotate(0deg);   opacity: 0.8; }
+  50%  { transform: rotate(180deg); opacity: 1.0; }
+  to   { transform: rotate(360deg); opacity: 0.8; }
+}
 
-#sidebar { -webkit-flex:1; -moz-flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; 
+#sidebar { -webkit-flex:1; -moz-flex:1; flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; user-select:text;
             max-width:40%; min-width: 450px; overflow-y:auto; max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; 
             border-right: 0; background:transparent; }
 
-.ajaxloader {  }
-
-.ajaxloader { -webkit-animation: spin 1s linear infinite; width: 100px; height:100px; 
-  background:#FFF; margin:30px auto; border: 30px solid #000; border-right: 0 none; border-right-color: transparent;
-  border-radius: 50%; box-shadow: 0 0 100px 2px #333; }
+.ajaxloader { -webkit-animation: spin 1s linear infinite; -moz-animation: spin 1s linear infinite; animation: spin 1s linear infinite; 
+  width: 100px; height:100px; background:#FFF; margin:30px auto; border: 30px solid #000; border-right: 0 none; 
+  border-right-color: transparent; border-radius: 50%; box-shadow: 0 0 100px 2px #333; }
 
 /* Tab styling */
 
@@ -31,8 +39,6 @@
     background: #FFF; 
     border: none; 
     border-bottom: 1px solid #c0c0c0; 
-    -moz-border-radius: 0px; 
-    -webkit-border-radius: 0px; 
     border-radius: 0px; 
 } 
 #sidebar .ui-tabs-nav .ui-state-default { 
@@ -43,6 +49,7 @@
     margin-right: 0;
     -webkit-user-select:none; 
     -moz-user-select:-moz-none;
+    user-select:none;
 } 
 #sidebar .ui-tabs-nav .ui-state-active { 
     background: url(uitabsarrow.png) no-repeat bottom center, -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%); 
@@ -71,6 +78,9 @@
   margin-top:0;
   padding-top: 0;
   background: -webkit-linear-gradient(top, rgba(25,25,25,0.4) 0%, rgba(25,25,25,0.5), rgba(25,25,25,0.4) 100%), url('textured_paper.png');
+  background: -moz-linear-gradient(top, rgba(25,25,25,0.4) 0%, rgba(25,25,25,0.5), rgba(25,25,25,0.4) 100%), url('textured_paper.png');
+  background: -ms-linear-gradient(top, rgba(25,25,25,0.4) 0%, rgba(25,25,25,0.5), rgba(25,25,25,0.4) 100%), url('textured_paper.png');
+  background: linear-gradient(top, rgba(25,25,25,0.4) 0%, rgba(25,25,25,0.5), rgba(25,25,25,0.4) 100%), url('textured_paper.png');
   color:transparent;
   text-shadow:0 0 1px #E22, -3px -4px 2px #353, 3px 7px 3px #400, -6px 1px 5px #100;
   margin:0 -15px 10px -15px;
