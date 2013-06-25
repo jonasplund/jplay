@@ -24,7 +24,7 @@
             for (var i = 0; i < 5; i++) {
                 this.imgarr[i] = $('<img />').appendTo(this.container).prop('src', '');
             }
-            this.container.click(function (e) { that._toggleExpanded(e); });
+            this.stage.click(function (e) { that._toggleExpanded(e); });
             $(document).on('jplay.newsong', function (e) {
                 that._rotate(e);
             });
@@ -45,19 +45,19 @@
             if (e.from) { 
                 src = this.imgarr[(this.rotation + 2) % 5].attr('src');
                 if (src !== '/getImage?id=' + e.from.dirid) {
-                    this.imgarr[(this.rotation + 2) % 5].attr('src', '/getImage?id=' + e.from.dirid);
+                    this.imgarr[(this.rotation + 2) % 5].attr('src', '/getImage?id=' + e.from.dirid + '&small=1');
                 }
             }
             if (e.to) { 
                 src = this.imgarr[(this.rotation + 3) % 5].attr('src');
                 if (src !== '/getImage?id=' + e.to.dirid) {
-                    this.imgarr[(this.rotation + 3) % 5].attr('src', '/getImage?id=' + e.to.dirid);
+                    this.imgarr[(this.rotation + 3) % 5].attr('src', '/getImage?id=' + e.to.dirid + '&small=1');
                 }
             }
             if (e.next) { 
                 src = this.imgarr[(this.rotation + 4) % 5].attr('src');
                 if (src !== '/getImage?id=' + e.next.dirid) {
-                    this.imgarr[(this.rotation + 4) % 5].attr('src', '/getImage?id=' + e.next.dirid);
+                    this.imgarr[(this.rotation + 4) % 5].attr('src', '/getImage?id=' + e.next.dirid + '&small=1');
                 }
             }
         },
@@ -68,7 +68,7 @@
         _toggleExpanded: function (e) {
             var clickBalance,
                 that = this,
-                container = this.stage,
+                container = this.container,
                 $etarget,
                 offset;
             if (e) {
@@ -88,38 +88,53 @@
             that.offset = that.offset || offset;
             if (!this.expanded) {
                 this._toggleFullscreen(container, function () {
-                    container.css({
+                    /*container.css({
                         left: offset.left + 'px',
                         top: offset.top + 'px',
                         position: 'absolute',
                         zIndex: that.options.zindex
-                    });
-                    container.animate(that._positionExpanded(that.imgarr[(that.rotation + 3) % 5]), {
-                        duration: that.options.animationspeed,
-                        complete: function () {
-                            that.expanded = true;
-                        },
-                        easing: that.options.easing,
-                        step: function (now, fx) {
-                            that._step(now, fx, clickBalance);
-                        }
+                    });*/
+                    var activeImg = that.imgarr[(that.rotation + 2) % 5];
+                    that.tmpImg = $('<img />').attr('src', activeImg.attr('src').replace(/&small=1/, ''));
+                    that.tmpImg.css({
+                        position: 'absolute',
+                        top: activeImg.offset().top + 'px',
+                        left: activeImg.offset().left + 'px',
+                        width: activeImg.width() + 'px',
+                        height: activeImg.height() + 'px',
+                        zIndex: that.options.zindex
+                    }).appendTo('body').click(function (e) { that._toggleExpanded(e); }).load(function () {
+                        that.stage.css('visibility', 'hidden');
+                        that.tmpImg.animate(that._positionExpanded(that.tmpImg), {
+                            duration: that.options.animationspeed,
+                            complete: function () {
+                                that.expanded = true;
+                            },
+                            easing: that.options.easing,
+                            step: function (now, fx) {
+                                that._step(now, fx, clickBalance);
+                            }
+                        });
                     });
                 });
             } else {
                 this._toggleFullscreen(null, function () {
+                    that.stage.css('visibility', 'visible');
                     var offset, animateTo;
                     offset = that.element.offset();
                     animateTo = {
-                        width: ((100 / that.imgarr[(that.rotation + 3) % 5][0].naturalHeight) * that.imgarr[(that.rotation + 3) % 5][0].naturalWidth),
+                        width: ((100 / that.tmpImg[0].naturalHeight) * that.tmpImg[0].naturalWidth),
                         height: that.element.height(),
                         top: offset.top,
                         left: offset.left
                     };
-                    container.animate(animateTo, {
+                    that.tmpImg.animate(animateTo, {
                         duration: that.options.animationspeed,
                         complete: function () {
                             that.expanded = false;
-                            container.removeAttr('style').css({ display: 'block', height: that.element.height() + 'px' });
+                            that.tmpImg.remove();
+                            that.tmpImg = null;
+                            //container.removeAttr('style').css({ display: 'block', height: that.element.height() + 'px' });
                         },
                         easing: that.options.easing,
                         step: function (now, fx) {
@@ -148,9 +163,9 @@
                     valueOpac = progress;
                 }
                 // 768 px high picture looks decent with 500 px perspective
-                modifier = (500 / 768) * this.options.distanceMultiplier * this._positionExpanded(this.imgarr[(this.rotation + 3) % 5]).height;
+                modifier = (500 / 768) * this.options.distanceMultiplier * this._positionExpanded(this.tmpImg).height;
                 valTransStr = 'perspective(' + modifier + 'px) rotateY(' + transformVal.y + 'deg) rotateX(' + transformVal.x + 'deg)';
-                this.container.css({
+                this.tmpImg.css({
                     '-webkit-transform': valTransStr,
                     '-moz-transform': valTransStr,
                     transform: valTransStr,
