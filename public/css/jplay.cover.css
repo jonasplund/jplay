@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 @-webkit-keyframes expand { to { -webkit-transform: height:100%; } }
 @-moz-keyframes expand { to { transform: height:100%; } }
 @keyframes expand { to { transform: height:100%; } }
 
+=======
+>>>>>>> refs/heads/beta
 @-webkit-keyframes spinWheel0 { to   { -webkit-transform: rotateY(-72deg); }}
 @-webkit-keyframes spinWheel1 { to   { -webkit-transform: rotateY(-144deg); }}
 @-webkit-keyframes spinWheel2 { to   { -webkit-transform: rotateY(-216deg); }}
@@ -18,6 +21,7 @@
 @keyframes spinWheel3 { to   { -webkit-transform: rotateY(-288deg); }}
 @keyframes spinWheel4 { to   { -webkit-transform: rotateY(-360deg); }}
 
+<<<<<<< HEAD
 #covercontainer { height:100px; width:100px; float:left; margin-left:25px; }
 
 .coverwheelstage { -webkit-transform-style:preserve-3d; -webkit-transform:translateZ(-85px); 
@@ -58,3 +62,25 @@
 	-moz-transform:perspective(500px) translateX(20px) translateZ(-50px) rotateY(-55deg); opacity:0.8;
 	transform:perspective(500px) translateX(20px) translateZ(-50px) rotateY(-55deg); opacity:0.8; }
 .coverCurrent { position:relative; -webkit-transform:perspective(500px) translateZ(0); } */
+=======
+#covercontainer { height:100px; width:100px; float:left; margin-left:25px; -webkit-perspective:500; -webkit-perspective-origin:center center; }
+
+.coverwheelstage { -webkit-transform-style:preserve-3d; -webkit-transform:translateZ(-68px); cursor:pointer; }
+.coverwheel { position:absolute; top:0; width:100%; height:100px; -webkit-transform-style:preserve-3d; }
+.coverwheel.state0.roll { -webkit-animation:spinWheel0 1s; -webkit-animation-fill-mode:forwards; }
+.coverwheel.state1.roll { -webkit-animation:spinWheel1 1s; -webkit-animation-fill-mode:forwards; }
+.coverwheel.state2.roll { -webkit-animation:spinWheel2 1s; -webkit-animation-fill-mode:forwards; }
+.coverwheel.state3.roll { -webkit-animation:spinWheel3 1s; -webkit-animation-fill-mode:forwards; }
+.coverwheel.state4.roll { -webkit-animation:spinWheel4 1s; -webkit-animation-fill-mode:forwards; }
+.coverwheel.state0 { -webkit-transform:rotateY(0deg); }
+.coverwheel.state1 { -webkit-transform:rotateY(-72deg); }
+.coverwheel.state2 { -webkit-transform:rotateY(-144deg); }
+.coverwheel.state3 { -webkit-transform:rotateY(-216deg); }
+.coverwheel.state4 { -webkit-transform:rotateY(-288deg); }
+.coverwheel img { height:100px; position:absolute; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
+.coverwheel img:nth-child(1) { -webkit-transform:rotateY(-144deg) translateZ(69px); }
+.coverwheel img:nth-child(2) { -webkit-transform:rotateY(-72deg)  translateZ(69px); }
+.coverwheel img:nth-child(3) { -webkit-transform:rotateY(0)       translateZ(69px); }
+.coverwheel img:nth-child(4) { -webkit-transform:rotateY(72deg)   translateZ(69px); }
+.coverwheel img:nth-child(5) { -webkit-transform:rotateY(144deg)  translateZ(69px); }
+>>>>>>> refs/heads/beta
