@@ -145,6 +145,26 @@
         });
     };
 
+    // FIXME: Is this guaranteed to run before allCovers is read the first time? Use async?
+    // Also, should be wrapped in insertNew so it doesn't get run when starting 
+    // server without 'update', but need to refactor to make it only run once.
+    // Does this even help performance? Seems like it doesn't.
+    var allCovers = [];
+    (function () {
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        var qry = "SELECT dirname, cover_small, cover FROM dirs;";
+        connection.query(qry, function (err, data) {
+            connection.end();
+            // Flatten data
+            allCovers = [].concat.apply([], data.map(function(value) { 
+                if (value.cover || value.small_cover) {
+                    return [path.join(value.dirname, value.cover), path.join(value.dirname, value.cover_small)];
+                }
+            }));
+        });
+    })();
+    
     var updateDepth = 0;
     var lastDone = 0;
     var lastPrint = -1;
@@ -182,7 +202,8 @@
                         });
                     } else if (stat.size < 1) {
                         next();
-                    } else if (_isPicture(fullpath)) {
+                    } else if (_isPicture(fullpath) && (allCovers.indexOf(fullpath) < 0)) {
+                        console.log('Inserting new cover: ' + fullpath);
                         insertCover(fullpath, connection, next);
                     } else if (_isMusic(fullpath)) {
                         updateMusic(fullpath, stat, connection, function () {
@@ -332,6 +353,7 @@
         var filename = path.basename(file);
         var small = filename.indexOf('-small') >= 0;
         var query = connection.query('SELECT id FROM dirs WHERE dirname = ?', dir, function (err, data) {
+            var qry;
             if (err) { throw err; }
             if (data.length === 0) {
                 console.log(query.sql);
@@ -340,12 +362,16 @@
             var id = data[0].id;
             if (!small) {
                 var smallname = path.basename(file).split('.')[0] + '-small' + path.extname(file);
-                smallname = path.join(path.dirname(file), smallname);
-                if (!path.existsSync(smallname)) {
-                    createSmallCover(file, smallname, connection);
+                var fullsmallname = path.join(path.dirname(file), smallname);
+                if (!fs.existsSync(fullsmallname)) {
+                    createSmallCover(file, fullsmallname, connection);
                 }
+                qry = 'UPDATE dirs SET cover_small=' + connection.escape(smallname) + ' WHERE id = ' + id + ';';
+                connection.query(qry, function (err) {
+                    if (err) { throw err; }
+                });
             }
-            var qry = 'UPDATE dirs SET ' + (small ? 'cover_small=' : 'cover=') + connection.escape(filename) + ' WHERE id = ' + id + ';';
+            qry = 'UPDATE dirs SET ' + (small ? 'cover_small=' : 'cover=') + connection.escape(filename) + ' WHERE id = ' + id + ';';
             var query = connection.query(qry, function (err) {
                 if (err) { console.log(query.sql); throw err; }
                 if ((typeof callback) === 'function') { callback(); }
@@ -353,7 +379,7 @@
         });
     };
 
-    var createSmallCover = function (large, small, connection) {
+    var createSmallCover = function (large, small) {
         im.convert.path = options.imageMagickPath;
         console.log('Creating image: ' + small);
         im.resize({
@@ -362,10 +388,6 @@
         }, function (err, stdout, stdin) {
             if (err) { throw err; }
             fs.writeFileSync(small, stdout, 'binary');
-        });
-        var qry = 'UPDATE dirs SET cover_small=' + connection.escape(small) + ' WHERE id = ' + id + ';';
-        connection.query(qry, function (err) {
-            if (err) { throw err; }
         });
     };
 
@@ -531,11 +553,11 @@
                 'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
                 'last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' + 
                 'dirname VARCHAR(2000),' +
-                'cover VARCHAR(100),' + 
+                'cover VARCHAR(200),' + 
                 'parent_id INT,' + 
                 'ancestors VARCHAR(200),' + 
                 'isdir BOOL,' + 
-                'cover_small VARCHAR(106));',
+                'cover_small VARCHAR(206));',
             songplays: 'CREATE TABLE songplays (' +
                 'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
                 'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' +
