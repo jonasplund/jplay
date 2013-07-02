@@ -1,0 +1,68 @@
+#sidebar {
+        border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; user-select:text;
+            max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; 
+            border-right: 0; background:transparent;
+}
+
+.jp-tabsOuterContainer {
+
+}
+.jp-tabsContainer {
+    background: #FFF; 
+    border: none; 
+    border-bottom: 1px solid #c0c0c0; 
+    border-radius: 0px; 
+}
+.jp-tabsContainer.vertical {
+    background: #FFF; 
+    border: 1px solid #C0C0C0; 
+    border-right:0;
+    -webkit-transform-origin:0 0;
+    -webkit-transform:rotateZ(-90deg) translateX(-100%) translateY(-100%);
+}
+.jp-tabsContentContainer {
+}
+.jp-tab {
+    padding:10px;
+    border: 1px solid black;
+    float:left;
+    cursor:pointer;
+    background: transparent; 
+    border: none; 
+    border-radius: 0;
+    border-right: 1px solid #c0c0c0;
+    margin-right: 0;
+    -webkit-user-select:none; 
+    -moz-user-select:-moz-none;
+    user-select:none;
+    font-weight:bold;
+}
+.jp-activeTab {
+    background: url(uitabsarrow.png) no-repeat bottom center, -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%); 
+    background: url(uitabsarrow.png) no-repeat bottom center, -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%); 
+    background: url(uitabsarrow.png) no-repeat bottom center, -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);  
+    background: url(uitabsarrow.png) no-repeat bottom center, linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%); 
+    border: none; 
+    border-right: 1px solid #c0c0c0;
+    margin-right: 0;
+    box-shadow: 1px 1px 3px #000 inset;
+}
+.jp-tabsContainer.vertical .jp-activeTab {
+    box-shadow: -1px 1px 3px #000 inset;
+}
+.jp-inactiveTab {
+    color:#C0C0C0;
+}
+.jp-tabContent {
+    height:400px;
+}
+.jp-visibleTabContent {
+    display:block;
+}
+.jp-hiddenTabContent {
+    display: none;
+}
+
+.jp-tabsOuterContainer.hidden {
+    width:0;
+}
