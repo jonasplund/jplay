@@ -159,7 +159,9 @@
             // Flatten data
             allCovers = [].concat.apply([], data.map(function(value) { 
                 if (value.cover || value.small_cover) {
-                    return [path.join(value.dirname, value.cover), path.join(value.dirname, value.cover_small)];
+                    if (value.dirname && value.cover && value.cover_small) {
+                        return [path.join(value.dirname, value.cover), path.join(value.dirname, value.cover_small)];
+                    }
                 }
             }));
         });
