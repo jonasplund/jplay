@@ -1,7 +1,6 @@
 ﻿var jplay = {
     ui: {
         elements: {
-            bigscreen: {},
             smallscreen: {},
             nextbutton: {},
             prevbutton: {},
@@ -13,7 +12,6 @@
             volumeslider: {},
             covercontainer: {},
             time: {},
-            bigscreenbutton: {},
             playlistcontainer: {},
             playlist: {},
             repeatbutton: {},
@@ -27,92 +25,85 @@
             playerdomobj: {}
         },
         init: function () {
-            "use strict";
+            'use strict';
             var elements = jplay.ui.elements;
-            $("#maincontainer h2#settingsheader").click(function () {
-                var div = $(this).next("div");
-                if (div.css("display") === "block") {
-                    div.hide("blind", jplay.settings.items.animationspeed, function () { });
+            $('#maincontainer h2#settingsheader').click(function () {
+                var div = $(this).next('div');
+                if (div.css('display') === 'block') {
+                    div.hide('blind', jplay.settings.items.animationspeed, function () { });
                 } else {
-                    div.show("blind", jplay.settings.items.animationspeed, function () { });
+                    div.show('blind', jplay.settings.items.animationspeed, function () { });
                 }
             });
-            elements.bigscreen = $("#bigscreen");
-            elements.smallscreen = $("#maincontainer");
-            elements.nextbutton = $("#nextbutton,#bigscreen #bs_nextbutton");
-            elements.prevbutton = $("#prevbutton,#bigscreen #bs_prevbutton");
-            elements.playpausebutton = $("#playpausebutton,#bigscreen #bs_playpausebutton");
-            elements.playinfo = $("#playinfo,#bigscreen #bs_playinfo");
-            elements.searchlinksbutton = $("#searchlinksbutton");
-            elements.searchlinksmenu = $("#searchlinksmenu");
-            elements.progressmeter = $("#progressmeter");
-            elements.volumeslider = $("#volumeslider");
-            elements.mutebutton = $("#mutebutton");
-            elements.covercontainer = $("#covercontainer");
-            elements.bscover = $("#bs_coverrow");
-            elements.time = $("#time");
-            elements.bigscreenbutton = $("#bigscreen_button").add("#bigscreen #bs_toggle");
-            elements.playlistcontainer = $("#playlistcontainer");
-            elements.playlist = $("#playlist");
-            elements.searchsettings = $("#searchsettings");
-            elements.searchtext = $("#searchtext");
-            elements.saveplaylistbutton = $("#saveplaylistbutton");
-            elements.clearplaylistbutton = $("#clearplaylistbutton");
-            elements.shufflebutton = $("#shufflebutton");
-            elements.repeatbutton = $("#repeatbutton");
-            elements.addrandombutton = $("#addrandom");
+            elements.smallscreen = $('#maincontainer');
+            elements.nextbutton = $('#nextbutton');
+            elements.prevbutton = $('#prevbutton');
+            elements.playpausebutton = $('#playpausebutton');
+            elements.playinfo = $('#playinfo');
+            elements.searchlinksbutton = $('#searchlinksbutton');
+            elements.searchlinksmenu = $('#searchlinksmenu');
+            elements.progressmeter = $('#progressmeter');
+            elements.volumeslider = $('#volumeslider');
+            elements.mutebutton = $('#mutebutton');
+            elements.covercontainer = $('#covercontainer');
+            elements.time = $('#time');
+            elements.playlistcontainer = $('#playlistcontainer');
+            elements.playlist = $('#playlist');
+            elements.searchsettings = $('#searchsettings');
+            elements.searchtext = $('#searchtext');
+            elements.saveplaylistbutton = $('#saveplaylistbutton');
+            elements.clearplaylistbutton = $('#clearplaylistbutton');
+            elements.shufflebutton = $('#shufflebutton');
+            elements.repeatbutton = $('#repeatbutton');
+            elements.addrandombutton = $('#addrandom');
             
             elements.mutebutton.button({
-                icons: { primary: "ui-icon-volume-on" },
+                icons: { primary: 'ui-icon-volume-on' },
                 text: false
             });
             elements.nextbutton.button({
-                icons: { primary: "ui-icon-seek-next" },
+                icons: { primary: 'ui-icon-seek-next' },
                 text: false
             });
             elements.playpausebutton.button({
-                icons: { primary: "ui-icon-play" },
+                icons: { primary: 'ui-icon-play' },
                 text: false
             });
             elements.prevbutton.button({
-                icons: { primary: "ui-icon-seek-prev" },
+                icons: { primary: 'ui-icon-seek-prev' },
                 text: false
             });
             elements.searchlinksbutton.button({
-                icons: { primary: "ui-icon-info" },
+                icons: { primary: 'ui-icon-info' },
                 text: false
             });
             elements.searchlinksmenu.menu();
-            elements.bigscreenbutton.filter(elements.smallscreen.find("*")).button({
-                icons: { primary: "ui-icon-arrow-4-diag" },
-                label: "Go to big screen mode (sucky)",
-                text: false
-            });
             elements.saveplaylistbutton.button({
-                icons: { primary: "ui-icon-disk" },
+                icons: { primary: 'ui-icon-disk' },
                 text: false
             });
             elements.clearplaylistbutton.button({
-                icons: { primary: "ui-icon-close" },
+                icons: { primary: 'ui-icon-close' },
                 text: false
             });
             elements.searchsettings.buttonset({});
             elements.shufflebutton.button({
-                icons: { primary: "ui-icon-shuffle" },
+                icons: { primary: 'ui-icon-shuffle' },
                 text: false
             });
             elements.repeatbutton.button({
-                icons: { primary: "ui-icon-refresh" },
+                icons: { primary: 'ui-icon-refresh' },
                 text: false
             });
             elements.addrandombutton.button({
-                icons: { primary: "ui-icon-transfer-e-w" },
+                icons: { primary: 'ui-icon-transfer-e-w' },
                 text: false,
-                title: "Add random song to playlist"
+                title: 'Add random song to playlist'
             });
             $(document).on('jplay.newsong', jplay.ui.setBGCover);
         },        
         setBGCover: function (e) {
+            'use strict';
             var to = null;
             if (e && e.to && e.to.dirid) {
                 to = e.to.dirid;
@@ -135,70 +126,70 @@
     settings: {
         items: {},
         init: function () {
-            "use strict";
-            if (localStorage.getItem("settings")) {
-                jplay.settings.items = $.parseJSON(localStorage.getItem("settings"));
+            'use strict';
+            if (localStorage.getItem('settings')) {
+                jplay.settings.items = $.parseJSON(localStorage.getItem('settings'));
                 var items = jplay.settings.items;
-                if (items.hasOwnProperty("shuffle")) {
+                if (items.hasOwnProperty('shuffle')) {
                     if (items.shuffle) {
-                        $("#shufflebutton").addClass("ui-state-highlight");
+                        $('#shufflebutton').addClass('ui-state-highlight');
                     }
                 }
-                if (items.hasOwnProperty("repeatall")) {
+                if (items.hasOwnProperty('repeatall')) {
                     if (items.repeatall) {
-                        $("#repeatbutton").addClass("ui-state-highlight");
+                        $('#repeatbutton').addClass('ui-state-highlight');
                     }
                 }
-                if (items.hasOwnProperty("notifications")) {
-                    $("#notifications").get(0).checked = items.notifications;
+                if (items.hasOwnProperty('notifications')) {
+                    $('#notifications').get(0).checked = items.notifications;
                 }
-                if (items.hasOwnProperty("bgcover")) {
-                    $("#bgcover").get(0).checked = items.bgcover;
+                if (items.hasOwnProperty('bgcover')) {
+                    $('#bgcover').get(0).checked = items.bgcover;
                 }
-                if (items.hasOwnProperty("fft")) {
-                    $("#fftsetting").get(0).checked = items.fft;
+                if (items.hasOwnProperty('fft')) {
+                    $('#fftsetting').get(0).checked = items.fft;
                 }
-                if (items.hasOwnProperty("saveplaylist")) {
-                    $("#saveplaylist").get(0).checked = items.saveplaylist;
+                if (items.hasOwnProperty('saveplaylist')) {
+                    $('#saveplaylist').get(0).checked = items.saveplaylist;
                 }
-                if (!items.hasOwnProperty("animations")) {
-                    items.animations = $("#animations").get(0).checked;
+                if (!items.hasOwnProperty('animations')) {
+                    items.animations = $('#animations').get(0).checked;
                 } else {
-                    $("#animations").get(0).checked = items.animations;
+                    $('#animations').get(0).checked = items.animations;
                 }
-                if (items.hasOwnProperty("volume")) {
+                if (items.hasOwnProperty('volume')) {
                     // Slider not inited yet
                     // jplay.ui.elements.volumeslider.slider("option", "value", jplay.settings.items.volume * 100);
                     // jplay.ui.elements.playerdomobj.volume = jplay.settings.items.volume;
                     jplay.player.setVolume(jplay.settings.items.volume);
                 }
-                if (!items.hasOwnProperty("animationspeed")) {
-                    items.animationspeed = Number($("#animationspeed").get(0).value);
+                if (!items.hasOwnProperty('animationspeed')) {
+                    items.animationspeed = Number($('#animationspeed').get(0).value);
                 } else {
-                    $("#animationspeed").get(0).value = items.animationspeed;
+                    $('#animationspeed').get(0).value = items.animationspeed;
                 }
-                if (items.hasOwnProperty("mute")) {
+                if (items.hasOwnProperty('mute')) {
                     jplay.ui.elements.playerdomobj.muted = items.mute;
                     if (items.mute === true) {
-                        jplay.ui.elements.mutebutton.button("option", "icons", { primary: "ui-icon-volume-off" }).addClass("ui-state-highlight");
+                        jplay.ui.elements.mutebutton.button('option', 'icons', { primary: 'ui-icon-volume-off' }).addClass('ui-state-highlight');
                     }
                 }
-                if (items.hasOwnProperty("searchsettings")) {
+                if (items.hasOwnProperty('searchsettings')) {
                     $.each(items.searchsettings, function (key, setting) {
-                        var el = jplay.ui.elements.searchsettings.find("#searchcheck" + key);
-                        el.prop("checked", setting).button("refresh");
+                        var el = jplay.ui.elements.searchsettings.find('#searchcheck' + key);
+                        el.prop('checked', setting).button('refresh');
                     });
                 }
                 $.fx.off = !(items.animations);
             } else {
                 jplay.settings.update();
             }
-            $("#settingscontainer input").change(function () {
+            $('#settingscontainer input').change(function () {
                 jplay.settings.update();
             });
         },
         update: function () {
-            "use strict";
+            'use strict';
             var items = jplay.settings.items;
             items.notifications = $('#notifications').get(0).checked;
             items.bgcover = $('#bgcover').get(0).checked;
@@ -227,7 +218,7 @@
                 jplay.player.mesource = jplay.player.audioContext.createMediaElementSource(jplay.player.domobj);
             }
             if (items.fft && !jplay.ui.elements.fft && jplay.player.audioContext && jplay.player.mesource) {
-                jplay.ui.elements.fft = $("<canvas></canvas>").attr("width", "200px").attr("height", "100px").prop("id", "fft");
+                jplay.ui.elements.fft = $('<canvas></canvas>').attr('width', '200px').attr('height', '100px').prop('id', 'fft');
                 jplay.ui.elements.fft.insertBefore(jplay.ui.elements.covercontainer);
                 jplay.ui.elements.fft.fft({
                     player: jplay.player.jqobj,
@@ -236,17 +227,17 @@
                     volume: jplay.settings.items.volume
                 });
             }
-            items.volume = jplay.player.domobj.hasOwnProperty("volume") ? jplay.player.domobj.volume : 1;
+            items.volume = jplay.player.domobj.hasOwnProperty('volume') ? jplay.player.domobj.volume : 1;
             items.mute = jplay.player.domobj.muted;
             items.searchsettings = (function () {
                 var retobj = {};
-                $.each(jplay.ui.elements.searchsettings.children("input"), function (key, val) {
+                $.each(jplay.ui.elements.searchsettings.children('input'), function (key, val) {
                     val = $(val);
-                    retobj[val.prop("id").replace("searchcheck", "")] = val.prop("checked");
+                    retobj[val.prop('id').replace('searchcheck', '')] = val.prop('checked');
                 });
                 return retobj;
             } ());
-            localStorage.setItem("settings", JSON.stringify(jplay.settings.items));
+            localStorage.setItem('settings', JSON.stringify(jplay.settings.items));
         }
     },
     player: {
@@ -254,14 +245,14 @@
         domobj: {},
         errorTime: 0,
         createInstance: function () {
-            "use strict";
+            'use strict';
             var elements = jplay.ui.elements;
             if (jplay.player.jqobj) {
                 jplay.player.jqobj.remove();
             }
-            jplay.player.jqobj = $("<audio></audio>").prop("id", "audio").appendTo($("body")).prop("id", "player");
+            jplay.player.jqobj = $('<audio></audio>').prop('id', 'audio').appendTo($('body')).prop('id', 'player');
             jplay.player.domobj = jplay.player.jqobj.get(0);
-            jplay.player.jqobj.on("loadedmetadata", function () {
+            jplay.player.jqobj.on('loadedmetadata', function () {
                 this.play();
                 if (jplay.settings.items.fft) {
                     if (jplay.player.audioContext && !jplay.player.mesource) {
@@ -271,7 +262,7 @@
                         jplay.ui.elements.fft.remove();
                         jplay.ui.elements.fft = null;
                     }
-                    jplay.ui.elements.fft = $("<canvas></canvas>").prop("width", "200px").prop("height", "100px").prop("id", "fft");
+                    jplay.ui.elements.fft = $('<canvas></canvas>').prop('width', '200px').prop('height', '100px').prop('id', 'fft');
                     jplay.ui.elements.fft.insertBefore(jplay.ui.elements.covercontainer);
                     jplay.ui.elements.fft.fft({
                         player: jplay.player.jqobj,
@@ -284,11 +275,11 @@
                     this.currentTime = jplay.player.errorTime;
                     jplay.player.errorTime = 0;
                 }
-            }).on("ended", function () {
+            }).on('ended', function () {
                 jplay.player.next();
-            }).on("timeupdate", function () {
+            }).on('timeupdate', function () {
                 if (isNaN(this.currentTime) || isNaN(this.duration)) {
-                    elements.time.text("--:--/--:--");
+                    elements.time.text('--:--/--:--');
                     return;
                 }
                 elements.progressmeter.progressbar('option', 'value', 100 * this.currentTime / this.duration);
@@ -298,11 +289,15 @@
                 if (elements.time.text() !== newTime) {
                     elements.time.text(newTime);
                 }
-            }).on("play", function () {
+                if (this.duration - this.currentTime < 10 && !jplay.player.soonTriggered) {
+                    $(document).trigger({ type: 'jplay.soonnewsong', next: jplay.player.next(true).data('attribs') });
+                    jplay.player.soonTriggered = true;
+                }
+            }).on('play', function () {
                 elements.playpausebutton.button("option", "icons", { primary: "ui-icon-pause" }).addClass("ui-state-highlight");
-            }).on("pause", function () {
+            }).on('pause', function () {
                 elements.playpausebutton.button("option", "icons", { primary: "ui-icon-play" }).removeClass("ui-state-highlight");
-            }).on("error", function (e) {
+            }).on('error', function (e) {
                 if (e && e.target && e.target.error) {
                     if (e.target.error.code === 2) {
                         jplay.player.errorTime = jplay.player.domobj.currentTime;
@@ -389,9 +384,6 @@
                 }
             });
             elements.covercontainer.cover({});
-            elements.bigscreenbutton.click(function () {
-                $('#bigscreencontainer').toggle();
-            });
             elements.addrandombutton.click(jplay.searchfn.addRandom);
         },
         toggleplay: function () {
@@ -458,31 +450,31 @@
             }
         },
         prev: function () {
-            "use strict";
+            'use strict';
             if ($.isEmptyObject(jplay.player.activeSong)) {
                 if (jplay.settings.items.shuffle) {
                     jplay.shuffle.index = jplay.shuffle.list.length - 1;
-                    jplay.player.setActiveSong($("#playlist .songinplaylist:eq(" + (jplay.shuffle.list[jplay.shuffle.index]) + ")"));
+                    jplay.player.setActiveSong($('#playlist .songinplaylist:eq(' + (jplay.shuffle.list[jplay.shuffle.index]) + ")"));
                     jplay.shuffle.index -= 1;
                 } else {
-                    jplay.player.setActiveSong(jplay.ui.elements.playlist.children("li").last(".songinplaylist"));
+                    jplay.player.setActiveSong(jplay.ui.elements.playlist.children('li').last('.songinplaylist'));
                 }
             } else {
                 var prev;
                 if (jplay.settings.items.shuffle) {
-                    prev = $("#playlist .songinplaylist:eq(" + (jplay.shuffle.list[jplay.shuffle.index]) + ")");
+                    prev = $('#playlist .songinplaylist:eq(' + (jplay.shuffle.list[jplay.shuffle.index]) + ')');
                     jplay.shuffle.index -= 1;
                 } else {
-                    prev = jplay.player.activeSong.prev(".songinplaylist");
+                    prev = jplay.player.activeSong.prev('.songinplaylist');
                 }
                 if (prev.length === 0) {
                     if (jplay.settings.items.repeatall) {
                         if (jplay.settings.items.shuffle) {
                             jplay.shuffle.index = jplay.shuffle.list.length - 1;
-                            jplay.player.setActiveSong($("#playlist .songinplaylist:eq(" + (jplay.shuffle.list[jplay.shuffle.index]) + ")"));
+                            jplay.player.setActiveSong($('#playlist .songinplaylist:eq(' + (jplay.shuffle.list[jplay.shuffle.index]) + ')'));
                             jplay.shuffle.index -= 1;
                         } else {
-                            jplay.player.setActiveSong(jplay.ui.elements.playlist.children().last(".songinplaylist"));
+                            jplay.player.setActiveSong(jplay.ui.elements.playlist.children().last('.songinplaylist'));
                         }
                     }
                 } else {
@@ -519,11 +511,11 @@
             }
             jplay.helpfunctions.showNotification(data);
             jplay.ui.elements.covercontainer.cover({ 'src': '/getImage?id=' + data.dirid });
-            jplay.ui.elements.bscover.css('background-image', 'url("/getImage?id=' + data.dirid + '")');
             jplay.player.mesource = null;
             jplay.player.createInstance();
             jplay.player.jqobj.prop('src', '/getMusic?id=' + data.id).get(0).play();
             $(document).trigger({ type: 'jplay.newsong', from: oldSong, to: data, next: jplay.player.next(true).data('attribs') });
+            jplay.player.soonTriggered = false;
             // FIXME: muted doesn't work after changing songs. Temporary solution:
             setTimeout(function () {
                 jplay.player.togglemute();

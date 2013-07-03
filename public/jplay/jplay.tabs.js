@@ -1,18 +1,51 @@
 (function (jplay, $) {
     'use strict';
 
+    $(document).on('click', '#sidebar a.tabcontent', function(e) {
+        e.preventDefault();
+        var id = $(e.target).attr('href').match(/id=([0-9]+)/)[1];
+        jplay.searchfn.gotodir({ id: id, isdir: true });
+    });
+
     var preprocessors = {
         bandInfo: function (data) {
-           return data;
+            try {
+                var $data = $('<div>').append($(data));
+                $data.find('a').contents().unwrap();
+                data = $data.html();
+            } catch (ex) { }
+            return data;
         },
         similarArtists: function (data) {
-           return data;
+            try {
+                data = $.map(data, function (item) { 
+                   if (item.dirid) {
+                       return '<a class="tabcontent" href="#id=' + 
+                           item.dirid + '">' + decodeURI(item.item) + '</a>';
+                   }
+                   return decodeURI(item.item);
+                }).join('<br />');
+            } catch (ex) { }
+            return data;
         },
         lyrics: function (data) {
-           return data;
+            if (jplay.player.activeSong) {
+                data = '<h1>' + jplay.player.activeSong.data().attribs.title.replace(/[0-9]{2,3} - /, '') + '</h1>' + data; 
+            }
+            return data;
         },
         video: function (data) {
-           return data;
+            if (jplay.player.activeSong) {
+                data = $('<iframe></iframe>').attr({
+                    'width': '420',
+                    'height': '315',
+                    'src': 'http://www.youtube.com/embed/' + data,
+                    'frameborder': '0',
+                    'allowfullscreen': ''
+                });
+                return data[0].outerHTML;
+            }
+            return data;
         }
     };
 
@@ -20,39 +53,45 @@
         tabs: [ {
                 title: 'Band Info',
                 order: 1,
-                data: 'bandInfo',
-                preprocess: preprocessors.bandInfo
+                name: 'bandInfo',
+                preprocess: preprocessors.bandInfo,
+                defaultText: 'No active song.'
             }, {
                 title: 'Similar Artists',
                 order: 2,
-                data: 'similarArtists',
-                preprocess: preprocessors.similarArtists
+                name: 'similarArtists',
+                preprocess: preprocessors.similarArtists,
+                defaultText: 'No active song.'
             }, {
                 title: 'Lyrics',
                 order: 3,
-                data: 'lyrics',
-                preprocess: preprocessors.lyrics
+                name: 'lyrics',
+                preprocess: preprocessors.lyrics,
+                defaultText: 'No active song.'
             }, {
                 title: 'Video',
                 order: 4,
-                data: 'video',
-                preprocess: preprocessors.video
+                name: 'video',
+                preprocess: preprocessors.video,
+                defaultText: 'No active song.'
             }
         ],
         firstActive: 'Band Info',
-        direction: 'vertical',
+        direction: 'horizontal',
         updateAllUrl: '/getSidebarInfo',
         preload: true
     };
 
     function Tab (tabs, settings) {
         var that = this;
-        var contentId = settings.contentId || settings.data + 'TabContent';
-        var tabId = settings.tabId || settings.data + 'Tab';
+        var contentId = settings.contentId || settings.name + 'TabContent';
+        var tabId = settings.tabId || settings.name + 'Tab';
         this.tabs = tabs;
         this.tab = $('<div class="jp-tab" />').text(settings.title).attr('id', tabId).click(function () { that.activate(); });
         this.title = settings.title;
-        this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.title);
+        this.name = settings.name;
+        this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.defaultText);
+        this.preprocess = settings.preprocess;
         this.settings = settings;
         this.tabs.tabsContainer.append(this.tab);
         this.tabs.tabsContentContainer.append(this.tabContent);
@@ -63,7 +102,7 @@
     };
 
     Tab.prototype.preprocessData = function (data) {
-       return this.preprocess ? this.preprocess.call(this, data) : '';
+        return this.preprocess ? this.preprocess.call(this, data) : '';
     };
 
     Tab.prototype.hide = function () {
@@ -82,14 +121,22 @@
 
     Tab.prototype.update = function () {
         // TODO: Implement
-    }
+    };
 
     function Tabs (element, tabsSettings) {
-        this.element = element.addClass('jp-tabsOuterContainer');
         this.vertical = tabsSettings.direction === 'vertical';
-        this.tabsContainer = $('<div class="jp-tabsContainer' + (this.vertical ? ' vertical' : '') + '">').appendTo(element);
+        this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
+        this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
+        this.tabsContainer = $('<div class="jp-tabsContainer">').appendTo(this.tabsContainerOuter);
+        this.tabsContainerOuter.append($('<div style="clear:both"></div>'));
         this.tabsContentContainer = $('<div class="jp-tabsContentContainer">').appendTo(element);
         this.settings = tabsSettings;
+        this.preload = {
+            enabled: tabsSettings.preload,
+            hasData: false,
+            data: {},
+            id: -1
+        };
         tabsSettings.tabs.sort(function (a, b) { return a.order - b.order; });
         this.tabObjects = [];
         for (var i = 0; i < tabsSettings.tabs.length; i++) {
@@ -115,16 +162,25 @@
 
     Tabs.prototype.updateAll = function (songInfo) {
         var that = this;
-        if (this.preloaded) {
-            // TODO: Fetch preloaded data
+        this.activeTab.tabContent.html('<div class="ajaxloader" />');
+        if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
+            for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
+                var currTab = that.tabObjects[i];
+                if (this.preload.data[currTab.name]) {
+                    currTab.setContent(currTab.preprocessData(this.preload.data[currTab.name]));
+                } else {
+                    currTab.setContent('No information found.');
+                }
+            }
+            this.preload.hasData = false;
         } else {
             $.get(this.settings.updateAllUrl, songInfo, function (data) {
                 for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
                     var currTab = that.tabObjects[i];
-                    for (var j = 0, endj = data.length; j < endj; j++) {
-                        if (currTab.data === data[j].name) {
-                            currTab.setContent(currTab.preprocessData(data[j].data));
-                        }
+                    if (data[currTab.name]) {
+                        currTab.setContent(currTab.preprocessData(data[currTab.name]));
+                    } else {
+                        currTab.setContent('No information found.');
                     }
                 }
             });
@@ -155,27 +211,31 @@
         this.element.removeClass('hidden');
     };
 
-    Tabs.prototype.preload = function (data) {
+    Tabs.prototype.preloadAll = function (songInfo) {
         var that = this;
-        if (!this.settings.preload) {
+        if (!this.preload.enabled) {
             return;
         }
         $.get(this.settings.updateAllUrl, songInfo, function (data) {
-            // TODO: Implement sidebarInfo on serverside
-            this.preloadedData = data; 
+            that.preload.data = data;
+            that.preload.hasData = true;
+            that.preload.id = songInfo.id;
         });
-    }
+    };
 
     Tabs.prototype.resize = function () {
         if (this.vertical) {
             var width = 0;
             $.each(this.tabObjects, function () { width += this.tab.outerWidth(); });
             this.tabsContainer.width(width + 'px');
+            this.tabsContainerOuter.css('width', $(window).height());
         }
-    }
+    };
 
     var tabs = new Tabs($('#sidebar'), options);
     $(document).on('jplay.newsong', function (e) {
         tabs.updateAll(e.to);
+    }).on('jplay.soonnewsong', function (e) {
+        tabs.preloadAll(e.next);
     });
 }) (jplay, $);

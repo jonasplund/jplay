@@ -11,6 +11,46 @@
 
     var jps = module.exports = {};
 
+    jps.getSidebarInfo = function (req, res) {
+        if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
+            res.send('Invalid id');
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs WHERE id = ?', [req.query.id], function (err, data) {
+            connection.end();
+            if (err) { throw err; }
+            if (data.length < 1) {
+                res.send('No songs matching id');
+                return;
+            }
+            async.parallel({
+                video: function (callback) {
+                    metalminer.getVideo(data[0], function (err, results) {
+                        callback(err, results);
+                    });
+                },
+                similarArtists: function (callback) {
+                    getSimilarArtistsInternal(req.query.id, undefined, function (err, results) {
+                        callback(err, results);
+                    });
+                },
+                bandInfo: function (callback) {
+                    metalminer.getBandInfo(data[0], function (err, results) {
+                        callback(err, results);
+                    });
+                },
+                lyrics: function (callback) {
+                    metalminer.getLyrics(data[0], function (err, results) {
+                        callback(err, results);
+                    });
+                },
+            }, function (err, results) {
+                res.send(results);
+            });
+        });
+    }
+
     jps.getVideo = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
             res.send('Invalid id');
@@ -86,6 +126,51 @@
             if (err) { throw err; }
             connection.end();
             res.send(data);
+        });
+    };
+
+    var getSimilarArtistsInternal = function (id, connection, callback) {
+        if (!id || !isNumeric(id)) {
+            callback('Invalid id.');
+            return;
+        }
+        var connection = connection || mysql.createConnection(options.dbConnection);
+        connection.query('SELECT * FROM songs WHERE id = ?', [id], function (err, data) {
+            if (err) { throw err; }
+            if (data.length < 1) {
+                connection.end();
+                callback('Invalid id.');
+            }
+            metalminer.getSimilarArtists(data[0], function (err, results) {
+                if (err) {
+                    connection.end();
+                    return err;
+                }
+                async.map(results, function (item, callback) {
+                    connection.query('SELECT dirid FROM songs WHERE artist = ? LIMIT 1', item, function (err, data2) {
+                        if (err) {
+                            callback(err);
+                            throw err;
+                        }
+                        if (data2 && data2.length > 0 && data2[0] && data2[0].dirid) {
+                            callback(null, { item: item, dirid: data2[0].dirid });
+                        } else {
+                            callback(null, { item: item });
+                        }
+                    });
+                }, function (err, sendobj) {
+                    connection.end();
+                    if (err) { throw err; }
+                    sendobj.sort(function (a, b) {
+                        if (a.dirid && !b.dirid)
+                            return -1;
+                        if (!a.dirid && b.dirid)
+                            return 1;
+                        return a.item > b.item ? 1 : -1;
+                    });
+                    callback(null, sendobj);
+                });
+            });
         });
     };
 

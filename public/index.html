@@ -4,11 +4,9 @@
 	<meta charset="UTF-8" />
 	<title>Muzak</title>
     <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/jplay.sidebar.css" />
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
-    <link rel="stylesheet" type="text/css" href="css/jplay.bigscreen.css" />
     <link rel="stylesheet" type="text/css" href="css/jplay.cover.css" />
-    <link rel="stylesheet" type="text/css" href="css/jplay.sidebar.css" />
+    <link rel="stylesheet" type="text/css" href="css/jplay.tabs.css" />
     <link rel="stylesheet" type="text/css" href="css/jplay.popular.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="jquery/jquery-2.0.2.min.js" defer="defer"></script>
@@ -19,7 +17,7 @@
     <script src="jplay/jplay.client.js" type="text/javascript" defer="defer"></script>
     <script src="jplay/jplay.playlist.js" type="text/javascript" defer="defer"></script>
     <script src="jplay/jplay.popular.js" type="text/javascript" defer="defer"></script>
-    <script src="jplay/jplay.sidebar.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.tabs.js" type="text/javascript" defer="defer"></script>
     <script src="jplay/jplay.helpfunctions.js" type="text/javascript" defer="defer"></script>
 </head>
 
@@ -133,29 +131,13 @@
         <div id="debug"></div>
         <div id="warning"></div>
 	</div>
-    <div id="bigscreencontainer">
-        <div id="bigscreen">
-            <div id="bs_headrow">
-                <h1 id="bs_head"><span id="bs_playinfo"><span class="artist">Amon Amarth</span> - <span class="title">01 - Death in Fire</span></span></h1>
-            </div>
-            <div id="bs_coverrow"></div>
-            <div id="bs_bottomrow">
-                <div id="bs_controls">
-                    <div id="bs_prevbutton" class="bs_button"></div>
-                    <div id="bs_playpausebutton" class="bs_button active">&gt;</div>
-                    <div id="bs_nextbutton" class="bs_button"></div>
-                </div>
-            </div>
-            <div id="bs_toggle">u</div>
-        </div>
-    </div>
     <div id="sidebar">
-        <ul id="tabs">
+        <!-- <ul id="tabs">
             <li id="preloaded"><a href="/getBandInfo">Band Info</a></li>
             <li id="lyricstab"><a href="/getLyrics">Lyrics</a></li>
             <li id="similartab"><a href="/getSimilar">Similar Artists</a></li>
             <li id="youtubetab"><a href="/getVideo">Video</a></li>
-        </ul>
-    </div>
+        </ul> -->
+    </div> 
 </body>
 </html>
