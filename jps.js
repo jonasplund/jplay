@@ -290,8 +290,8 @@
             connection.query(qry, [id], function (err, data) {
                 connection.end();
             });
-            recSongPlay(req, data[0].dirid);
             if (data.length < 1) { return; }
+            recSongPlay(req, data[0].dirid);
             fullpath = path.join(data[0].dir, data[0].filename);
             if (!fs.existsSync(fullpath)) {
                 sys.error('Error serving ' + fullpath);
