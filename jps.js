@@ -25,28 +25,34 @@
                 return;
             }
             async.parallel({
+                // If err is defined in callback, the whole thing is cancelled, so don't send err to callback
                 video: function (callback) {
                     metalminer.getVideo(data[0], function (err, results) {
-                        callback(err, results);
+                        callback(undefined, { err: err, results: results });
                     });
                 },
                 similarArtists: function (callback) {
                     getSimilarArtistsInternal(req.query.id, undefined, function (err, results) {
-                        callback(err, results);
+                        callback(undefined, { err: err, results: results });
                     });
                 },
                 bandInfo: function (callback) {
                     metalminer.getBandInfo(data[0], function (err, results) {
-                        callback(err, results);
+                        callback(undefined, { err: err, results: results });
                     });
                 },
                 lyrics: function (callback) {
                     metalminer.getLyrics(data[0], function (err, results) {
-                        callback(err, results);
+                        callback(undefined, { err: err, results: results });
                     });
-                },
+                }
             }, function (err, results) {
-                res.send(results);
+                res.send({ 
+                    video: results.video.results, 
+                    similarAritists: results.similarArtists.results, 
+                    bandInfo: results.bandInfo.results, 
+                    lyrics: results.lyrics.results 
+                });
             });
         });
     }

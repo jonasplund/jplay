@@ -77,7 +77,7 @@
             }
         ],
         firstActive: 'Band Info',
-        direction: 'horizontal',
+        direction: 'vertical',
         updateAllUrl: '/getSidebarInfo',
         preload: true
     };
