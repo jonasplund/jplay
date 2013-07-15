@@ -90,7 +90,7 @@ h2#settingsheader { cursor:pointer; }
 #filesouter { padding:0; margin:0 auto; height:456px; overflow-y:auto; }
 
 #searchcontainer { background:#FFF; padding:3px 4px; height:17px; border-bottom:2px ridge #FFF; }
-#searchcontainer * { float:left; }
+#searchcontainer * { display:inline-block; }
 #searchcontainer #searchtext { width:250px; height:14px; padding:0 2px; font-size:11px; float:left; 
 							  border:1px solid #888; border-radius:2px; box-shadow:1px 1px 2px rgba(128,128,128,0.5) inset; }
 /* #searchcontainer #searchbutton { float:left; } */

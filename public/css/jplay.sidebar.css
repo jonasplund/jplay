@@ -22,7 +22,7 @@
 }
 
 #sidebar { -webkit-flex:1; -moz-flex:1; ms-flex:1; flex:1; border-left: 2px ridge #FFF; -webkit-user-select:text; -moz-user-select:text; -ms-user-select:text; user-select:text;
-            max-width:40%; min-width: 450px; overflow-y:auto; max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; 
+            max-width:600px; min-width: 450px; overflow-y:auto; max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; 
             border-right: 0; background:transparent; }
 
 .ajaxloader { -webkit-animation: spin 1s linear infinite; -moz-animation: spin 1s linear infinite; animation: spin 1s linear infinite; 
