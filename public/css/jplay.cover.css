@@ -45,7 +45,7 @@
 .coverwheel.state2 { -webkit-transform:rotateY(-144deg); -moz-transform:rotateY(-144deg); transform:rotateY(-144deg); }
 .coverwheel.state3 { -webkit-transform:rotateY(-216deg); -moz-transform:rotateY(-216deg); transform:rotateY(-216deg); }
 .coverwheel.state4 { -webkit-transform:rotateY(-288deg); -moz-transform:rotateY(-288deg); transform:rotateY(-288deg); }
-.coverwheel img { height:100px; position:absolute; -webkit-backface-visibility:hidden; -moz-backface-visibility:hidden; backface-visibility:hidden; }
+.coverwheel img { width:100px; position:absolute; -webkit-backface-visibility:hidden; -moz-backface-visibility:hidden; backface-visibility:hidden; }
 .coverwheel img:nth-child(1) { -webkit-transform:rotateY(-144deg) translateZ(69px); -moz-transform:rotateY(-144deg) translateZ(69px); transform:rotateY(-144deg) translateZ(69px); }
 .coverwheel img:nth-child(2) { -webkit-transform:rotateY(-72deg) translateZ(69px); -moz-transform:rotateY(-72deg) translateZ(69px); transform:rotateY(-72deg) translateZ(69px); }
 .coverwheel img:nth-child(3) { -webkit-transform:rotateY(0) translateZ(69px); -moz-transform:rotateY(0) translateZ(69px); transform:rotateY(0) translateZ(69px); }
