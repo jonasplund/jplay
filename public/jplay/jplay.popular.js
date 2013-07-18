@@ -40,6 +40,7 @@
         if (dims.rows * dims.cols > this.savedData.length) {
             $.get('/getPopular2', { 'count': dims.rows * dims.cols }, function (results) {
                 that.redraw(dims, results);
+                that.savedData = results;
             });
         } else {
             that.redraw(dims, this.savedData.splice(dims.rows * dims.calc));
