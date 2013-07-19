@@ -5,6 +5,7 @@
         this.header = elem.children(':header').first();
         this.elem = elem;
         this.savedData = [];
+        this.currentDims = {};
 
         this.header.text("Most popular");
         this.elem.addClass('popular');
@@ -27,16 +28,21 @@
     };
 
     Popular.prototype.dimension = function () {
-        return {
+        var dims = {
             rows: (Math.round(this.elem.height() / 130) || 1),
             cols: (Math.round(this.elem.width() / 130) || 1)
         }
+        return dims;
     };
 
     Popular.prototype.recalc = function () {
         var title, row, part, img, frag;
         var that = this;
         var dims = this.dimension();
+        if (dims.rows === this.currentDims.rows && dims.cols === this.currentDims.cols) {
+            return;
+        }
+        this.currentDims = dims;
         if (dims.rows * dims.cols > this.savedData.length) {
             $.get('/getPopular2', { 'count': dims.rows * dims.cols }, function (results) {
                 that.redraw(dims, results);
