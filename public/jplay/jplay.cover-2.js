@@ -95,7 +95,7 @@
                         zIndex: that.options.zindex
                     });*/
                     var activeImg = that.imgarr[(that.rotation + 2) % 5];
-                    that.tmpImg = $('<img />').attr('src', activeImg.attr('src').replace(/&small=1/, ''));
+                    that.tmpImg = $('<img />').attr('src', activeImg.attr('src').replace(/&small=1/, '')).addClass('tmpCover');
                     that.tmpImg.css({
                         position: 'absolute',
                         top: activeImg.offset().top + 'px',
@@ -132,7 +132,8 @@
                         duration: that.options.animationspeed,
                         complete: function () {
                             that.expanded = false;
-                            that.tmpImg.remove();
+                            // Remove all. If error, old ones can get left behind.
+                            $('.tmpCover').remove();
                             that.tmpImg = null;
                             //container.removeAttr('style').css({ display: 'block', height: that.element.height() + 'px' });
                         },
