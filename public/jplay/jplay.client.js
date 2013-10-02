@@ -863,40 +863,55 @@
             "use strict";
             var customPlaylist, songs;
             customPlaylist = [];
-            songs = $("#playlist li");
+            songs = $('#playlist li');
             $.each(songs, function () {
-                customPlaylist.push($(this).data("attribs"));
+                customPlaylist.push($(this).data('attribs'));
             });
-            localStorage.setItem("cp_" + name, JSON.stringify(customPlaylist));
+            localStorage.setItem('cp_' + name, JSON.stringify(customPlaylist));
             jplay.customplaylists.update();
         },
         update: function () {
-            "use strict";
+            'use strict';
             var i, endi, id, data, dbleh, ctxeh;
             dbleh = function (e) {
                 e.preventDefault();
                 jplay.playlist.clear();
-                $.each($(this).data("attribs"), function () {
-                    jplay.playlist.addFile(this);
-                });
+                if ($(this).data('local') === false) {
+                    $.get('getPlaylist', function (data) {
+                        console.log(data);
+                        $.each(data, function () { 
+                            jplay.playlist.addFile(this); 
+                        });
+                    });
+                } else {
+                    $.each($(this).data('attribs'), function () {
+                        jplay.playlist.addFile(this);
+                    });
+                }
                 jplay.playlist.save();
             };
             ctxeh = function (e) {
                 e.preventDefault();
-                var key = "cp_" + $(this).text();
+                var key = 'cp_' + $(this).text();
                 $(this).remove();
                 localStorage.removeItem(key);
             };
-            $("#customplaylists").children("li").remove();
+            $('#customplaylists').children('li').remove();
             for (i = 0, endi = localStorage.length; i < endi; i++) {
                 id = localStorage.key(i);
                 if (id.length > 2 &&
-					id.substr(0, 3) === "cp_") {
+					id.substr(0, 3) === 'cp_') {
                     data = $.parseJSON(localStorage.getItem(localStorage.key(i)));
-                    $("<li/>").addClass("customplaylist").text(id.substr(3)).data("attribs", data).
-						dblclick(dbleh).on("contextmenu", ctxeh).appendTo($("#customplaylists"));
+                    $('<li/>').addClass('customplaylist').text(id.substr(3)).data('local', true).data('attribs', data).
+						dblclick(dbleh).on('contextmenu', ctxeh).appendTo($('#customplaylists'));
                 }
             }
+            $.get('getPlaylists', function (data) {
+                $.each(data, function () {
+                    $('<li/>').addClass('customplaylist').text(this.name).data('local', false).
+                        dblclick(dbleh).on('contextmenu', ctxeh).appendTo($('#customplaylists'));
+                });
+            });
         }
     },
     keybindings: {

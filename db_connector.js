@@ -565,7 +565,14 @@
                 'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,' +
                 'ip_number VARCHAR(20),' +
                 'song_id INT,' +
-                'album_id INT);'
+                'album_id INT);',
+            playlists: 'CREATE TABLE playlists (' +
+                'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,' +
+                'name VARCHAR(1000),' +
+                'created_by VARCHAR(100));',
+            playlistsongs: 'CREATE TABLE playlistsongs (' +
+                'playlistid INT,' +
+                'songid INT);'
         },
         dropAll: function (connection, callback) {
             connection.query('DROP TABLE IF EXISTS dirs; DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS songplays;', function (err) {

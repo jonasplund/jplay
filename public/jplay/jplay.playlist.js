@@ -47,6 +47,9 @@
                         return;
                     }
                     jplay.customplaylists.saveNew($('#playlistnameinput #name').get(0).value);
+                    if ($('#uploadtoservercb').get(0).checked) {
+                        that.uploadToServer(name);
+                    }
                     $(this).dialog('close');
                 }
             }
@@ -151,6 +154,11 @@
             this.shufflebutton.addClass('ui-state-highlight');
         }
     };
+    Playlist.prototype.uploadToServer = function (name) {
+        $.get('/uploadPlaylist', {'name': name, 'songs': this.items }, function (data) {
+
+        });
+    }
     $(document).on('jplay.inited', function () {
         jplay.playlist = new Playlist();
         jplay.playlist.init();

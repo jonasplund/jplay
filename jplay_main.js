@@ -31,6 +31,10 @@
     app.get('/getPopular2', jps.getPopular2);
     app.get('/getRandom', jps.getRandom);
     app.get('/getSidebarInfo', jps.getSidebarInfo);
+    app.get('/getPlaylists', jps.getPlaylists);
+    app.get('/getPlaylist', jps.getPlaylist);
+    app.get('/uploadPlaylist', jps.uploadPlaylist);
+    app.get('/deletePlaylist', jps.deletePlaylist);
 
     var args = process.argv.slice(2);
     switch (args[0]) {

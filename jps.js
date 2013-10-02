@@ -55,7 +55,7 @@
                 });
             });
         });
-    }
+    };
 
     jps.getVideo = function (req, res) {
         if (!req.query || !req.query.id || !isNumeric(req.query.id)) {
@@ -128,7 +128,7 @@
 
     jps.getRandom = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT ?', parseInt(req.query.count) || 1, function (err, data) {
+        connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT ?', parseInt(req.query.count, 10) || 1, function (err, data) {
             if (err) { throw err; }
             connection.end();
             res.send(data);
@@ -140,7 +140,7 @@
             callback('Invalid id.');
             return;
         }
-        var connection = connection || mysql.createConnection(options.dbConnection);
+        connection = connection || mysql.createConnection(options.dbConnection);
         connection.query('SELECT * FROM songs WHERE id = ?', [id], function (err, data) {
             if (err) { throw err; }
             if (data.length < 1) {
@@ -442,7 +442,7 @@
             connection.end();
             res.send(data);
         });
-    }
+    };
         
     jps.getPopular2 = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
@@ -458,7 +458,7 @@
             connection.end();
             res.send(data);
         });
-    }
+    };
     
     jps.getNewest = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
@@ -471,7 +471,86 @@
             connection.end();
             res.send(data);
         });
-    }
+    };
+
+    // TODO: Test
+    jps.getPlaylists = function (req, res) {
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        var qry = 'SELECT * FROM playlists;';
+        connection.query(qry, function (err, data) {
+            if (err) { throw err; }
+            connection.end();
+            res.send(data);
+        });
+    };
+
+    // TODO: Test
+    jps.getPlaylist = function (req, res) {
+        if (!req.query.id || !isNumeric(req.query.id)) {
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        var qry = 'SELECT s.* FROM songs s INNER JOIN playlistsongs pls ON s.id = pls.songid WHERE pls.playlistid = ?;';
+        connection.query(qry, req.query.id, function (err, data) {
+            if (err) { throw err; }
+            connection.end();
+            res.send(data);
+        });
+    };
+
+    // TODO: Test
+    // Requires: req.query.songs (array of songs with id), req.query.name (name of playlist)
+    // Optional: req.query.id (if existing playlist should be updated)
+    jps.uploadPlaylist = function (req, res) {
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        if (req.query.id && isNumeric(req.query.id)) {
+            var cnt = 0;
+            for (var i = 0; i < req.query.songs.length; i++) {
+                connection.query('INSERT INTO playlistsongs SET playlistid = ' + req.query.id + ', songid = ' + req.query.songs[i].id, function (err, result) {
+                    if (cnt++ == req.query.songs.length) {
+                        connection.end();
+                        res.send('success');
+                    }
+                });
+            }
+            return;
+        }
+        var qry = 'INSERT INTO playlists SET name = ?;';
+        var qryres = connection.query(qry, req.query.name, function (err, data) {
+            if (err) { throw err; }
+            var cnt = 0;
+            for (var i = 0; i < req.query.songs.length; i++) {
+                var tmp = connection.query('INSERT INTO playlistsongs SET playlistid = ' + qryres._results[0].insertId + ', songid = ' + req.query.songs[i].id, function (err, result) {
+                    if (err) { throw err; }
+                    if (++cnt == req.query.songs.length) {
+                        connection.end();
+                        res.send('success');
+                    }
+                });
+            }
+        });
+    };
+
+    // TODO: Test
+    // Requires: req.query.id (id of playlist to delete)
+    jps.deletePlaylist = function (req, res) {
+        if (!req.query.id || !isNumeric(req.query.id)) {
+            return;
+        }
+        var connection = mysql.createConnection(options.dbConnection);
+        connection.connect();
+        connection.query('DELETE FROM playlistsongs WHERE playlistid = ?;', req.query.id, function (err, result) {
+            if (err) { throw err; }
+            connection.query('DELETE FROM playlists WHERE id = ?', req.query.id, function (err, result) {
+                if (err) { throw err; }
+                connection.end();
+                res.send('success');
+            });
+        });
+    };
 
     var recSongPlay = function (req, dirid) {
         if (!req.query.id || !isNumeric(req.query.id)) {
@@ -484,7 +563,7 @@
             if (err) { throw err; }
             connection.end();
         });
-    }
+    };
 
     var getFiles_db = function (dir, callback) {
         getSongs(dir, function (res_songs) {
