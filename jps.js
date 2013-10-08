@@ -49,7 +49,7 @@
             }, function (err, results) {
                 res.send({ 
                     video: results.video.results, 
-                    similarAritists: results.similarArtists.results, 
+                    similarArtists: results.similarArtists.results, 
                     bandInfo: results.bandInfo.results, 
                     lyrics: results.lyrics.results 
                 });
