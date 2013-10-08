@@ -354,17 +354,18 @@
             res.send({});
             return;
         }
-        var artist = (searchsettings.artist === 'true') ? 'artist LIKE \'%' + [needle] + '%\' ' : null;
-        var album = (searchsettings.album === 'true') ? 'album LIKE \'%' + [needle] + '%\' ' : null;
-        var title = (searchsettings.title === 'true') ? 'title LIKE \'%' + [needle] + '%\' ' : null;
-        var all = [title, artist, album].filter(function (val) { return val !== null; }).join('OR ');
-        var qry = 'SELECT * FROM songs WHERE ' + all + 'LIMIT 100;';
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
+        needle = connection.escape('%' + needle + '%');
+        var artist = (searchsettings.artist === 'true') ? 'artist LIKE ' + needle + ' ' : null;
+        var album = (searchsettings.album === 'true') ? 'album LIKE ' + needle + ' ' : null;
+        var title = (searchsettings.title === 'true') ? 'title LIKE ' + needle + ' ' : null;
+        var all = [title, artist, album].filter(function (val) { return val !== null; }).join('OR ');
+        var qry = 'SELECT * FROM songs WHERE ' + all + 'LIMIT 100;';
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
             if (searchsettings.album) {
-                qry = 'SELECT * FROM dirs WHERE dirname LIKE \'%' + [needle] + '%\' LIMIT 100';
+                qry = 'SELECT * FROM dirs WHERE dirname LIKE ' + connection.escape(needle) + ' LIMIT 100';
                 connection.query(qry, function (err, data2) {
                     if (err) { throw err; }
                     connection.end();

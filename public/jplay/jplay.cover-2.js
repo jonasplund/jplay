@@ -60,6 +60,9 @@
                     this.imgarr[(this.rotation + 4) % 5].attr('src', '/getImage?id=' + e.next.dirid + '&small=1');
                 }
             }
+            if (this.expanded) {
+                this.tmpImg.attr('src', 'getImage?id=' + e.to.dirid);
+            }
         },
         _setOption: function (key, val) {
             this._super(key, val);
