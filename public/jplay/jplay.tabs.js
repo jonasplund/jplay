@@ -34,7 +34,7 @@
                 if (dataAttribs.title) {
                     data = '<h1>' + dataAttribs.title.replace(/[0-9]{2,3} - /, '') + '</h1>' + data;
                 } else {
-                    data = '<h1>' + dataAttribs.filename.replace(/[0-9]{2,3}s+-s+/, '') + '</h1>' + data;
+                    data = '<h1>' + dataAttribs.filename.replace(/[0-9]{2,3}\s+-\s+/, '') + '</h1>' + data;
                 }
             }
             return data;
