@@ -30,7 +30,12 @@
         },
         lyrics: function (data) {
             if (jplay.player.activeSong) {
-                data = '<h1>' + jplay.player.activeSong.data().attribs.title.replace(/[0-9]{2,3} - /, '') + '</h1>' + data; 
+                var dataAttribs = jplay.player.activeSong.data().attribs;
+                if (dataAttribs.title) {
+                    data = '<h1>' + dataAttribs.title.replace(/[0-9]{2,3} - /, '') + '</h1>' + data;
+                } else {
+                    data = '<h1>' + dataAttribs.filename.replace(/[0-9]{2,3}s+-s+/, '') + '</h1>' + data;
+                }
             }
             return data;
         },
