@@ -158,7 +158,7 @@
         $.get('/uploadPlaylist', {'name': name, 'songs': this.items }, function (data) {
 
         });
-    }
+    };
     $(document).on('jplay.inited', function () {
         jplay.playlist = new Playlist();
         jplay.playlist.init();

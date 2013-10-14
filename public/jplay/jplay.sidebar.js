@@ -19,6 +19,7 @@
                 break;
             case 'Video':
                 $('#sidebar').tabs('load', $('#sidebar').tabs('option', 'active'));
+                break;
             default:
                 break;
         }

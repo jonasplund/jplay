@@ -31,7 +31,7 @@
         var dims = {
             rows: (Math.round(this.elem.height() / 130) || 1),
             cols: (Math.round(this.elem.width() / 130) || 1)
-        }
+        };
         return dims;
     };
 
@@ -69,11 +69,11 @@
                 img.setAttribute('style', 'background-image: url(/getImage?id=' + data[j].id + '&small=1)');
                 $(img).data('data', data[j]);
                 row.appendChild(img);
-            };
+            }
             frag.appendChild(row);
         }
         this.elem[0].appendChild(frag);
-    }
+    };
 
     Popular.prototype.clear = function () {
         this.elem.find('.coverRow').remove();
