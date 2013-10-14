@@ -13,7 +13,7 @@
     app.configure(function () {
         app.use(express.static(__dirname + '/public'));
     });
-    app.get('/', function () { });
+    app.get('/', function () { console.log("asd"); });
     app.get('/dirtree', jps.dirtree);
     app.get('/getMusic', jps.getMusic);
     app.get('/getImage', jps.getImage);

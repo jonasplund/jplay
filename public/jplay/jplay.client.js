@@ -877,8 +877,9 @@
                 e.preventDefault();
                 jplay.playlist.clear();
                 if ($(this).data('local') === false) {
-                    $.get('getPlaylist', function (data) {
+                    $.get('playlist',  function (data) {
                         $.each(data, function () { 
+                            console.log(this);
                             jplay.playlist.addFile(this); 
                         });
                     });

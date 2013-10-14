@@ -6,6 +6,9 @@
         this.elem = elem;
         this.savedData = [];
         this.currentDims = {};
+        this.mouseUpped = true;
+        this.playingTemp = false;
+        this.tmpPlayer;
 
         this.header.text("Most popular");
         this.elem.addClass('popular');
@@ -15,11 +18,39 @@
         $(document).trigger('jplay.popularInited');
 
         $(document).on('click', '.popCover', function () {
+            if (that.playingTemp) return;
             jplay.searchfn.gotodir($(this).data('data'));
             $(this).addClass('shadeanim');
             this.addEventListener('webkitAnimationEnd', function () { 
                 $(this).removeClass('shadeanim');
             }, false);
+        });
+
+        $(document).on('mousedown', '.popCover', function () {
+            that.mouseUpped = false;
+            setTimeout(function (popCover) {
+                if (!that.mouseUpped) {
+                    if (jplay.player.domobj) {
+                        jplay.player.domobj.pause();
+                    }
+                    that.playingTemp = true;
+                    $.get('getRandom', { id: $(popCover).data('data').id }, function (data) {
+                        that.tmpPlayer = $('<audio></audio>').prop('src', '/getMusic?id=' + data[0].id).appendTo($('body'));
+                        that.tmpPlayer.get(0).play();
+                    });
+                }
+            }, 1000, this);
+        });
+
+        $(document).on('mouseup', '.popCover', function (e) {
+            that.mouseUpped = true;
+            if (that.playingTemp) {
+                that.tmpPlayer.remove();
+                that.playingTemp = false;
+                if (jplay.player.domobj) {
+                    jplay.player.domobj.play();
+                }
+            }
         });
 
         $(window).resize(function () {

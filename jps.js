@@ -128,11 +128,20 @@
 
     jps.getRandom = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
-        connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT ?', parseInt(req.query.count, 10) || 1, function (err, data) {
-            if (err) { throw err; }
-            connection.end();
-            res.send(data);
-        });
+        var id = req.query.id; // Random from directory
+        if (id) {
+            connection.query('SELECT * FROM songs WHERE dirid = ' + connection.escape(id) + 'ORDER BY RAND() LIMIT ?', parseInt(req.query.count, 10) || 1, function (err, data) {
+                if (err) { throw err; }
+                connection.end();
+                res.send(data);
+            });
+        } else {
+            connection.query('SELECT * FROM songs ORDER BY RAND() LIMIT ?', parseInt(req.query.count, 10) || 1, function (err, data) {
+                if (err) { throw err; }
+                connection.end();
+                res.send(data);
+            });
+        }
     };
 
     var getSimilarArtistsInternal = function (id, connection, callback) {
@@ -491,6 +500,7 @@
         if (!req.query.id || !isNumeric(req.query.id)) {
             return;
         }
+        console.log("b");
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         var qry = 'SELECT s.* FROM songs s INNER JOIN playlistsongs pls ON s.id = pls.songid WHERE pls.playlistid = ?;';
