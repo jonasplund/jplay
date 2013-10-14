@@ -6,6 +6,7 @@
         this.shufflebutton = jplay.ui.elements.shufflebutton;
         this.dirCounter = 0; // For addDir()
         this.items = [];
+        this.id = -1; // Number. If remote playlist, set to playlist id.
     };
     Playlist.prototype.init = function () {
         var that = this;
@@ -155,7 +156,7 @@
         }
     };
     Playlist.prototype.uploadToServer = function (name) {
-        $.get('/uploadPlaylist', {'name': name, 'songs': this.items }, function (data) {
+        $.post('/playlist', {'name': name, 'songs': this.items, 'id': this.id }, function (data) {
 
         });
     };

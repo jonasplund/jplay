@@ -32,9 +32,9 @@
     app.get('/getRandom', jps.getRandom);
     app.get('/getSidebarInfo', jps.getSidebarInfo);
     app.get('/getPlaylists', jps.getPlaylists);
-    app.get('/getPlaylist', jps.getPlaylist);
-    app.get('/uploadPlaylist', jps.uploadPlaylist);
-    app.get('/deletePlaylist', jps.deletePlaylist);
+    app.get('/playlist', jps.getPlaylist);
+    app.post('/playlist', jps.uploadPlaylist);
+    app.delete('/playlist', jps.deletePlaylist);
 
     var args = process.argv.slice(2);
     switch (args[0]) {

@@ -511,9 +511,14 @@
             var cnt = 0;
             for (var i = 0; i < req.query.songs.length; i++) {
                 connection.query('INSERT INTO playlistsongs SET playlistid = ' + req.query.id + ', songid = ' + req.query.songs[i].id, function (err, result) {
+                    if (err) { 
+                        connection.end();
+                        res.send({ success: false });
+                        throw err; 
+                    }
                     if (cnt++ == req.query.songs.length) {
                         connection.end();
-                        res.send('success');
+                        res.send({ success: true });
                     }
                 });
             }
@@ -521,14 +526,18 @@
         }
         var qry = 'INSERT INTO playlists SET name = ?;';
         var qryres = connection.query(qry, req.query.name, function (err, data) {
-            if (err) { throw err; }
+            if (err) { 
+                connection.end();
+                res.send({ success: false });
+                throw err; 
+            }
             var cnt = 0;
             for (var i = 0; i < req.query.songs.length; i++) {
                 var tmp = connection.query('INSERT INTO playlistsongs SET playlistid = ' + qryres._results[0].insertId + ', songid = ' + req.query.songs[i].id, function (err, result) {
                     if (err) { throw err; }
                     if (++cnt == req.query.songs.length) {
                         connection.end();
-                        res.send('success');
+                        res.send({ success: true });
                     }
                 });
             }
@@ -539,16 +548,25 @@
     // Requires: req.query.id (id of playlist to delete)
     jps.deletePlaylist = function (req, res) {
         if (!req.query.id || !isNumeric(req.query.id)) {
+            res.send({ success: false });
             return;
         }
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         connection.query('DELETE FROM playlistsongs WHERE playlistid = ?;', req.query.id, function (err, result) {
-            if (err) { throw err; }
-            connection.query('DELETE FROM playlists WHERE id = ?', req.query.id, function (err, result) {
-                if (err) { throw err; }
+            if (err) { 
                 connection.end();
-                res.send('success');
+                res.send({ success: false });
+                throw err; 
+            }
+            connection.query('DELETE FROM playlists WHERE id = ?', req.query.id, function (err, result) {
+                if (err) { 
+                    connection.end();
+                    res.send({ success: false });
+                    throw err; 
+                }
+                connection.end();
+                res.send({ success: true });
             });
         });
     };

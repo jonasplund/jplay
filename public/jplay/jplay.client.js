@@ -860,7 +860,7 @@
     },
     customplaylists: {
         saveNew: function (name) {
-            "use strict";
+            'use strict';
             var customPlaylist, songs;
             customPlaylist = [];
             songs = $('#playlist li');
@@ -878,7 +878,6 @@
                 jplay.playlist.clear();
                 if ($(this).data('local') === false) {
                     $.get('getPlaylist', function (data) {
-                        console.log(data);
                         $.each(data, function () { 
                             jplay.playlist.addFile(this); 
                         });
@@ -892,9 +891,22 @@
             };
             ctxeh = function (e) {
                 e.preventDefault();
-                var key = 'cp_' + $(this).text();
-                $(this).remove();
-                localStorage.removeItem(key);
+                var that = this;
+                if ($(this).data('local') === false) {
+                    var key = 'cp_' + $(this).text();
+                    $(this).remove();
+                    localStorage.removeItem(key);
+                } else {
+                    $.ajax({
+                        url: 'playlist',
+                        type: 'DELETE',
+                        success: function(result) {
+                            if (result.success === true) {
+                                $(that).remove();
+                            }
+                        }
+                    });
+                }
             };
             $('#customplaylists').children('li').remove();
             for (i = 0, endi = localStorage.length; i < endi; i++) {
@@ -908,7 +920,7 @@
             }
             $.get('getPlaylists', function (data) {
                 $.each(data, function () {
-                    $('<li/>').addClass('customplaylist').text(this.name).data('local', false).
+                    $('<li/>').addClass('customplaylist remote').text(this.name).data('local', false).
                         dblclick(dbleh).on('contextmenu', ctxeh).appendTo($('#customplaylists'));
                 });
             });

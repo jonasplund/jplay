@@ -112,6 +112,7 @@ h2#settingsheader { cursor:pointer; }
 #savedplaylistscontainer ul#customplaylists { list-style:none; padding-left:0; margin-top:0; margin-bottom:10px;
                                               cursor:pointer; }
 #customplaylists li { padding-left:10px; }
+#customplaylists li.remote { color:#880000; }
 #customplaylists li:nth-child(2n) { background-color:rgba(220,220,220,1); }
 
 /*.chatcontainer { -webkit-box-flex:1; display:-webkit-box; -webkit-box-orient:vertical; 
