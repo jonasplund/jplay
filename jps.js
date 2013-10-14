@@ -422,7 +422,7 @@
         var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query('SELECT * FROM songs WHERE dirid = ?;', [id], function (err, data) {
+        connection.query('SELECT * FROM songs WHERE dirid = ? ORDER BY filename;', [id], function (err, data) {
             if (err) { throw err; }
             connection.query('SELECT * FROM dirs WHERE parent_id = ?;', [id], function (err, data2) {
                 if (err) { throw err; }
@@ -514,6 +514,10 @@
     // Requires: req.body.songs (array of songs with id), req.body.name (name of playlist)
     // Optional: req.body.id (if existing playlist should be updated)
     jps.uploadPlaylist = function (req, res) {
+        if (!req.body || !req.body.songs) {
+            res.send({ success: false });
+            return;
+        }
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         if (req.body.id && isNumeric(req.body.id) && req.body.id > -1) {
