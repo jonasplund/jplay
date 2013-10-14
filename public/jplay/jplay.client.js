@@ -877,36 +877,37 @@
                 e.preventDefault();
                 jplay.playlist.clear();
                 if ($(this).data('local') === false) {
-                    $.get('playlist',  function (data) {
+                    $.get('playlist', { id: $(this).data('id') }, function (data) {
                         $.each(data, function () { 
-                            console.log(this);
-                            jplay.playlist.addFile(this); 
+                            jplay.playlist.addFile(this);
                         });
+                        jplay.playlist.save();
                     });
                 } else {
                     $.each($(this).data('attribs'), function () {
                         jplay.playlist.addFile(this);
                     });
+                    jplay.playlist.save();
                 }
-                jplay.playlist.save();
             };
             ctxeh = function (e) {
                 e.preventDefault();
                 var that = this;
                 if ($(this).data('local') === false) {
-                    var key = 'cp_' + $(this).text();
-                    $(this).remove();
-                    localStorage.removeItem(key);
-                } else {
                     $.ajax({
                         url: 'playlist',
                         type: 'DELETE',
+                        data: { id: $(this).data('id') },
                         success: function(result) {
                             if (result.success === true) {
                                 $(that).remove();
                             }
                         }
                     });
+                } else {
+                    var key = 'cp_' + $(this).text();
+                    $(this).remove();
+                    localStorage.removeItem(key);
                 }
             };
             $('#customplaylists').children('li').remove();
@@ -921,7 +922,7 @@
             }
             $.get('getPlaylists', function (data) {
                 $.each(data, function () {
-                    $('<li/>').addClass('customplaylist remote').text(this.name).data('local', false).
+                    $('<li/>').addClass('customplaylist remote').text(this.name).data('local', false).data('id', this.id).
                         dblclick(dbleh).on('contextmenu', ctxeh).appendTo($('#customplaylists'));
                 });
             });

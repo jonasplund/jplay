@@ -500,7 +500,6 @@
         if (!req.query.id || !isNumeric(req.query.id)) {
             return;
         }
-        console.log("b");
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
         var qry = 'SELECT s.* FROM songs s INNER JOIN playlistsongs pls ON s.id = pls.songid WHERE pls.playlistid = ?;';
@@ -512,21 +511,21 @@
     };
 
     // TODO: Test
-    // Requires: req.query.songs (array of songs with id), req.query.name (name of playlist)
-    // Optional: req.query.id (if existing playlist should be updated)
+    // Requires: req.body.songs (array of songs with id), req.body.name (name of playlist)
+    // Optional: req.body.id (if existing playlist should be updated)
     jps.uploadPlaylist = function (req, res) {
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        if (req.query.id && isNumeric(req.query.id)) {
+        if (req.body.id && isNumeric(req.body.id) && req.body.id > -1) {
             var cnt = 0;
-            for (var i = 0; i < req.query.songs.length; i++) {
-                connection.query('INSERT INTO playlistsongs SET playlistid = ' + req.query.id + ', songid = ' + req.query.songs[i].id, function (err, result) {
+            for (var i = 0; i < req.body.songs.length; i++) {
+                connection.query('INSERT INTO playlistsongs SET playlistid = ' + req.body.id + ', songid = ' + req.body.songs[i].id, function (err, result) {
                     if (err) { 
                         connection.end();
                         res.send({ success: false });
                         throw err; 
                     }
-                    if (cnt++ == req.query.songs.length) {
+                    if (cnt++ == req.body.songs.length) {
                         connection.end();
                         res.send({ success: true });
                     }
@@ -534,18 +533,23 @@
             }
             return;
         }
+        if (!req.body || !req.body.name) {
+            connection.end();
+            res.send({ success: false });
+            return; 
+        }
         var qry = 'INSERT INTO playlists SET name = ?;';
-        var qryres = connection.query(qry, req.query.name, function (err, data) {
-            if (err) { 
+        var qryres = connection.query(qry, req.body.name, function (err, data) {
+            if (err) {
                 connection.end();
                 res.send({ success: false });
                 throw err; 
             }
             var cnt = 0;
-            for (var i = 0; i < req.query.songs.length; i++) {
-                var tmp = connection.query('INSERT INTO playlistsongs SET playlistid = ' + qryres._results[0].insertId + ', songid = ' + req.query.songs[i].id, function (err, result) {
+            for (var i = 0; i < req.body.songs.length; i++) {
+                var tmp = connection.query('INSERT INTO playlistsongs SET playlistid = ' + qryres._results[0].insertId + ', songid = ' + req.body.songs[i].id, function (err, result) {
                     if (err) { throw err; }
-                    if (++cnt == req.query.songs.length) {
+                    if (++cnt == req.body.songs.length) {
                         connection.end();
                         res.send({ success: true });
                     }
@@ -557,19 +561,19 @@
     // TODO: Test
     // Requires: req.query.id (id of playlist to delete)
     jps.deletePlaylist = function (req, res) {
-        if (!req.query.id || !isNumeric(req.query.id)) {
+        if (!req.body.id || !isNumeric(req.body.id)) {
             res.send({ success: false });
             return;
         }
         var connection = mysql.createConnection(options.dbConnection);
         connection.connect();
-        connection.query('DELETE FROM playlistsongs WHERE playlistid = ?;', req.query.id, function (err, result) {
+        connection.query('DELETE FROM playlistsongs WHERE playlistid = ?;', req.body.id, function (err, result) {
             if (err) { 
                 connection.end();
                 res.send({ success: false });
                 throw err; 
             }
-            connection.query('DELETE FROM playlists WHERE id = ?', req.query.id, function (err, result) {
+            connection.query('DELETE FROM playlists WHERE id = ?', req.body.id, function (err, result) {
                 if (err) { 
                     connection.end();
                     res.send({ success: false });

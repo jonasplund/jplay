@@ -12,6 +12,7 @@
 
     app.configure(function () {
         app.use(express.static(__dirname + '/public'));
+        app.use(express.bodyParser());
     });
     app.get('/', function () { console.log("asd"); });
     app.get('/dirtree', jps.dirtree);

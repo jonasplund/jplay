@@ -28,9 +28,7 @@
             this.items = $.parseJSON(localStorage.getItem('playlist'));
             if (this.items) {
                 for (var i = 0, endi = this.items.length; i < endi; i++) {
-                //$.each(this.items, function () {
                     this.addFile(this.items[i]);
-                //});
                 }
             }
         }
@@ -47,9 +45,10 @@
                     if (name === '') {
                         return;
                     }
-                    jplay.customplaylists.saveNew($('#playlistnameinput #name').get(0).value);
                     if ($('#uploadtoservercb').get(0).checked) {
                         that.uploadToServer(name);
+                    } else {
+                        jplay.customplaylists.saveNew($('#playlistnameinput #name').get(0).value);
                     }
                     $(this).dialog('close');
                 }
@@ -157,7 +156,7 @@
     };
     Playlist.prototype.uploadToServer = function (name) {
         $.post('/playlist', {'name': name, 'songs': this.items, 'id': this.id }, function (data) {
-
+            jplay.customplaylists.update();
         });
     };
     $(document).on('jplay.inited', function () {
