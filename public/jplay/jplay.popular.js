@@ -36,7 +36,10 @@
                     that.playingTemp = true;
                     $.get('getRandom', { id: $(popCover).data('data').id }, function (data) {
                         that.tmpPlayer = $('<audio></audio>').prop('src', '/getMusic?id=' + data[0].id).appendTo($('body'));
-                        that.tmpPlayer.get(0).play();
+                        that.tmpPlayer.on('loadedmetadata', function (e) {
+                            this.play();
+                            this.currentTime = this.duration / 3;
+                        });
                     });
                 }
             }, 1000, this);
