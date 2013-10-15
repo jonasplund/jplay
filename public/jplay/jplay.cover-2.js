@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
     $.widget('jplay.cover', {
-        version: '0.4.0',
+        version: '0.4.1',
         options: {
             animationspeed: 300,    // Animation duration in ms
             zindex: 1000,           // zIndex while expanded/animating
@@ -28,6 +28,10 @@
             $(document).on('jplay.newsong', function (e) {
                 that._rotate(e);
             });
+            $(document).on('visibilitychange', that._checkVisibility);
+            $(document).on('webkitvisibilitychange', that._checkVisibility);
+            $(document).on('mozvisibilitychange', that._checkVisibility);
+            $(document).on('msvisibilitychange', that._checkVisibility);
         },
         _rotate: function (e) {
             var that = this;
@@ -91,12 +95,6 @@
             that.offset = that.offset || offset;
             if (!this.expanded) {
                 this._toggleFullscreen(container, function () {
-                    /*container.css({
-                        left: offset.left + 'px',
-                        top: offset.top + 'px',
-                        position: 'absolute',
-                        zIndex: that.options.zindex
-                    });*/
                     var activeImg = that.imgarr[(that.rotation + 2) % 5];
                     that.tmpImg = $('<img />').attr('src', activeImg.attr('src').replace(/&small=1/, '')).addClass('tmpCover');
                     that.tmpImg.css({
@@ -245,6 +243,14 @@
                     callback();
                 });
                 document.exitFS();
+            }
+        },
+        _checkVisibility: function (e) {
+            if (document.hasOwnProperty('visibiltyState') && document.visibiltyState === 'visible' ||
+                document.hasOwnProperty('webkitVisibiltyState') && document.webkitVisibiltyState === 'visible' ||
+                document.hasOwnProperty('mozVisibiltyState') && document.mozVisibiltyState === 'visible' ||
+                document.hasOwnProperty('msVisibiltyState') && document.msVisibiltyState === 'visible') {
+                that._reloadImages();
             }
         }
     });
