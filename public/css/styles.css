@@ -16,7 +16,7 @@ input[type=number] { margin:3px 5px 3px 4px; }
 body { display:-webkit-flex; -webkit-flex-direction:row; display:-moz-flex; -moz-flex-direction:row; display:flex; flex-direction:row; }
 
 #maincontainer { display:-webkit-flex; -webkit-flex-direction:column; display:-moz-flex; -moz-flex-direction:column; 
-	display:flex; flex-direction:column; height:100%; -webkit-flex:1; -moz-flex:1; flex:1; }
+	display:flex; flex-direction:column; height:100%; -webkit-flex:1; -moz-flex:1; flex:1; border-right:2px ridge #FFF; }
 h2 { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
      background:-moz-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
 	 background:-ms-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));

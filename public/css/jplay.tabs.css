@@ -39,9 +39,8 @@
     -webkit-transform:rotateZ(-90deg) translateX(-100%) translateY(-100%);
     transform-origin:0 0;
     transform:rotateZ(-90deg) translateX(-100%) translateY(-100%);
-    border-bottom:2px ridge #FFF;
 }
-.jp-tabsOuterContainer.vertical .jp-tabsContainer { float:right; margin-bottom:-2px; }
+.jp-tabsOuterContainer.vertical .jp-tabsContainer { float:right; }
 .jp-tabsContainer {
     background: #FFF; 
     border: 1px solid #C0C0C0; 

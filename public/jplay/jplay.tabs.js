@@ -210,10 +210,18 @@
 
     Tabs.prototype.hide = function () {
         this.element.addClass('hidden');
+        if (!this.vertical) {
+            this.element.addClass('vertical');
+            this.resize(true);
+        }
     };
 
     Tabs.prototype.show = function () {
         this.element.removeClass('hidden');
+        if (!this.vertical) {
+            this.element.removeClass('vertical');
+            this.resize(true);
+        }
     };
 
     Tabs.prototype.preloadAll = function (songInfo) {
@@ -228,8 +236,8 @@
         });
     };
 
-    Tabs.prototype.resize = function () {
-        if (this.vertical) {
+    Tabs.prototype.resize = function (forceV) {
+        if (this.vertical || forceV) {
             var width = 0;
             $.each(this.tabObjects, function () { width += this.tab.outerWidth(); });
             this.tabsContainer.width(width + 'px');
