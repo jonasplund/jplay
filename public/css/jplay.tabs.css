@@ -20,7 +20,10 @@
 
 .jp-tabsOuterContainer { -webkit-user-select:text; -moz-user-select:text; user-select:text;
     max-height:100%; border-radius: 0; padding:0; border-bottom: 0; border-top: 0; 
-    border-right: 0; background:transparent; max-width: 600px; overflow-y:auto; overflow-x:hidden; }
+    border-right: 0; background:transparent; max-width: 600px; overflow-y:auto; overflow-x:hidden; 
+    -webkit-transition:max-width 0.3s; -moz-transition:max-width 0.3s;
+    -o-transition:max-width 0.3s; transition:max-width 0.3s;
+}
 .jp-tabsOuterContainer.vertical { padding-left: 36px; margin-left: -36px; }
 .jp-tabsOuterContainer.horizontal { border-left: 2px ridge #FFF; }
 
@@ -92,5 +95,5 @@
 }
 
 .jp-tabsOuterContainer.hidden {
-    width:0;
+    max-width:0;
 }
