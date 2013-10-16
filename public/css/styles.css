@@ -99,6 +99,7 @@ h2#settingsheader { cursor:pointer; }
 #searchcontainer #addrandom { margin-left:10px; }
 
 .ui-autocomplete { max-height:250px; overflow-y:auto; overflow-x:hidden; padding-right:20px; }
+.ui-autocomplete img { float:left; padding-top:5px; margin-right: 2px; }
 
 #filescontainer { clear:both; }
 #filescontainer ul { list-style:none; margin:0; line-height:16px; }

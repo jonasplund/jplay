@@ -129,6 +129,7 @@
     };
 
     function Tabs (element, tabsSettings) {
+        var that = this;
         this.vertical = tabsSettings.direction === 'vertical';
         this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
         this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
@@ -154,6 +155,14 @@
             this.setActive(tabsSettings.firstActive);
         }
         this.resize();
+        this.inited = false;
+        this.element.on('webkitTransitionEnd', function () {
+            if (that.inited) {
+                $(document).trigger('jplay.displaychange');
+            } else {
+                that.inited = true;
+            }
+        });
     }
 
     Tabs.prototype.getTab = function (o) {
@@ -237,6 +246,7 @@
     };
 
     Tabs.prototype.resize = function (forceV) {
+        var that = this;
         if (this.vertical || forceV) {
             var width = 0;
             $.each(this.tabObjects, function () { width += this.tab.outerWidth(); });

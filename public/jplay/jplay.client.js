@@ -569,7 +569,18 @@
             jplay.ui.elements.searchsettings.click(function () {
                 jplay.settings.update();
             });
-            jplay.ui.elements.searchtext.autocomplete({
+            $.widget('jplay.jautocomplete', $.ui.autocomplete, {
+                _renderItem: function (ul, item) { 
+                    var el = $('<li>').append($('<a>').text(item.label)).appendTo(ul);
+                    if (item.isdir) {
+                        el.prepend($('<img src="/img/foldericon.png">'));
+                    } else {
+                        el.prepend($('<img src="/img/playbutton.png">'));
+                    }
+                    return el;
+                }
+            });
+            jplay.ui.elements.searchtext.jautocomplete({
                 minLength: 2,
                 source: function (request, response) {
                     $.get('/search', { needle: request.term, options: jplay.settings.items.searchsettings }, function (data) {

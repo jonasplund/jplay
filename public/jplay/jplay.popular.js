@@ -59,6 +59,8 @@
         $(window).resize(function () {
             that.recalc();
         });
+
+        $(document).on('jplay.displaychange', function () { that.recalc(); });
     };
 
     Popular.prototype.dimension = function () {
