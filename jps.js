@@ -374,7 +374,7 @@
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
             if (searchsettings.album) {
-                qry = 'SELECT * FROM dirs WHERE dirname LIKE ' + connection.escape(needle) + ' LIMIT 100';
+                var qry = 'SELECT * FROM dirs WHERE dirname LIKE ' + needle + ' LIMIT 100';
                 connection.query(qry, function (err, data2) {
                     if (err) { throw err; }
                     connection.end();
