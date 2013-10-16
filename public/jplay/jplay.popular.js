@@ -36,6 +36,7 @@
                     that.playingTemp = true;
                     $.get('getRandom', { id: $(popCover).data('data').id }, function (data) {
                         that.tmpPlayer = $('<audio></audio>').prop('src', '/getMusic?id=' + data[0].id).appendTo($('body'));
+                        that.tmpPlayer.get(0).volume = jplay.player.domobj ? jplay.player.domobj.volume : 1;
                         that.tmpPlayer.on('loadedmetadata', function (e) {
                             this.play();
                             this.currentTime = this.duration / 3;
@@ -45,7 +46,7 @@
             }, 1000, this);
         });
 
-        $(document).on('mouseup', '.popCover', function (e) {
+        $(document).on('mouseup', function (e) {
             that.mouseUpped = true;
             if (that.playingTemp) {
                 that.tmpPlayer.remove();

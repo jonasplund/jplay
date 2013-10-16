@@ -57,7 +57,7 @@
                 artist = data.artist || 'Artist unknown';
                 title = data.title || 'Title unknown';
                 // FIXME: Get pic from cover
-                //image = data.cover ? "/getImage?id=" + data.dirid : '/img/playbutton.png';
+                image = data.dirid ? '/getImage?id=' + data.dirid + '&small=1' : '/img/playbutton.png';
                 jplay.notification = window.webkitNotifications.createNotification(image, artist, title);
                 if (jplay.notification) {
                     jplay.notification.show();
