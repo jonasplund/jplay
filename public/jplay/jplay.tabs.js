@@ -176,7 +176,9 @@
 
     Tabs.prototype.updateAll = function (songInfo) {
         var that = this;
-        this.activeTab.tabContent.html('<div class="ajaxloader" />');
+        if (this.activeTab && this.activeTab.tabContent) {
+            this.activeTab.tabContent.html('<div class="ajaxloader" />');
+        }
         if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
             for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
                 var currTab = that.tabObjects[i];
