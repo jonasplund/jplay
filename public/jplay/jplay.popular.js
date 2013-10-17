@@ -86,7 +86,7 @@
                 that.savedData = results;
             });
         } else {
-            that.redraw(dims, this.savedData.splice(dims.rows * dims.cols));
+            that.redraw(dims, this.savedData.splice(0, dims.rows * dims.cols));
         }
     };
 
