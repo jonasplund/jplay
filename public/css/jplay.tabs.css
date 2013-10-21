@@ -92,7 +92,11 @@
 .jp-hiddenTabContent {
     display: none;
 }
-
 .jp-tabsOuterContainer.hidden {
     max-width:0;
+}
+.jp-tabContent a.tabcontent img {
+    width:100px;
+    float:left;
+    margin-right:4px;
 }

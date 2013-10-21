@@ -3,7 +3,7 @@
 
     $(document).on('click', '#sidebar a.tabcontent', function(e) {
         e.preventDefault();
-        var id = $(e.target).attr('href').match(/id=([0-9]+)/)[1];
+        var id = $(this).attr('href').match(/id=([0-9]+)/)[1];
         jplay.searchfn.gotodir({ id: id, isdir: true });
     });
 
@@ -18,13 +18,19 @@
         },
         similarArtists: function (data) {
             try {
+                var pics = true;
                 data = $.map(data, function (item) { 
-                   if (item.dirid) {
-                       return '<a class="tabcontent" href="#id=' + 
-                           item.dirid + '">' + decodeURI(item.item) + '</a>';
-                   }
-                   return decodeURI(item.item);
-                }).join('<br />');
+                    if (item.dirid) {
+                        return '<a class="tabcontent" href="#id=' + item.dirid + '"><img src="/getImage?id=' + 
+                            item.dirid + '&small=1" height="100px" title="' + decodeURI(item.item) + '" /></a>';
+                    }
+                    if (pics === true) {
+                        pics = false;
+                        return '<div class="clear">' + decodeURI(item.item) + ('<br />');
+                    } else {
+                        return decodeURI(item.item) + ('<br />');
+                    }
+                }).join('');
             } catch (ex) { }
             return data;
         },
