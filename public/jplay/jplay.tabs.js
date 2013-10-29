@@ -1,7 +1,11 @@
 (function (jplay, $) {
     'use strict';
 
-    $(document).on('click', '#sidebar a.tabcontent', function(e) {
+    $(document).on('click', '#sidebar a.tabcontent', function (e) {
+        e.preventDefault();
+        var id = $(this).attr('href').match(/id=([0-9]+)/)[1];
+        jplay.searchfn.gotodir({ id: id, isdir: true });
+    }).on('click', '#sidebar a.setlistitem', function (e) {
         e.preventDefault();
         var id = $(this).attr('href').match(/id=([0-9]+)/)[1];
         jplay.searchfn.gotodir({ id: id, isdir: true });
@@ -57,6 +61,20 @@
                 return data[0].outerHTML;
             }
             return data;
+        },
+        setlist: function (data) {
+            try {
+                data = $.map(data, function (item) { 
+                    if (item.id) {
+                        return '<a class="setlistitem" href="#id=' + item.dirid + '">' + decodeURI(item.item) + '</a>';
+                    }
+                    return decodeURI(item.item);
+                }).join('<br />');
+                if (data.length > 0) {
+                    //TODO: Add all to playlist button
+                }
+            } catch (ex) { }
+            return data;
         }
     };
 
@@ -84,6 +102,12 @@
                 order: 4,
                 name: 'video',
                 preprocess: preprocessors.video,
+                defaultText: 'No active song.'
+            }, {
+                title: 'Setlist',
+                order: 5,
+                name: 'setlist',
+                preprocess: preprocessors.setlist,
                 defaultText: 'No active song.'
             }
         ],

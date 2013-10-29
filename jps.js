@@ -45,13 +45,19 @@
                     metalminer.getLyrics(data[0], function (err, results) {
                         callback(undefined, { err: err, results: results });
                     });
+                },
+                setlist: function (callback) {
+                    getSetlistInternal(data[0], undefined, function (err, results) {
+                        callback(undefined, { err: err, results: results });
+                    });
                 }
             }, function (err, results) {
                 res.send({ 
                     video: results.video.results, 
                     similarArtists: results.similarArtists.results, 
-                    bandInfo: results.bandInfo.results, 
-                    lyrics: results.lyrics.results 
+                    bandInfo: results.bandInfo.results,
+                    lyrics: results.lyrics.results,
+                    setlist: results.setlist.results
                 });
             });
         });
@@ -142,6 +148,34 @@
                 res.send(data);
             });
         }
+    };
+
+    var getSetlistInternal = function (metadata, connection, callback) {
+        connection = connection || mysql.createConnection(options.dbConnection);
+        metalminer.getSetlist(metadata, function (err, results) {
+            if (err) {
+                connection.end();
+                return err;
+            }
+            async.map(results, function (item, callback) {
+                var qry = connection.query('SELECT dirid, id FROM songs WHERE artist = ' + connection.escape(metadata.artist) + 
+                        ' AND title LIKE ' + connection.escape('%' + item) + ' LIMIT 1', function (err, data2) {
+                    if (err) {
+                        callback(err);
+                        throw err;
+                    }
+                    if (data2 && data2.length > 0 && data2[0] && data2[0].dirid && data2[0].id) {
+                        callback(null, { item: item, dirid: data2[0].dirid, id: data2[0].id });
+                    } else {
+                        callback(null, { item: item });
+                    }
+                });
+            }, function (err, sendobj) {
+                connection.end();
+                if (err) { throw err; }
+                callback(null, sendobj);
+            });
+        });
     };
 
     var getSimilarArtistsInternal = function (id, connection, callback) {
