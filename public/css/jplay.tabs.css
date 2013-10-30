@@ -101,3 +101,9 @@
     margin-right:4px;
     margin-bottom:4px;
 }
+.jp-tabContent .addsetlistbutton {
+    clear:both;
+    margin-top:20px;
+    margin-left:0;
+    outline-style:none;
+}

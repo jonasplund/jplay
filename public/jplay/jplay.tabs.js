@@ -13,7 +13,7 @@
         var setlistitems = $('.setlistitem');
         for (var i = 0, endi = setlistitems.length; i < endi; i++) {
             var id = jplay.helpfunctions.getHashes($(setlistitems[i]).attr('href')).id;
-            jplay.playlist.addFile(id);
+            jplay.playlist.addFile({ 'id': id });
         }
     });
 
@@ -72,12 +72,12 @@
             try {
                 data = $.map(data, function (item) { 
                     if (item.id) {
-                        return '<a class="setlistitem" href="#id=' + item.dirid + '">' + decodeURI(item.item) + '</a>';
+                        return '<a class="setlistitem" href="#dirid=' + item.dirid + '&id=' + item.id + '">' + decodeURI(item.item) + '</a>';
                     }
                     return decodeURI(item.item);
                 }).join('<br />');
                 if (data.length > 0) {
-                    data = '<br />' + data.concat($('<button>').addClass('addsetlistbutton').button({ label: 'test' }).prop('outerHTML'));
+                    data = data.concat('<br />' + $('<button>').addClass('addsetlistbutton').button({ label: 'Add all to playlist' }).prop('outerHTML'));
                 }
             } catch (ex) { }
             return data;

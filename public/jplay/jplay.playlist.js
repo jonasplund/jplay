@@ -107,33 +107,40 @@
         }, this));
     };
     Playlist.prototype.addFile = function (json, position, before) {
-        var html, title, node, retval, texts;
-        if (!json.filename && json.id) {
-            
-        }
-        json.title = json.title || json.filename;
-        html = '<span class="playlist_artist">' + json.artist + '</span> ' +
-            '<span class="playlist_album">- ' + json.album + '</span> ' +
-            '<span class="playlist_title">- ' + json.title + '</span> ' +
-            '<span class="playlist_year">- ' + json.year + '</span>';
-        title = '';
-        texts = ['Artist', 'Song', 'Album', 'Year'];
-        title = [json.artist, json.title, json.album, json.year].map(function (item, i) {
-            return item ? texts[i] + ':\t' + item : '';
-        }).filter(String).join('\n');
-        node = $('<li/>').addClass('songinplaylist').html(html).attr('title', title).
-            data('attribs', json).data('playlistorder', $('#songinplaylist'));
-        if (position && (position.is('ul') || position.is('li'))) {
-            if (before) {
-                node.insertBefore($(position));
-                retval = $(position);
+        var build = (function (json) {
+            var html, title, node, retval, texts;
+            html = '<span class="playlist_artist">' + json.artist + '</span> ' +
+                '<span class="playlist_album">- ' + json.album + '</span> ' +
+                '<span class="playlist_title">- ' + json.title + '</span> ' +
+                '<span class="playlist_year">- ' + json.year + '</span>';
+            title = '';
+            texts = ['Artist', 'Song', 'Album', 'Year'];
+            title = [json.artist, json.title, json.album, json.year].map(function (item, i) {
+                return item ? texts[i] + ':\t' + item : '';
+            }).filter(String).join('\n');
+            node = $('<li/>').addClass('songinplaylist').html(html).attr('title', title).
+                data('attribs', json).data('playlistorder', $('#songinplaylist'));
+            if (position && (position.is('ul') || position.is('li'))) {
+                if (before) {
+                    node.insertBefore($(position));
+                    retval = $(position);
+                } else {
+                    retval = node.insertAfter($(position));
+                }
             } else {
-                retval = node.insertAfter($(position));
+                retval = node.appendTo(jplay.ui.elements.playlist);
             }
+            return retval;
+        });
+
+        json.title = json.title || json.filename;
+        if (!json.filename && json.id) {
+            $.get('/getSongInfo', json, function (data) {
+                return build(data[0], position, before);
+            });
         } else {
-            retval = node.appendTo(jplay.ui.elements.playlist);
+            return build(json, position, before);
         }
-        return retval;
     };
     Playlist.prototype.togglerepeat = function () {
         if (jplay.settings.items.repeatall === true) {
