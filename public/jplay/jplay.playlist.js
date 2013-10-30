@@ -108,6 +108,9 @@
     };
     Playlist.prototype.addFile = function (json, position, before) {
         var html, title, node, retval, texts;
+        if (!json.filename && json.id) {
+            
+        }
         json.title = json.title || json.filename;
         html = '<span class="playlist_artist">' + json.artist + '</span> ' +
             '<span class="playlist_album">- ' + json.album + '</span> ' +

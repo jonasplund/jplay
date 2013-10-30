@@ -9,6 +9,12 @@
         e.preventDefault();
         var id = $(this).attr('href').match(/id=([0-9]+)/)[1];
         jplay.searchfn.gotodir({ id: id, isdir: true });
+    }).on('click', '#sidebar .addsetlistbutton', function () {
+        var setlistitems = $('.setlistitem');
+        for (var i = 0, endi = setlistitems.length; i < endi; i++) {
+            var id = jplay.helpfunctions.getHashes($(setlistitems[i]).attr('href')).id;
+            jplay.playlist.addFile(id);
+        }
     });
 
     var preprocessors = {
@@ -71,7 +77,7 @@
                     return decodeURI(item.item);
                 }).join('<br />');
                 if (data.length > 0) {
-                    //TODO: Add all to playlist button
+                    data = '<br />' + data.concat($('<button>').addClass('addsetlistbutton').button({ label: 'test' }).prop('outerHTML'));
                 }
             } catch (ex) { }
             return data;

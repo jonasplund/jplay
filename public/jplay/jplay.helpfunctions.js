@@ -20,16 +20,16 @@
                 return returnval;
             }
         },
-        getHashes: function () {
+        getHashes: function (url) {
             var vars, hashes, i, endi, hash;
-            vars = [];
-            hashes = window.location.toString();
+            vars = {};
+            hashes = url || window.location.toString();
             if (hashes.indexOf('#') > -1) {
                 hashes = hashes.substring(hashes.indexOf('#') + 1);
                 hashes = hashes.split('&');
                 for (i = 0, endi = hashes.length; i < endi; i++) {
                     hash = hashes[i].split('=');
-                    vars.push(hash[0]);
+                    //vars.push(hash[0]);
                     vars[hash[0]] = hash[1];
                 }
             }

@@ -155,7 +155,8 @@
         metalminer.getSetlist(metadata, function (err, results) {
             if (err) {
                 connection.end();
-                return err;
+                callback(err);
+                return;
             }
             async.map(results, function (item, callback) {
                 var qry = connection.query('SELECT dirid, id FROM songs WHERE artist = ' + connection.escape(metadata.artist) + 
