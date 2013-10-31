@@ -15,6 +15,12 @@
             var id = jplay.helpfunctions.getHashes($(setlistitems[i]).attr('href')).id;
             jplay.playlist.addFile({ 'id': id });
         }
+        // FIXME: Probably won't work since addFile will be async
+        jplay.playlist.save();
+    }).on('jplay.newsong', function (e) {
+        tabs.updateAll(e.to);
+    }).on('jplay.soonnewsong', function (e) {
+        tabs.preloadAll(e.next);
     });
 
     var preprocessors = {
@@ -74,7 +80,7 @@
                     if (item.id) {
                         return '<a class="setlistitem" href="#dirid=' + item.dirid + '&id=' + item.id + '">' + decodeURI(item.item) + '</a>';
                     }
-                    return decodeURI(item.item);
+                    return '<span class="unavailable">' + decodeURI(item.item) + '</span>';
                 }).join('<br />');
                 if (data.length > 0) {
                     data = data.concat('<br />' + $('<button>').addClass('addsetlistbutton').prop('outerHTML'));
@@ -86,7 +92,7 @@
 
     var postprocessors = {
         setlist: function () {
-            this.tabContent.find('button').button({ label: 'Add all to playlist' });
+            this.tabContent.find('button').button({ label: this.tabContent.find('.unavailable').length ? 'Add available to playlist' : 'Add all to playlist' });
         }
     }
 
@@ -127,15 +133,16 @@
         firstActive: 'Band Info',
         direction: 'vertical',
         updateAllUrl: '/getSidebarInfo',
-        preload: true
+        preload: true,
+        winMinWidth: 1000 // Minimum window width for tabs to be visible. TODO: Implement
     };
 
     function Tab (tabs, settings) {
-        var that = this;
+        var self = this;
         var contentId = settings.contentId || settings.name + 'TabContent';
         var tabId = settings.tabId || settings.name + 'Tab';
         this.tabs = tabs;
-        this.tab = $('<div class="jp-tab" />').text(settings.title).attr('id', tabId).click(function () { that.activate(); });
+        this.tab = $('<div class="jp-tab" />').text(settings.title).attr('id', tabId).click(function () { self.activate(); });
         this.title = settings.title;
         this.name = settings.name;
         this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.defaultText);
@@ -188,7 +195,7 @@
     };
 
     function Tabs (element, tabsSettings) {
-        var that = this;
+        var self = this;
         this.vertical = tabsSettings.direction === 'vertical';
         this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
         this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
@@ -216,10 +223,10 @@
         this.resize();
         this.inited = false;
         this.element.on('webkitTransitionEnd', function () {
-            if (that.inited) {
+            if (self.inited) {
                 $(document).trigger('jplay.displaychange');
             } else {
-                that.inited = true;
+                self.inited = true;
             }
         });
     }
@@ -234,13 +241,13 @@
     };
 
     Tabs.prototype.updateAll = function (songInfo) {
-        var that = this;
+        var self = this;
         if (this.activeTab && this.activeTab.tabContent) {
             this.activeTab.content('<div class="ajaxloader" />');
         }
         if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
-            for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
-                var currTab = that.tabObjects[i];
+            for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
+                var currTab = self.tabObjects[i];
                 if (this.preload.data[currTab.name]) {
                     currTab.content(currTab.preprocessData(this.preload.data[currTab.name]));
                     currTab.postprocessContent();
@@ -251,8 +258,8 @@
             this.preload.hasData = false;
         } else {
             $.get(this.settings.updateAllUrl, songInfo, function (data) {
-                for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
-                    var currTab = that.tabObjects[i];
+                for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
+                    var currTab = self.tabObjects[i];
                     if (data[currTab.name]) {
                         currTab.content(currTab.preprocessData(data[currTab.name]));
                         currTab.postprocessContent();
@@ -266,9 +273,7 @@
 
     Tabs.prototype.setActive = function (title) {
         title = title.title || title;
-        for (var i = 0, endi = this.tabObjects.length; i < endi; i++) {
-            this.tabObjects[i].hide();
-        }
+        this.tabObjects.forEach(function (tab) { tab.hide() });
         if (this.activeTab && (title === this.activeTab.title)) {
             this.hide();
             this.activeTab = false;
@@ -297,19 +302,18 @@
     };
 
     Tabs.prototype.preloadAll = function (songInfo) {
-        var that = this;
+        var self = this;
         if (!this.preload.enabled) {
             return;
         }
         $.get(this.settings.updateAllUrl, songInfo, function (data) {
-            that.preload.data = data;
-            that.preload.hasData = true;
-            that.preload.id = songInfo.id;
+            self.preload.data = data;
+            self.preload.hasData = true;
+            self.preload.id = songInfo.id;
         });
     };
 
     Tabs.prototype.resize = function (forceV) {
-        var that = this;
         if (this.vertical || forceV) {
             var width = 0;
             $.each(this.tabObjects, function () { width += this.tab.outerWidth(); });
@@ -319,9 +323,4 @@
     };
 
     var tabs = new Tabs($('#sidebar'), options);
-    $(document).on('jplay.newsong', function (e) {
-        tabs.updateAll(e.to);
-    }).on('jplay.soonnewsong', function (e) {
-        tabs.preloadAll(e.next);
-    });
 }) (jplay, $);

@@ -107,3 +107,8 @@
     margin-left:0;
     outline-style:none;
 }
+.jp-tabContent .setlistitem {
+    text-decoration:none;
+    color:#333;
+    font-weight:bold;
+}
