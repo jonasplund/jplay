@@ -77,12 +77,18 @@
                     return decodeURI(item.item);
                 }).join('<br />');
                 if (data.length > 0) {
-                    data = data.concat('<br />' + $('<button>').addClass('addsetlistbutton').button({ label: 'Add all to playlist' }).prop('outerHTML'));
+                    data = data.concat('<br />' + $('<button>').addClass('addsetlistbutton').prop('outerHTML'));
                 }
             } catch (ex) { }
             return data;
         }
     };
+
+    var postprocessors = {
+        setlist: function () {
+            this.tabContent.find('button').button({ label: 'Add all to playlist' });
+        }
+    }
 
     var options = {
         tabs: [ {
@@ -114,6 +120,7 @@
                 order: 5,
                 name: 'setlist',
                 preprocess: preprocessors.setlist,
+                postprocess: postprocessors.setlist,
                 defaultText: 'No active song.'
             }
         ],
@@ -133,31 +140,47 @@
         this.name = settings.name;
         this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.defaultText);
         this.preprocess = settings.preprocess;
+        this.postprocess = settings.postprocess;
         this.settings = settings;
         this.tabs.tabsContainer.append(this.tab);
         this.tabs.tabsContentContainer.append(this.tabContent);
     }
 
-    Tab.prototype.setContent = function (content) {
-        this.tabContent.html(content);
+    Tab.prototype.content = function (content) {
+        if (content) {
+            this.tabContent.html(content);
+            return this;
+        } else {
+            return this.tabContent.html();
+        }
     };
 
     Tab.prototype.preprocessData = function (data) {
         return this.preprocess ? this.preprocess.call(this, data) : '';
     };
 
+    Tab.prototype.postprocessContent = function () {
+        if (this.postprocess) {
+            this.postprocess.call(this);
+        }
+        return this;
+    };
+
     Tab.prototype.hide = function () {
         this.tabContent.addClass('jp-hiddenTabContent').removeClass('jp-visibleTabContent');
         this.tab.addClass('jp-inactiveTab').removeClass('jp-activeTab');
+        return this;
     };
 
     Tab.prototype.show = function () {
         this.tabContent.addClass('jp-visibleTabContent').removeClass('jp-hiddenTabContent');
         this.tab.addClass('jp-activeTab').removeClass('jp-inactiveTab');
+        return this;
     };
 
     Tab.prototype.activate = function () {
         this.tabs.setActive(this);
+        return this;
     };
 
     Tab.prototype.update = function () {
@@ -213,15 +236,16 @@
     Tabs.prototype.updateAll = function (songInfo) {
         var that = this;
         if (this.activeTab && this.activeTab.tabContent) {
-            this.activeTab.tabContent.html('<div class="ajaxloader" />');
+            this.activeTab.content('<div class="ajaxloader" />');
         }
         if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
             for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
                 var currTab = that.tabObjects[i];
                 if (this.preload.data[currTab.name]) {
-                    currTab.setContent(currTab.preprocessData(this.preload.data[currTab.name]));
+                    currTab.content(currTab.preprocessData(this.preload.data[currTab.name]));
+                    currTab.postprocessContent();
                 } else {
-                    currTab.setContent('No information found.');
+                    currTab.content('No information found.');
                 }
             }
             this.preload.hasData = false;
@@ -230,9 +254,10 @@
                 for (var i = 0, endi = that.tabObjects.length; i < endi; i++) {
                     var currTab = that.tabObjects[i];
                     if (data[currTab.name]) {
-                        currTab.setContent(currTab.preprocessData(data[currTab.name]));
+                        currTab.content(currTab.preprocessData(data[currTab.name]));
+                        currTab.postprocessContent();
                     } else {
-                        currTab.setContent('No information found.');
+                        currTab.content('No information found.');
                     }
                 }
             });
