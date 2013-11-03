@@ -2,21 +2,21 @@
 @-moz-keyframes expand { to { transform: height:100%; } }
 @keyframes expand { to { transform: height:100%; } }
 
-@-webkit-keyframes spinWheel0 { to   { -webkit-transform: rotateY(-72deg); }}
-@-webkit-keyframes spinWheel1 { to   { -webkit-transform: rotateY(-144deg); }}
-@-webkit-keyframes spinWheel2 { to   { -webkit-transform: rotateY(-216deg); }}
-@-webkit-keyframes spinWheel3 { to   { -webkit-transform: rotateY(-288deg); }}
-@-webkit-keyframes spinWheel4 { to   { -webkit-transform: rotateY(-360deg); }}
-@-moz-keyframes spinWheel0 { to   { -webkit-transform: rotateY(-72deg); }}
-@-moz-keyframes spinWheel1 { to   { -webkit-transform: rotateY(-144deg); }}
-@-moz-keyframes spinWheel2 { to   { -webkit-transform: rotateY(-216deg); }}
-@-moz-keyframes spinWheel3 { to   { -webkit-transform: rotateY(-288deg); }}
-@-moz-keyframes spinWheel4 { to   { -webkit-transform: rotateY(-360deg); }}
-@keyframes spinWheel0 { to   { -webkit-transform: rotateY(-72deg); }}
-@keyframes spinWheel1 { to   { -webkit-transform: rotateY(-144deg); }}
-@keyframes spinWheel2 { to   { -webkit-transform: rotateY(-216deg); }}
-@keyframes spinWheel3 { to   { -webkit-transform: rotateY(-288deg); }}
-@keyframes spinWheel4 { to   { -webkit-transform: rotateY(-360deg); }}
+@-webkit-keyframes spinWheel0 { to { -webkit-transform: rotateY(-72deg); }}
+@-webkit-keyframes spinWheel1 { to { -webkit-transform: rotateY(-144deg); }}
+@-webkit-keyframes spinWheel2 { to { -webkit-transform: rotateY(-216deg); }}
+@-webkit-keyframes spinWheel3 { to { -webkit-transform: rotateY(-288deg); }}
+@-webkit-keyframes spinWheel4 { to { -webkit-transform: rotateY(-360deg); }}
+@-moz-keyframes spinWheel0 { to { -moz-transform: rotateY(-72deg); }}
+@-moz-keyframes spinWheel1 { to { -moz-transform: rotateY(-144deg); }}
+@-moz-keyframes spinWheel2 { to { -moz-transform: rotateY(-216deg); }}
+@-moz-keyframes spinWheel3 { to { -moz-transform: rotateY(-288deg); }}
+@-moz-keyframes spinWheel4 { to { -moz-transform: rotateY(-360deg); }}
+@keyframes spinWheel0 { to { transform: rotateY(-72deg); }}
+@keyframes spinWheel1 { to { transform: rotateY(-144deg); }}
+@keyframes spinWheel2 { to { transform: rotateY(-216deg); }}
+@keyframes spinWheel3 { to { transform: rotateY(-288deg); }}
+@keyframes spinWheel4 { to { transform: rotateY(-360deg); }}
 
 #covercontainer { height:100px; width:100px; float:left; margin-left:25px; -webkit-perspective:500; 
 	-webkit-perspective-origin:center center;  -moz-perspective:500; -moz-perspective-origin:center center; 
