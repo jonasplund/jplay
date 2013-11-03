@@ -82,6 +82,7 @@
 }
 .jp-disabledTab {
     background-color:#DDDDDD;
+    cursor:default;
 }
 .jp-tabContent {
     padding:0 10px;

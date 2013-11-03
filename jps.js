@@ -496,7 +496,7 @@
         var count = (req.query && req.query.count && isNumeric(req.query.count)) ? req.query.count : 15;
         count = Math.min(count, 100);
         var qry = 'SELECT album_id, COUNT(album_id) AS cnt_album_id FROM songplays WHERE time >= DATE_SUB(NOW(), INTERVAL ' + 
-                interval + ' DAY) GROUP BY album_id ORDER BY cnt_album_id DESC LIMIT ' + (count + 1);
+                interval + ' DAY) GROUP BY album_id ORDER BY cnt_album_id DESC';
         qry = 'SELECT *, popalbums.cnt_album_id FROM dirs, (' + qry + ') popalbums WHERE popalbums.album_id = dirs.id ORDER BY popalbums.cnt_album_id DESC LIMIT ' + count + ';';
         connection.query(qry, function (err, data) {
             if (err) { throw err; }
