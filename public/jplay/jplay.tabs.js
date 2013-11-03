@@ -94,7 +94,7 @@
         setlist: function () {
             this.tabContent.find('button').button({ label: this.tabContent.find('.unavailable').length ? 'Add available to playlist' : 'Add all to playlist' });
         }
-    }
+    };
 
     var options = {
         tabs: [ {
@@ -149,6 +149,7 @@
         this.preprocess = settings.preprocess;
         this.postprocess = settings.postprocess;
         this.settings = settings;
+        this.disabled = false;
         this.tabs.tabsContainer.append(this.tab);
         this.tabs.tabsContentContainer.append(this.tabContent);
     }
@@ -190,8 +191,16 @@
         return this;
     };
 
-    Tab.prototype.update = function () {
-        // TODO: Implement
+    Tab.prototype.disable = function () {
+        this.disabled = true;
+        this.tab.addClass('jp-disabledTab');
+        return this;
+    };
+
+    Tab.prototype.enable = function () {
+        this.disabled = false;
+        this.tab.removeClass('jp-disabledTab');
+        return this;
     };
 
     function Tabs (element, tabsSettings) {
@@ -233,15 +242,17 @@
 
     Tabs.prototype.getTab = function (o) {
         o = o.title || o;
-        for (var i = 0; i < this.tabObjects.length; i++) {
-            if (this.tabObjects[i].title === o) {
-                return this.tabObjects[i];
-            }
-        }
+        return this.tabObjects.filter(function (item) { return item.title === o })[0];
     };
 
     Tabs.prototype.updateAll = function (songInfo) {
         var self = this;
+        var checkDisabled = function () {
+            // Callback. Close Tabs if none is enabled.
+            if (!self.tabObjects.filter(function (item) { return !item.disabled; }).length) {
+                self.hide();
+            }
+        };
         if (this.activeTab && this.activeTab.tabContent) {
             this.activeTab.content('<div class="ajaxloader" />');
         }
@@ -256,31 +267,36 @@
                 }
             }
             this.preload.hasData = false;
+            checkDisabled();
         } else {
             $.get(this.settings.updateAllUrl, songInfo, function (data) {
                 for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
                     var currTab = self.tabObjects[i];
                     if (data[currTab.name]) {
-                        currTab.content(currTab.preprocessData(data[currTab.name]));
+                        currTab.content(currTab.preprocessData(data[currTab.name])).enable();
                         currTab.postprocessContent();
                     } else {
-                        currTab.content('No information found.');
+                        currTab.content('No information found.').disable();
                     }
                 }
+                checkDisabled();
             });
         }
     };
 
     Tabs.prototype.setActive = function (title) {
         title = title.title || title;
-        this.tabObjects.forEach(function (tab) { tab.hide() });
+        var activeTab = this.getTab(title);
+        if (activeTab.disabled === true) {
+            return;
+        }
+        this.tabObjects.forEach(function (tab) { tab.hide(); });
         if (this.activeTab && (title === this.activeTab.title)) {
             this.hide();
             this.activeTab = false;
             return;
         }
         this.show();
-        var activeTab = this.getTab(title);
         activeTab.show();
         this.activeTab = activeTab;
     };

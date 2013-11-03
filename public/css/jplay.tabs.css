@@ -80,6 +80,9 @@
 .jp-inactiveTab {
     color:#C0C0C0;
 }
+.jp-disabledTab {
+    background-color:#DDDDDD;
+}
 .jp-tabContent {
     padding:0 10px;
 }
