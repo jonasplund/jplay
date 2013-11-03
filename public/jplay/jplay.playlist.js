@@ -106,7 +106,7 @@
             }
         }, this));
     };
-    Playlist.prototype.addFile = function (json, position, before) {
+    Playlist.prototype.addFile = function (json, position, before, callback) {
         var build = (function (json) {
             var html, title, node, retval, texts;
             html = '<span class="playlist_artist">' + json.artist + '</span> ' +
@@ -130,6 +130,7 @@
             } else {
                 retval = node.appendTo(jplay.ui.elements.playlist);
             }
+            if (callback) { callback(retval); }
             return retval;
         });
 

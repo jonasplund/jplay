@@ -13,10 +13,10 @@
         var setlistitems = $('.setlistitem');
         for (var i = 0, endi = setlistitems.length; i < endi; i++) {
             var id = jplay.helpfunctions.getHashes($(setlistitems[i]).attr('href')).id;
-            jplay.playlist.addFile({ 'id': id });
+            jplay.playlist.addFile({ 'id': id }, undefined, undefined, function () {
+                jplay.playlist.save();
+            });
         }
-        // FIXME: Probably won't work since addFile will be async
-        jplay.playlist.save();
     }).on('jplay.newsong', function (e) {
         tabs.updateAll(e.to);
     }).on('jplay.soonnewsong', function (e) {
