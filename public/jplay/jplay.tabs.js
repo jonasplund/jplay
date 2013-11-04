@@ -10,13 +10,14 @@
         var id = $(this).attr('href').match(/id=([0-9]+)/)[1];
         jplay.searchfn.gotodir({ id: id, isdir: true });
     }).on('click', '#sidebar .addsetlistbutton', function () {
-        var setlistitems = $('.setlistitem');
-        for (var i = 0, endi = setlistitems.length; i < endi; i++) {
-            var id = jplay.helpfunctions.getHashes($(setlistitems[i]).attr('href')).id;
-            jplay.playlist.addFile({ 'id': id }, undefined, undefined, function () {
-                jplay.playlist.save();
-            });
-        }
+        var setlistitems = Array.prototype.slice.call(document.querySelectorAll('.setlistitem'));
+        var setlistids = setlistitems.map(function (data) {
+            return jplay.helpfunctions.getHashes(data.getAttribute('href')).id;
+        });
+        setlistids = [].concat(setlistids);
+        jplay.playlist.addFile(setlistids, undefined, undefined, function () {
+            jplay.playlist.save();
+        });
     }).on('jplay.newsong', function (e) {
         tabs.updateAll(e.to);
     }).on('jplay.soonnewsong', function (e) {

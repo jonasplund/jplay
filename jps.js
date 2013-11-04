@@ -443,8 +443,24 @@
     };
 
     jps.getSongInfo = function (req, res) {
-        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
+        if (!req.query || !req.query.id) {
+            res.send();
+            return;
+        }
         var connection = mysql.createConnection(options.dbConnection);
+        if (Object.prototype.toString.call(req.query.id) === '[object Array]') {
+            console.log(req.query.id);
+            var ids = req.query.id.filter(function (data) { return isNumeric(data); });
+            console.log(ids);
+            var qry = connection.query('SELECT * FROM songs WHERE id IN (?)', [ids], function (err, data) {
+                if (err) { console.log(qry.sql); throw err; }
+                console.log(data);
+                connection.end();
+                res.send(data);
+            });
+            return;
+        }
+        var id = isNumeric(req.query.id) ? req.query.id : options.baseDirId;
         connection.connect();
         connection.query('SELECT * FROM songs WHERE id = ?', [id], function (err, data) {
             if (err) { throw err; }

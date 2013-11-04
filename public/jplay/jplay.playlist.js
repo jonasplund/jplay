@@ -107,7 +107,7 @@
         }, this));
     };
     Playlist.prototype.addFile = function (json, position, before, callback) {
-        var build = (function (json) {
+        var build = function (json) {
             var html, title, node, retval, texts;
             html = '<span class="playlist_artist">' + json.artist + '</span> ' +
                 '<span class="playlist_album">- ' + json.album + '</span> ' +
@@ -132,15 +132,13 @@
             }
             if (callback) { callback(retval); }
             return retval;
-        });
-
-        json.title = json.title || json.filename;
-        if (!json.filename && json.id) {
-            $.get('/getSongInfo', json, function (data) {
-                return build(data[0], position, before);
+        };
+        if (Object.prototype.toString.call(json) === '[object Array]') {
+            $.get('/getSongInfo', { 'id': json }, function (data) {
+                data.map(function (item) { build(item, position, before) });
             });
         } else {
-            return build(json, position, before);
+            build(json, position, before);
         }
     };
     Playlist.prototype.togglerepeat = function () {
