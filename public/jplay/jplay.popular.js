@@ -101,7 +101,7 @@
                 var img = document.createElement('div');
                 img.classList.add('popCover');
                 var title = data[j].dirname.split('\\');
-                title = title[title.length - 1];
+                title = title[title.length - 1] + '\n' + data[j].cnt_album_id + ' songs have been played from this album in the last week.';
                 img.setAttribute('title', title);
                 img.setAttribute('style', 'background-image: url(/getImage?id=' + data[j].id + '&small=1)');
                 $(img).data('data', data[j]);
