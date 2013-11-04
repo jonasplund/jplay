@@ -451,8 +451,7 @@
         if (Object.prototype.toString.call(req.query.id) === '[object Array]') {
             var ids = req.query.id.filter(function (data) { return isNumeric(data); });
             var qry = connection.query('SELECT * FROM songs WHERE id IN (?)', [ids], function (err, data) {
-                if (err) { console.log(qry.sql); throw err; }
-                console.log(data);
+                if (err) { throw err; }
                 connection.end();
                 res.send(data);
             });
