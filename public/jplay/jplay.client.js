@@ -27,13 +27,8 @@
         init: function () {
             'use strict';
             var elements = jplay.ui.elements;
-            $('#maincontainer h2#settingsheader').click(function () {
-                var div = $(this).next('div');
-                if (div.css('display') === 'block') {
-                    div.hide('blind', jplay.settings.items.animationspeed, function () { });
-                } else {
-                    div.show('blind', jplay.settings.items.animationspeed, function () { });
-                }
+            $('h2#settingstab').click(function () {
+                this.parentNode.classList.toggle('active');
             });
             elements.smallscreen = $('#maincontainer');
             elements.nextbutton = $('#nextbutton');

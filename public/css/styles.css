@@ -142,7 +142,7 @@ h2#settingsheader { cursor:pointer; }
 
 #settings { position:absolute; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9;
   -moz-transition:all 300ms ease; -moz-transform:translateZ(0); transition:all 300ms ease; transform:translateZ(0); }
-#settings:hover { -webkit-transform:translateY(calc(20px - 100%)); -moz-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
+#settings.active { -webkit-transform:translateY(calc(20px - 100%)); -moz-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
 #settingstab { width:200px; border-radius:0 20px 0 0; float:left; margin-top:-20px; height:20px; }
 #settingstab .ui-icon { float:left; margin-right:10px; }
 #settingscontainer { clear:left; height:150px; background:#FFF; border-top:2px ridge #FFF; }
