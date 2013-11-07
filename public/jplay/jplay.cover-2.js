@@ -37,12 +37,13 @@
             var that = this;
             this.container.addClass('roll');
             that._reloadImages(e);
-            this.container.on('webkitAnimationEnd', function () { 
+            var callback = function () { 
                 that.container.removeClass(function (index, css) {
                     return (css.match (/\bstate\S+/g) || []).join(' ');
                 }).addClass('state' + (++that.rotation % 5));
-                that.container.removeClass('roll').off('webkitAnimationEnd');
-            });
+                that.container.removeClass('roll').off('webkitAnimationEnd').off('animationend');
+            };
+            this.container.on('webkitAnimationEnd', callback).on('animationend', callback);
         },
         _reloadImages: function (e) {
             var src;
