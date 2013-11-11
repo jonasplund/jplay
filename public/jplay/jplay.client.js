@@ -311,6 +311,9 @@
             if (!jplay.player.audioContext && window.webkitAudioContext) {	// Only allowed to create one per page
                 jplay.player.audioContext = new window.webkitAudioContext();
             }
+            if (!jplay.player.audioContext && window.AudioContext) {
+                jplay.player.audioContext = new window.AudioContext();
+            }
             elements.nextbutton.click(jplay.player.next);
             elements.prevbutton.click(jplay.player.prev);
             elements.playpausebutton.click(jplay.player.toggleplay);
