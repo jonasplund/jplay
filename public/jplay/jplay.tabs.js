@@ -232,13 +232,10 @@
         }
         this.resize();
         this.inited = false;
-        this.element.on('webkitTransitionEnd', function () {
-            if (self.inited) {
-                $(document).trigger('jplay.displaychange');
-            } else {
-                self.inited = true;
-            }
-        });
+        var inner = function () {
+            $(document).trigger('jplay.displaychange');
+        };
+        this.element.on('transitionend transitionEnd msTransitionEnd webkitTransitionEnd', inner);
     }
 
     Tabs.prototype.getTab = function (o) {
