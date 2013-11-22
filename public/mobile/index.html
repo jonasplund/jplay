@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Muzak</title>
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="css/jplay.cover.css" />
+    <link rel="stylesheet" type="text/css" href="css/jplay.tabs.css" />
+    <link rel="stylesheet" type="text/css" href="css/jplay.popular.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script src="jquery/jquery-2.0.3.min.js" defer="defer"></script>
+    <script src="jquery/jquery-ui-1.10.3.custom.min.js" type="text/javascript" defer="defer"></script>
+    <script src="jstree/jquery.jstree.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.fft.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.cover-2.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.client.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.playlist.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.popular.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.tabs.js" type="text/javascript" defer="defer"></script>
+    <script src="jplay/jplay.helpfunctions.js" type="text/javascript" defer="defer"></script>
+</head>
+
+<body>
+	<div id="settings">
+		<h2 id="settingstab"><div class="ui-icon ui-icon-gear"></div>Settings</h2>
+		<div id="settingscontainer">
+			<input type="checkbox" name="notifications" id="notifications" /><label for="notifications">Desktop notifications</label><br />
+			<input type="checkbox" name="saveplaylist" checked="checked" id="saveplaylist" /><label for="saveplaylist">Save playlist between sessions</label><br />
+			<input type="checkbox" name="animations" checked="checked" id="animations" /><label for="animations">Animations</label><br />
+			<input type="checkbox" name="fftsetting" id="fftsetting" /><label for="fftsetting">Visualisation (buggy)</label><br />
+			<input type="checkbox" name="bgcover" id="bgcover" /><label for="bgcover">Show album cover in background (low performance)</label><br />
+			<input type="number" name="animationspeed" id="animationspeed" value="300" maxlength="4" size="4" /><label for="animationspeed">Animation speed (ms)</label>
+		</div>
+	</div>
+	<div id="maincontainer">
+		<div id="playercontainer">
+			<div id="playerleft">
+                <div id="playercontrols">
+			        <div id="prevbutton" class="controlbutton button" title="Previous"></div>
+			        <div id="playpausebutton" class="controlbutton paused button" title="Play/Pause"></div>
+			        <div id="nextbutton" class="controlbutton button" title="Next"></div>
+			        <div id="playinfo" class="ui-state-default ui-corner-all">
+                        <div id="piinner">
+                            <span class="artist"></span><br />
+                            <span class="title"></span>
+                        </div>
+                        <div id="searchlinksbutton" href="javascript:;"></div>
+                    </div>
+                    <ul id="searchlinksmenu">
+                        <li id="search_google"><a href="#">Google</a></li>
+                        <li id="search_google_instant"><a href="#">Google Instant</a></li>
+                        <li id="search_youtube"><a href="#">Youtube</a>
+                            <ul>
+                                <li id="search_youtube_song"><a href="#">Song</a></li>
+                                <li id="search_youtube_band"><a href="#">Band</a></li>
+                            </ul>
+                        </li>
+                        <li id="search_wikipedia"><a href="#">Wikipedia</a></li>
+                        <li id="search_darklyrics"><a href="#">Dark Lyrics</a></li>
+                    </ul>
+                    <div class="clear"></div>
+			    </div>
+                <div id="progressinfo">
+                    <div id="progressbar"><div id="progressmeter"></div></div>
+			        <div id="time" class="ui-state-default ui-corner-all">--:--/--:--</div>
+                    <div class="clear"></div>
+			    </div>
+                <div id="volumecontainer">
+                    <div id="volumeslidercontainer">
+				        <div id="volumeslider"></div>
+			        </div>
+			        <div id="mutebutton" class="button" title="Mute"></div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div id="covercontainer"></div>
+            <div id="bigscreen_button"></div>
+            <div class="clear"></div>
+		</div>
+		<div id="playlistnameinput">
+			<input type="text" id="name" /><br />
+            <input type="checkbox" id="uploadtoservercb" /><label for="uploadtoservercb">Upload to server</label>
+		</div>
+		<div id="midrow" class="row">
+			<div id="midrowleft" class="rowleft">
+				<h2 id="playlistheader">Playlist</h2>
+				<div id="playlistcontrols">
+					<div class="button" id="saveplaylistbutton" title="Save playlist"></div>
+					<div class="button" id="clearplaylistbutton" title="Clear playlist"></div>
+                    <div id="shufflebutton" class="controlbutton button" title="Shuffle"></div>
+                    <div id="repeatbutton" class="controlbutton button" title="Repeat all"></div>
+                    <div class="clear"></div>
+				</div>
+				<div id="playlistcontainer">
+					<ul id="playlist"></ul>
+				</div>
+			</div>
+			<div id="midrowright" class="rowright">
+				<h2>Files</h2>
+				<div id="searchcontainer">
+					<input type="text" id="searchtext" />
+					<span class="button" id="searchsettings" title="Search for...">
+                        <input type="checkbox" id="searchcheckartist" title="Search for Artist" checked="checked" /><label for="searchcheckartist">Artist</label>
+                        <input type="checkbox" id="searchcheckalbum" title="Search for Album" checked="checked" /><label for="searchcheckalbum">Album</label>
+                        <input type="checkbox" id="searchchecktitle" title="Search for Title" checked="checked" /><label for="searchchecktitle">Song</label>
+                    </span>
+                    <div class="button" id="addrandom"></div>
+				</div>
+				<div id="filesouter">
+					<div id="filescontainer"></div>
+				</div>
+                <ul id="jst_contextmenu">
+                    <li rel="add">Add to playlist</li>
+                    <li rel="addplay">Add to playlist and play</li>
+                    <li rel="download">Download selected song</li>
+                    <li rel="link">Get link</li>
+                </ul>
+			</div>
+		</div>
+        <div id="bottomrow" class="row">
+            <div id="bottomleft" class="rowleft">
+                <h2 id="savedplaylistsheader">Saved Playlists</h2>
+	            <div id="savedplaylistscontainer">
+		            <ul id="customplaylists"></ul>
+	            </div>
+            </div>
+            <div id="bottomright" class="rowright">
+                <h2 id="brheader"></h2>
+            </div>
+        </div>
+        <div id="debug"></div>
+        <div id="warning"></div>
+	</div>
+    <div id="sidebar">
+        <!-- <ul id="tabs">
+            <li id="preloaded"><a href="/getBandInfo">Band Info</a></li>
+            <li id="lyricstab"><a href="/getLyrics">Lyrics</a></li>
+            <li id="similartab"><a href="/getSimilar">Similar Artists</a></li>
+            <li id="youtubetab"><a href="/getVideo">Video</a></li>
+        </ul> -->
+    </div> 
+</body>
+</html>

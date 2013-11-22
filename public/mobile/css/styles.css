@@ -1,0 +1,150 @@
+﻿html { margin:0; padding:0; 
+     background-image:-moz-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%); 
+     background-image:-ms-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(225,225,225,0.94) 100%);
+     background-image:-webkit-linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(215,215,215,0.94) 100%);
+     background-image:linear-gradient(top, rgba(255,255,255,0.94) 0%, rgba(215,215,215,0.94) 100%);
+     background-size:contain; background-repeat: no-repeat; background-position: center;
+}
+body { -webkit-user-select:none; -moz-user-select:-moz-none; user-select:none; font-family:Verdana, Geneva, sans-serif; font-size:10px; margin:0; padding:0; }
+    
+div.clear { clear:both; }
+
+input[type=text],input[type=number] { height:12px; -webkit-user-select:text; -moz-user-select:text; font-size:10px; padding:0; margin-right:5px; }
+input[type=number] { margin:3px 5px 3px 4px; }
+
+.button { margin:0px 2px; height:15px; }
+
+#maincontainer {  }
+
+h2 { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+     background:-moz-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+	   background:-ms-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+	   background:linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+     margin:0; clear:both; padding-bottom:2px; padding-top:2px; padding-left:10px; color:#111; 
+     font-size:12px; height:14px; cursor:default;}
+h2#settingsheader { cursor:pointer; }
+
+#playercontainer { padding:10px; margin:0; height:100px; }
+#playercontainer .button,#progressbar,#volumeslidercontainer *,#cover { cursor:pointer; }
+#playerleft { float:left; }
+#playercontrols { margin-bottom:5px; }
+#playercontainer .controlbutton { width:25px; height:25px; float:left; }
+/* #playordercontrols { margin-bottom:5px; }
+#playordercontrols .controlbutton { width:25px; height:15px; float:left; } */
+#prevbutton { }
+#playpausebutton.paused { }
+#playpausebutton.playing { }
+#playinfo { float:left; width:196px; height:20px; padding:2px 5px 3px 5px; line-height:10px; margin:0 2px; overflow:hidden; }
+#piinner { width:auto; white-space:nowrap; cursor:default; float:left; width:170px; }
+#wikipedia { width:16px; height:16px; background-image:url("/img/wiki.png"); display:none; float:right; margin-top:2px; }
+#progressinfo { padding-top:5px; position:absolute; }
+#progressbar { clear:both; width:200px; float:left; height:10px; }
+#progressmeter { height:5px; box-shadow:2px 2px 3px #888 inset; }
+#progressmeter .ui-progressbar-value { box-shadow:2px 2px 3px #888 inset; background-color:#FF0; }
+#progressmeter .ui-widget-header { background:#AEE; border-right:1px solid #333; }
+#time { float:left; line-height:15px; margin-left:10px; cursor:default; height:15px; margin-top:-4px; padding:0 5px; width:77px; text-align:center; }
+#volumecontainer { padding-top:23px; }
+#volumeslidercontainer { padding-top:6px; padding-bottom:5px; width:200px; float:left; margin-bottom:10px; }
+#volumeslider { height:4px; box-shadow:2px 2px 3px #888 inset; }
+#volumeslider a { box-shadow:-2px -2px 3px #777 inset; border-radius:5px; height:12px; width:12px; background:#EEE; border:0; outline:none; }
+#mutebutton { float:left; margin-left:10px;}
+#fft { height:100px; width:200px; float:left; margin-left:5px; background:#000; }
+#searchlinksbutton { width:16px; height:16px; display:none; float:right; margin-top:2px; }
+#searchlinksmenu { display:none; position:absolute; z-index:1001; float:none; width:100px; }
+#lyrics_button { float:right; height:25px; width:25px; }
+#bigscreen_button { float:right; height:25px; width:25px; margin-right:5px; }
+
+.row { width:100%; }
+.rowleft {  }
+.rowright { border-left:2px groove #FFF; overflow-y:auto; overflow-x:hidden;}
+
+#midrow {  }
+#midrowleft {  }
+#midrowright {   }
+
+#playlistcontainer { padding:0; margin:0; overflow-y:auto; }
+#playlistcontrols { background:#FFF; padding:3px 4px; border-bottom:2px ridge #FFF; height:17px; }
+.playlistbutton { /*float:left; cursor:pointer;*/ }
+#playlist { list-style:none; padding-left:0px; margin:0 0 0 0; }
+#playlistcontainer ul { clear:both; }
+#playlist li { cursor:pointer; padding-left:10px; padding-right:25px; white-space:nowrap; overflow:hidden; height:30px; font-size: 20px; line-height:30px; }
+#playlist li:nth-child(2n) { background-color:rgba(220,220,220,1); }
+#playlist li.activesong { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+                          background:-moz-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+                          background:-ms-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+                          background:linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
+                          font-weight:bold; }
+#playlist span.playlist_album  { display:none; }
+#playlist span.playlist_year  { display:none; }
+
+#jst_contextmenu { display:none; position:absolute; padding:0; background-color:#FFF; border:1px solid #888; cursor:default; 
+                   list-style:none; min-width:100px; box-shadow:1px 1px 5px #888; }
+#jst_contextmenu li { padding:2px; padding-right:10px; }
+#jst_contextmenu li:hover { background:-webkit-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1));
+                            background:-moz-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1)); 
+							background:-ms-linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1));
+              background:linear-gradient(top, rgba(235,235,235,1), rgba(209,209,209,1)); }
+
+#filesouter { padding:0; margin:0 auto; overflow-y:auto; }
+
+#searchcontainer { background:#FFF; padding:3px 4px; height:17px; border-bottom:2px ridge #FFF; white-space:nowrap; }
+#searchcontainer * { display:inline-block; }
+#searchcontainer #searchtext { width:250px; height:14px; padding:0 2px; font-size:11px; float:left; 
+							  border:1px solid #888; border-radius:2px; box-shadow:1px 1px 2px rgba(128,128,128,0.5) inset; }
+/* #searchcontainer #searchbutton { float:left; } */
+#searchcontainer #searchsettings { float:none; }
+#searchcontainer #searchsettings * { height: 16px; line-height:8px; }
+#searchcontainer #addrandom { margin-left:10px; }
+
+.ui-autocomplete { max-height:250px; overflow-y:auto; overflow-x:hidden; padding-right:20px; }
+.ui-autocomplete img { float:left; padding-top:5px; margin-right: 2px; }
+
+#filescontainer { clear:both; }
+#filescontainer ul { list-style:none; margin:0; line-height:16px; }
+#filescontainer li { }
+#filescontainer img { margin-right:5px; }
+
+#bottomrow { }
+#bottomleft {  }
+
+#savedplaylistscontainer {  }
+#savedplaylistscontainer ul#customplaylists { list-style:none; padding-left:0; margin-top:0; margin-bottom:10px;
+                                              cursor:pointer; }
+#customplaylists li { padding-left:10px; }
+#customplaylists li.remote { color:#880000; }
+#customplaylists li:nth-child(2n) { background-color:rgba(220,220,220,1); }
+
+.overlay { position:absolute; width:100%; height:100%; z-index:3; top:0; left:0; background:#000; opacity:0.4; }
+.popup { position:fixed; width:500px; left:50%; top:50px; margin-left:-250px; 
+         background:white; border:1px solid #888; -moz-user-select:text; -webkit-user-select:text; user-select:text; padding:3px; 
+         z-index:4; }
+.popup h1 { margin:0; padding:0; border-bottom:2px ridge #CCC; text-align:center; padding:5px; margin:-3px -3px 10px -3px; 
+            text-shadow:5px 5px 5px #CCC; background:-webkit-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
+            background:-moz-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
+            background:-ms-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
+            background:linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
+
+#settings { position:fixed; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9;
+  -moz-transition:all 300ms ease; -moz-transform:translateZ(0); transition:all 300ms ease; transform:translateZ(0); }
+#settings.active { -webkit-transform:translateY(calc(20px - 100%)); -moz-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
+#settingstab { width:200px; border-radius:0 20px 0 0; float:left; margin-top:-20px; height:20px; line-height:17px; }
+#settingstab .ui-icon { float:left; margin-right:10px; }
+#settingscontainer { clear:left; height:150px; background:#FFF; border-top:2px ridge #FFF; }
+
+/* JQUI overwrites */
+.ui-state-default { background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); 
+    background-image: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(220,220,220,1) 50%, rgba(255,255,255,1) 100%);
+    background-image: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%);
+    background-image: linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
+.ui-state-highlight { box-shadow:1px 1px 3px #000 inset; border:1px solid #CCC;
+    background-image:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    background-image:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    background-image:-ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%); 
+    background-image:linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);}
+.ui-state-active { box-shadow:1px 1px 3px #000 inset; border:1px solid #CCC; color:inherit;
+    background-image:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    background-image:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    background-image:-ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%); 
+    background-image:linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 50%, rgba(255, 255, 255, 1) 100%);}
+.ui-tabs .ui-tabs-nav li { margin-top:0px; }
+.ui-tabs .ui-tabs-nav { padding:0px; }
