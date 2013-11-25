@@ -10,12 +10,12 @@
   "contributors"  : [],
   "licenses"      : ["MIT"],
   "dependencies"  : {
-    "async": "*",
-    "express": "*",
-    "id3": "*",
+    "async": "0.2.*",
+    "express": "3.*",
+    "id3": "0.0.*",
     "metalminer": "*",
-    "mysql": "*",
-    "socket.io": "*",
+    "mysql": "2.0.*",
+    "socket.io": "0.9.*",
     "imagemagick": "0.1.x"
   },
   "lib"           : "lib",
