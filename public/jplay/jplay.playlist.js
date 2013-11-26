@@ -80,31 +80,35 @@
     };
     Playlist.prototype.addDir = function (dirObj, position, before, callback) {
         this.dirCounter++;
-        var obj = (dirObj instanceof $) ? dirObj.data() : dirObj;
-        $.get('/addDir', { 'id': obj.id }, $.proxy(function (results) {
-            var firstnode;
-            for (var i = 0, endi = results.length; i < endi; i++) {
-                var value = results[i];
-                if (!value.isdir) {
-                    if (!firstnode) {
-                        firstnode = this.addFile(value);
-                    } else {
-                        this.addFile(value);
-                    }
-                } else {
-                    this.addDir(value, null, null, callback);
-                }
-                if (i === endi - 1) {
-                    this.dirCounter--;
-                    if (this.dirCounter === 0) {
-                        this.save();
-                        if (callback) {
-                            callback(firstnode);
+        var firstnode;
+        (function addDirInner(dirObj, position, before, current, callback) {
+            var obj = (dirObj instanceof $) ? dirObj.data() : dirObj;
+            $.get('/addDir', { 'id': obj.id }, $.proxy(function (results) {
+                for (var index = 0, endi = results.length; index < endi; index++) {
+                    (function (i, results, current) {
+                        var value = results[i];
+                        if (!value.isdir) {
+                            if (!firstnode) {
+                                firstnode = current.addFile(value);
+                                if (callback) {
+                                    callback(firstnode);
+                                }
+                            } else {
+                                current.addFile(value);
+                            }
+                        } else {
+                            addDirInner(value, null, null, current, callback);
                         }
-                    }
+                        if (i === endi - 1) {
+                            current.dirCounter--;
+                            if (current.dirCounter === 0) {
+                                current.save();
+                            }
+                        }
+                    })(index, results, current);
                 }
-            }
-        }, this));
+            }, this));
+        }) (dirObj, position, before, this, callback);
     };
     Playlist.prototype.addFile = function (json, position, before, callback) {
         var build = function (json) {

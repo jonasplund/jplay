@@ -767,18 +767,20 @@
                                 jplay.player.setActiveSong(first);
                             }
                         };
-                        for (var i = 0; i < sel.length; i++) {
-                            var val = $(sel[i]);
-                            if (val.data().isdir) {
-                                jplay.playlist.addDir(val, false, false, callback);
-                            } else {
-                                if (!started) {
-                                    started = true;
-                                    jplay.player.setActiveSong(jplay.playlist.addFile(val.data()));
+                        for (var index = 0; index < sel.length; index++) {
+                            (function (i) {
+                                var val = $(sel[i]);
+                                if (val.data().isdir) {
+                                    jplay.playlist.addDir(val, false, false, callback);
                                 } else {
-                                    jplay.playlist.addFile(val.data());
+                                    if (!started) {
+                                        started = true;
+                                        jplay.player.setActiveSong(jplay.playlist.addFile(val.data()));
+                                    } else {
+                                        jplay.playlist.addFile(val.data());
+                                    }
                                 }
-                            }
+                            })(index);
                         }
                         jplay.playlist.save();
                         break;
