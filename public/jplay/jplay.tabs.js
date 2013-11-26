@@ -205,7 +205,6 @@
     };
 
     function Tabs (element, tabsSettings) {
-        var self = this;
         this.vertical = tabsSettings.direction === 'vertical';
         this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
         this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
@@ -240,7 +239,7 @@
 
     Tabs.prototype.getTab = function (o) {
         o = o.title || o;
-        return this.tabObjects.filter(function (item) { return item.title === o })[0];
+        return this.tabObjects.filter(function (item) { return item.title === o; })[0];
     };
 
     Tabs.prototype.updateAll = function (songInfo) {
@@ -271,8 +270,13 @@
                 for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
                     var currTab = self.tabObjects[i];
                     if (data[currTab.name]) {
-                        currTab.content(currTab.preprocessData(data[currTab.name])).enable();
-                        currTab.postprocessContent();
+                        var pData = currTab.preprocessData(data[currTab.name]);
+                        if (pData) {
+                            currTab.content(pData).enable();
+                            currTab.postprocessContent();
+                        } else {
+                            currTab.content('No information found.').disable();
+                        }
                     } else {
                         currTab.content('No information found.').disable();
                     }
