@@ -37,6 +37,10 @@
     app.post('/playlist', jps.uploadPlaylist);
     app.delete('/playlist', jps.deletePlaylist);
 
+    process.on('uncaughtException', function (err) {
+        console.log('Caught exception: ' + err);
+    });
+
     var args = process.argv.slice(2);
     switch (args[0]) {
         case 'investigate':
