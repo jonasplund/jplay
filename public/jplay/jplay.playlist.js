@@ -1,16 +1,14 @@
 (function ($, jplay) {
     'use strict';
     var Playlist = (function () {
-        function Playlist() {
-            this.jqobj = jplay.ui.elements.playlist;
+        function Playlist(container) {
+            this.jqobj = container;
             this.repeatbutton = jplay.ui.elements.repeatbutton;
             this.shufflebutton = jplay.ui.elements.shufflebutton;
-            this.dirCounter = 0; // For addDir()
-            this.items = [];
+            this.items = []; // TODO: Remove this. It probably shouldn't exist.
+            this.PlaylistItems = []; // Array of PlaylistItem objects.
             this.id = -1; // Number. If remote playlist, set to playlist id.
-        }
 
-        Playlist.prototype.init = function () {
             var that = this;
             this.repeatbutton.click(function () { that.togglerepeat(); });
             this.shufflebutton.click(function () { that.toggleshuffle(); });
@@ -18,13 +16,23 @@
                 e.stopPropagation();
             }).on('contextmenu', '.songinplaylist', function (e) {
                 e.preventDefault();
-                $(this).remove();
+                that.removeItem($(this));
                 that.save();
             }).on('dblclick', '.songinplaylist', function (e) {
                 e.preventDefault();
                 jplay.player.setActiveSong($(this));
             });
-            this.jqobj.sortable();
+            this.jqobj.sortable({ 
+                'axis': 'y',
+                'start': function (event, ui) {
+                    ui.item.startPos = ui.item.index();
+                },
+                'update': function (event, ui) {
+                    that.PlaylistItems.splice(ui.item.index(), 0, 
+                        that.PlaylistItems.splice(ui.item.startPos, 1)[0]);
+                    that.save();
+                } 
+            });
             if (jplay.settings.items.saveplaylist &&
                 localStorage.getItem('playlist')) {
                 this.items = $.parseJSON(localStorage.getItem('playlist'));
@@ -63,24 +71,25 @@
                 that.clear();
             });
             jplay.shuffle.update();
-        };
+        }
 
         Playlist.prototype.save = function () {
-            var songs, tmp, that = this;
-            this.items = [];
-            songs = this.jqobj.children('li');
-            $.each(songs, function () {
-                tmp = $(this).data();
-                that.items.push($(this).data("attribs"));
+            var plis = this.PlaylistItems.map(function (item) {
+                return item.data;
             });
             jplay.shuffle.update();
             $(document).trigger('jplay.playlistsave');
-            localStorage.setItem('playlist', JSON.stringify(this.items));
+            localStorage.setItem('playlist', JSON.stringify(plis));
+            return this;
         };
 
         Playlist.prototype.clear = function () {
-            jplay.ui.elements.playlist.children('li').remove();
+            this.PlaylistItems.forEach(function (item) {
+                item.delete();
+            });
+            this.PlaylistItems = [];
             this.save();
+            return this;
         };
 
         Playlist.prototype.addDir = function (dirObj, position, before, callback) {
@@ -99,7 +108,7 @@
                             addDirInner(item.id);
                         });
                         files.forEach(function(item) {
-                            var song = self.addFile(item);
+                            var song = self.addFile(item, position, before);
                             if (!firstsong) {
                                 firstsong = song;
                             }
@@ -112,34 +121,33 @@
                     });
                 }) (id);
             }) (obj.id);
+            return this;
         };
 
         Playlist.prototype.addFile = function (json, position, before, callback) {
+            var that = this;
             var build = function (json) {
-                var html, title, node, retval, texts;
-                html = '<span class="playlist_artist">' + json.artist + '</span> ' +
-                    '<span class="playlist_album">- ' + json.album + '</span> ' +
-                    '<span class="playlist_title">- ' + json.title + '</span> ' +
-                    '<span class="playlist_year">- ' + json.year + '</span>';
-                title = '';
-                texts = ['Artist', 'Song', 'Album', 'Year'];
-                title = [json.artist, json.title, json.album, json.year].map(function (item, i) {
-                    return item ? texts[i] + ':\t' + item : '';
-                }).filter(String).join('\n');
-                node = $('<li/>').addClass('songinplaylist').html(html).attr('title', title).
-                    data('attribs', json).data('playlistorder', $('#songinplaylist'));
-                if (position && (position.is('ul') || position.is('li'))) {
-                    if (before) {
-                        node.insertBefore($(position));
-                        retval = $(position);
+                var item = new PlaylistItem(json);
+                if (item) {
+                    if (position && (position.is('ul') || position.is('li'))) {
+                        var searchId = $(position).data('attribs').id;
+                        var pli = that.getPlaylistItemById(searchId);
+                        if (before) {
+                            item.index = pli.index;
+                            that.PlaylistItems.splice(pli.index, 0, item);
+                            item.node.insertBefore($(position));
+                        } else {
+                            item.index = pli.index + 1;
+                            that.PlaylistItems.splice(pli.index + 1, 0, item);
+                            item.node.insertAfter($(position));
+                        }
                     } else {
-                        retval = node.insertAfter($(position));
+                        that.PlaylistItems.push(item);
+                        item.node.appendTo(that.jqobj);
                     }
-                } else {
-                    retval = node.appendTo(jplay.ui.elements.playlist);
                 }
-                if (callback) { callback(retval); }
-                return retval;
+                $(document).trigger('jplay.playlistchange');
+                return item.node;
             };
             if (Object.prototype.toString.call(json) === '[object Array]') {
                 $.get('/getSongInfo', { 'id': json }, function (data) {
@@ -148,6 +156,41 @@
             } else {
                 return build(json, position, before);
             }
+        };
+
+        Playlist.prototype.removeItem = function (obj) {
+            var item = this.getPlaylistItemByJQObj(obj);
+            item.item.delete();
+            this.PlaylistItems.splice(item.index, 1);
+            return this;
+        };
+
+        Playlist.prototype.getPlaylistItemById = function (id) {
+            var retval;
+            this.PlaylistItems.forEach(function (item, index) {
+                if (item.data.id == id) {
+                    retval = {
+                        item: item,
+                        index: index
+                    };
+                    return; 
+                }
+            });
+            return retval;
+        };
+
+        Playlist.prototype.getPlaylistItemByJQObj = function (obj) {
+            var retval;
+            this.PlaylistItems.forEach(function (item, index) {
+                if (item.node.is(obj)) {
+                    retval = {
+                        item: item,
+                        index: index
+                    };
+                    return;
+                }
+            });
+            return retval;
         };
 
         Playlist.prototype.togglerepeat = function () {
@@ -160,6 +203,7 @@
                 jplay.settings.update();
                 this.repeatbutton.addClass('ui-state-highlight');
             }
+            return this;
         };
 
         Playlist.prototype.toggleshuffle = function () {
@@ -172,15 +216,22 @@
                 jplay.settings.update();
                 this.shufflebutton.addClass('ui-state-highlight');
             }
+            return this;
         };
 
         Playlist.prototype.uploadToServer = function (name) {
             $.post('/playlist', {'name': name, 'songs': this.items, 'id': this.id }, function (data) {
                 jplay.customplaylists.update();
             });
+            return this;
         };
 
-        Playlist.prototype.getSelected = function () {};
+        Playlist.prototype.getSelected = function () {
+            return this.items.filter(function(item) { 
+                return item.selected; 
+            });
+            return this;
+        };
         
         return Playlist;
     })();
@@ -192,23 +243,24 @@
             this.selected = false;
             this.playing = false;
             this.parent = parent;
+            this.data = data;
             this.type = type || 'mp3';
-            html = '<span class="playlist_artist">' + json.artist + '</span> ' +
-                '<span class="playlist_album">- ' + json.album + '</span> ' +
-                '<span class="playlist_title">- ' + json.title + '</span> ' +
-                '<span class="playlist_year">- ' + json.year + '</span>';
+            this.index = -1;
+            html = '<span class="playlist_artist">' + data.artist + '</span> ' +
+                '<span class="playlist_album">- ' + data.album + '</span> ' +
+                '<span class="playlist_title">- ' + data.title + '</span> ' +
+                '<span class="playlist_year">- ' + data.year + '</span>';
             title = '';
             texts = ['Artist', 'Song', 'Album', 'Year'];
-            title = [json.artist, json.title, json.album, json.year].map(function (item, i) {
+            title = [data.artist, data.title, data.album, data.year].map(function (item, i) {
                 return item ? texts[i] + ':\t' + item : '';
             }).filter(String).join('\n');
             this.node = $('<li/>').
                 addClass('songinplaylist').
                 html(html).
                 attr('title', title).
-                data('attribs', json).
-                data('playlistorder', $('#songinplaylist')).
-                click(self.select);
+                data('attribs', data).
+                data('playlistorder', $('#songinplaylist'));
         }
 
         PlaylistItem.prototype.delete = function () {
@@ -230,13 +282,12 @@
         PlaylistItem.prototype.activate = function () {
             this.node.addClass('active');
             return this;
-        }
+        };
 
         return PlaylistItem;
     })();
 
     $(document).on('jplay.inited', function () {
-        jplay.playlist = new Playlist();
-        jplay.playlist.init();
+        jplay.playlist = new Playlist(jplay.ui.elements.playlist);
     });
 })($, jplay);
