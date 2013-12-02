@@ -9,16 +9,19 @@
             audioContext: undefined,
             volume: 1,
             source: undefined,
-            colors: ['#A00', '#AA0', '#0A0']
+            colors: ['#A00', '#AA0', '#0A0'],
+            width: 200,
+            height: 100
         },
         _create: function () {
             var o = this.options;
+            var that = this;
             if (!o.player || !o.audioContext || !o.source) {
                 throw 'Options player, source and/or audioContext not supplied';
             }
             this.ctx = o.audioContext;
             this.analyser = this.ctx.createAnalyser();
-            this.fft = this.element;
+            this.fft = this.element.prop({ width: o.width, height: o.height });
             this.fftctx = this.fft.get(0).getContext('2d');
             this.source = o.source;
             this.volumeNode = this.ctx.createGain();
@@ -74,14 +77,11 @@
         },
         _createGradient: function (fftctx) {
             var lingrad = fftctx.createLinearGradient(0, 0, 0, 150);
-            /*var colors = this.options.colors;
+            var colors = this.options.colors;
             var divider = colors.length - 1;
             for (var i = 0; i < colors.length; i++) {
-            lingrad.addColorStop();
-            }*/
-            lingrad.addColorStop(0, this.options.colors[0]);
-            lingrad.addColorStop(0.5, this.options.colors[1]);
-            lingrad.addColorStop(1, this.options.colors[2]);
+                lingrad.addColorStop(i / (colors.length - 1), colors[i]);
+            }
             return lingrad;
         }
     });
