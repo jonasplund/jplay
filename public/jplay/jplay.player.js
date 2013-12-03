@@ -47,7 +47,7 @@
                     });
                 }
                 if (that.errorTime) {
-                    that.currentTime = that.errorTime;
+                    this.currentTime = that.errorTime;
                     that.errorTime = 0;
                 }
             }).on('ended', function () {
