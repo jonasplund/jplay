@@ -335,6 +335,7 @@
         var connection = mysql.createConnection(options.dbConnection);
         connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
+            req.connection.setTimeout(3600000);
             if (err) { throw err; }
             qry = 'UPDATE songs SET playcount = playcount + 1 WHERE id = ?';
             connection.query(qry, [id], function (err, data) {
