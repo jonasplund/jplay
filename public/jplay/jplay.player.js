@@ -1,23 +1,23 @@
 (function ($, jplay) {
 	'use strict';
 
-	var Player = (function () {
-		function Player(settings) {
-			this.activeSong = {};
-			this.domobj = {};
-			this.jqobj;
-			this.errorTime = 0;
+    var Player = (function () {
+        function Player(settings) {
+            this.activeSong = {};
+            this.domobj = {};
+            this.jqobj;
+            this.errorTime = 0;
 
-			// Only allowed to create one per page
+            // Only allowed to create one per page
             if (window.webkitAudioContext) {	
                 this.audioContext = new window.webkitAudioContext();
             } else if (window.AudioContext) {
                 this.audioContext = new window.AudioContext();
-		    }
-		}
+            }
+        }
 
         Player.prototype.createInstance = function () {
-        	var that = this;
+            var that = this;
             var elements = jplay.ui.elements;
             if (this.jqobj && this.jqobj.is($)) {
                 this.jqobj.remove();
@@ -35,15 +35,15 @@
                         jplay.ui.elements.fft = null;
                     }
                     jplay.ui.elements.fft = $('<canvas></canvas>').
-                    	prop('width', '200px').
-                    	prop('height', '100px').
-                    	prop('id', 'fft').
-                    	insertBefore(jplay.ui.elements.covercontainer).
-                    	fft({
-	                        player: that.jqobj,
-	                        audioContext: that.audioContext,
-	                        source: that.mesource,
-	                        volume: jplay.settings.items.volume
+                        prop('width', '200px').
+                        prop('height', '100px').
+                        prop('id', 'fft').
+                        insertBefore(jplay.ui.elements.covercontainer).
+                        fft({
+                            player: that.jqobj,
+                            audioContext: that.audioContext,
+                            source: that.mesource,
+                            volume: jplay.settings.items.volume
                     });
                 }
                 if (that.errorTime) {
@@ -86,7 +86,7 @@
         };
 
         Player.prototype.init = function () {
-        	var that = this;
+            var that = this;
             var elements = jplay.ui.elements;
             this.createInstance();
             elements.nextbutton.click(function () { that.next(); });
@@ -338,8 +338,8 @@
         };
 
         return Player;
-	})();
+    })();
 
-	jplay.player = new Player();
+    jplay.player = new Player();
 
 }) ($, jplay);
