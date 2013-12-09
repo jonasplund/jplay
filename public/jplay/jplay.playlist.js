@@ -149,7 +149,7 @@
                 $(document).trigger('jplay.playlistchange');
                 return item.node;
             };
-            if (Object.prototype.toString.call(json) === '[object Array]') {
+            if (Array.isArray(json)) {
                 $.get('/getSongInfo', { 'id': json }, function (data) {
                     data.map(function (item) { build(item, position, before); });
                 });

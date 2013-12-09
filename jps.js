@@ -449,7 +449,7 @@
             return;
         }
         var connection = mysql.createConnection(options.dbConnection);
-        if (Object.prototype.toString.call(req.query.id) === '[object Array]') {
+        if (Array.isArray(req.query.id)) {
             var ids = req.query.id.filter(function (data) { return isNumeric(data); });
             var qry = connection.query('SELECT * FROM songs WHERE id IN (?)', [ids], function (err, data) {
                 if (err) { throw err; }
