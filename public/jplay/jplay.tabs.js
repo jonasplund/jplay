@@ -135,7 +135,7 @@
         direction: 'vertical',
         updateAllUrl: '/getSidebarInfo',
         preload: true,
-        winMinWidth: 1000 // Minimum window width for tabs to be visible. TODO: Implement
+        winMinWidth: 1000 // Minimum window width for tabs to be visible. 0 = always enabled.
     };
 
     function Tab (tabs, settings) {
@@ -205,6 +205,7 @@
     };
 
     function Tabs (element, tabsSettings) {
+        var self = this;
         this.vertical = tabsSettings.direction === 'vertical';
         this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
         this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
@@ -235,7 +236,16 @@
             $(document).trigger('jplay.displaychange');
         };
         this.element.on('transitionend transitionEnd msTransitionEnd webkitTransitionEnd', inner);
+        this.checkWidth();
+        $(window).resize(function () { self.checkWidth(); });
     }
+
+    Tabs.prototype.checkWidth = function () {
+        if (this.settings.winMinWidth &&
+            $(window).width() < this.settings.winMinWidth) {
+            this.hide();
+        }
+    };
 
     Tabs.prototype.getTab = function (o) {
         o = o.title || o;
