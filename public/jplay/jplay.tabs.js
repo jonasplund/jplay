@@ -93,7 +93,9 @@
 
     var postprocessors = {
         setlist: function () {
-            this.tabContent.find('button').button({ label: this.tabContent.find('.unavailable').length ? 'Add available to playlist' : 'Add all to playlist' });
+            this.tabContent.find('button').button({ 
+                label: this.tabContent.find('.unavailable').length ? 'Add available to playlist' : 'Add all to playlist' 
+            });
         }
     };
 
@@ -195,6 +197,9 @@
     Tab.prototype.disable = function () {
         this.disabled = true;
         this.tab.addClass('jp-disabledTab');
+        if (this.tabs.activeTab === this) {
+            this.tabs.activateFirstEnabled();
+        }
         return this;
     };
 
@@ -293,24 +298,26 @@
                 }
                 checkDisabled();
             });
-        }
+        } 
+        return this;
     };
 
     Tabs.prototype.setActive = function (title) {
         title = title.title || title;
         var activeTab = this.getTab(title);
         if (activeTab.disabled === true) {
-            return;
+            return this;
         }
         this.tabObjects.forEach(function (tab) { tab.hide(); });
         if (this.activeTab && (title === this.activeTab.title)) {
             this.hide();
             this.activeTab = false;
-            return;
+            return this;
         }
         this.show();
         activeTab.show();
         this.activeTab = activeTab;
+        return this;
     };
 
     Tabs.prototype.hide = function () {
@@ -320,6 +327,7 @@
             this.resize(true);
         }
         this.activeTab.hide();
+        return this;
     };
 
     Tabs.prototype.show = function () {
@@ -328,18 +336,20 @@
             this.element.removeClass('vertical');
             this.resize(true);
         }
+        return this;
     };
 
     Tabs.prototype.preloadAll = function (songInfo) {
         var self = this;
         if (!this.preload.enabled) {
-            return;
+            return this;
         }
         $.get(this.settings.updateAllUrl, songInfo, function (data) {
             self.preload.data = data;
             self.preload.hasData = true;
             self.preload.id = songInfo.id;
         });
+        return this;
     };
 
     Tabs.prototype.resize = function (forceV) {
@@ -349,6 +359,19 @@
             this.tabsContainer.width(width + 'px');
             this.tabsContainerOuter.css('width', $(window).height());
         }
+        return this;
+    };
+
+    Tabs.prototype.activateFirstEnabled = function () {
+        var done = false;
+        this.tabObjects.forEach(function (item) {
+            if (!done &&
+                !item.disabled) {
+                item.activate();
+                done = true;
+            }
+        });
+        return this;
     };
 
     var tabs = new Tabs($('#sidebar'), options);
