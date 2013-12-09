@@ -319,6 +319,7 @@
             this.element.addClass('vertical');
             this.resize(true);
         }
+        this.activeTab.hide();
     };
 
     Tabs.prototype.show = function () {
