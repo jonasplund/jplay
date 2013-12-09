@@ -197,7 +197,7 @@
                     return err;
                 }
                 async.map(results, function (item, callback) {
-                    connection.query('SELECT dirid FROM songs WHERE artist = ? LIMIT 1', item, function (err, data2) {
+                    connection.query('SELECT dirid FROM songs WHERE artist = ? ORDER BY RAND() LIMIT 1', item, function (err, data2) {
                         if (err) {
                             callback(err);
                             throw err;
