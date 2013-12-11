@@ -12,7 +12,7 @@
 @keyframes spinWheel3 { to { transform: rotateY(-288deg); }}
 @keyframes spinWheel4 { to { transform: rotateY(-360deg); }}
 
-#covercontainer { height:100px; width:100px; float:left; margin-left:25px; -webkit-perspective:500px; 
+#covercontainer { height:90%; width:50px; float:left; margin-left:25px; -webkit-perspective:500px; 
 	-webkit-perspective-origin:center center; perspective:500px; perspective-origin:center center; }
 
 .coverwheelstage { -webkit-transform-style:preserve-3d; -webkit-transform:translateZ(-20px);
@@ -34,9 +34,9 @@
 .coverwheel.state2 { -webkit-transform:rotateY(-144deg); transform:rotateY(-144deg); }
 .coverwheel.state3 { -webkit-transform:rotateY(-216deg); transform:rotateY(-216deg); }
 .coverwheel.state4 { -webkit-transform:rotateY(-288deg); transform:rotateY(-288deg); }
-.coverwheel img { width:100px; position:absolute; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
-.coverwheel img:nth-child(1) { -webkit-transform:rotateY(-144deg) translateZ(69px); transform:rotateY(-144deg) translateZ(69px); }
-.coverwheel img:nth-child(2) { -webkit-transform:rotateY(-72deg)  translateZ(69px); transform:rotateY(-72deg)  translateZ(69px); }
-.coverwheel img:nth-child(3) { -webkit-transform:rotateY(0)       translateZ(69px); transform:rotateY(0)       translateZ(69px); }
-.coverwheel img:nth-child(4) { -webkit-transform:rotateY(72deg)   translateZ(69px); transform:rotateY(72deg)   translateZ(69px); }
-.coverwheel img:nth-child(5) { -webkit-transform:rotateY(144deg)  translateZ(69px); transform:rotateY(144deg)  translateZ(69px); }
+.coverwheel img { width:100%; position:absolute; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
+.coverwheel img:nth-child(1) { -webkit-transform:rotateY(-144deg) translateZ(35px); transform:rotateY(-144deg) translateZ(35px); }
+.coverwheel img:nth-child(2) { -webkit-transform:rotateY(-72deg)  translateZ(35px); transform:rotateY(-72deg)  translateZ(35px); }
+.coverwheel img:nth-child(3) { -webkit-transform:rotateY(0)       translateZ(35px); transform:rotateY(0)       translateZ(35px); }
+.coverwheel img:nth-child(4) { -webkit-transform:rotateY(72deg)   translateZ(35px); transform:rotateY(72deg)   translateZ(35px); }
+.coverwheel img:nth-child(5) { -webkit-transform:rotateY(144deg)  translateZ(35px); transform:rotateY(144deg)  translateZ(35px); }

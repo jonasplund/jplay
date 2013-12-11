@@ -24,28 +24,30 @@ h2 { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,2
      font-size:1.2em; height:1.4em; cursor:default;}
 h2#settingsheader { cursor:pointer; }
 
-#playercontainer { padding:10px; margin:0; height:150px; background-color:white; width:100vw; }
+#playercontainer { padding:10px; margin:50px 0 0 0; background-color:white; }
 #playercontainer .button,#progressbar,#volumeslidercontainer *,#cover { cursor:pointer; }
-#playerleft { float:left; width:90%; }
-#playercontrols { margin-bottom:5px; }
+#playerleft { }
+#playercontrols { }
 #playercontainer .controlbutton { height:50px; float:left; width:30%; }
 #prevbutton { }
 #playpausebutton.paused { }
 #playpausebutton.playing { }
-#playinfo { float:left; height:50px; width:100%; padding:2px 5px 3px 5px; line-height:1em; margin:0 2px; overflow:hidden; }
-#piinner { width:auto; white-space:nowrap; cursor:default; float:left; width:170px; }
+#playinfo { float:right; height:50px; width:calc(100% - 95px); padding:2px 5px 3px 5px; line-height:1em; margin:0 2px; overflow:hidden; box-sizing:border-box; }
+#piinner { width:auto; white-space:nowrap; cursor:default;  text-align:right; }
 #wikipedia { width:16px; height:16px; background-image:url("/img/wiki.png"); display:none; float:right; margin-top:2px; }
-#progressinfo { padding-top:5px; position:absolute; }
-#progressbar { clear:both; width:200px; float:left; height:10px; }
+#progressinfo { display:flex; }
+#progressbar { flex:1; }
 #progressmeter { height:1em; box-shadow:2px 2px 3px #888 inset; }
 #progressmeter .ui-progressbar-value { box-shadow:2px 2px 3px #888 inset; background-color:#FF0; }
 #progressmeter .ui-widget-header { background:#AEE; border-right:1px solid #333; }
-#time { float:left; line-height:1em; margin-left:10px; cursor:default; height:1em; margin-top:-4px; padding:0 5px; width:200px; text-align:center; }
-#volumecontainer { padding-top:23px; }
-#volumeslidercontainer { padding-top:6px; padding-bottom:5px; width:200px; float:left; margin-bottom:10px; }
+#time { line-height:1em; margin-left:10px; cursor:default; height:1em; padding:0 5px; 
+  width:100px; text-align:center; font-size:1em; overflow:hidden; }
+#volumecontainer { display:flex; margin-top:10px; }
+#volumeslidercontainer { flex:1; }
 #volumeslider { height:1em; box-shadow:2px 2px 3px #888 inset; }
-#volumeslider a { box-shadow:-2px -2px 3px #777 inset; border-radius:5px; height:12px; width:12px; background:#EEE; border:0; outline:none; }
-#mutebutton { float:left; margin-left:10px; height:1em; }
+#volumeslider a { box-shadow:-2px -2px 3px #777 inset; border-radius:5px; height:100%; width:12px; background:#EEE; 
+  border:1px solid #888; outline:none; }
+#mutebutton { width:100px; margin-left:10px; margin-right:0; height:1em; padding:0 5px; }
 #fft { height:100px; width:200px; float:left; margin-left:5px; background:#000; }
 #searchlinksbutton { width:16px; height:16px; display:none; float:right; margin-top:2px; }
 #searchlinksmenu { display:none; position:absolute; z-index:1001; float:none; width:100px; }
@@ -54,18 +56,19 @@ h2#settingsheader { cursor:pointer; }
 
 .row { }
 .rowleft { }
-.rowright { border-left:2px groove #FFF; overflow-y:auto; overflow-x:hidden;}
+.rowright { }
 
 #midrow { }
 #midrowleft { }
 #midrowright { }
 
 #playlistcontainer { padding:0; margin:0; }
-#playlistcontrols { background:#FFF; padding:3px 4px; border-bottom:2px ridge #FFF; height:1.7em; }
-.playlistbutton {  }
+#playlistcontrols { background:#FFF; padding:3px 4px; border-bottom:2px ridge #FFF; }
+#playlistcontrols .button { height:100%; flex:1; }
 #playlist { list-style:none; padding-left:0px; margin:0 0 0 0; }
 #playlistcontainer ul { clear:both; }
-#playlist li { cursor:pointer; padding-left:10px; padding-right:25px; white-space:nowrap; overflow:hidden; height:1.5em; font-size: 1em; line-height:1em; }
+#playlist li { cursor:pointer; padding-left:10px; padding-right:25px; white-space:nowrap; 
+    overflow:hidden; height:1.5em; font-size: 1em; line-height:1.5em; }
 #playlist li:nth-child(2n) { background-color:rgba(220,220,220,1); }
 #playlist li.activesong { background:-webkit-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
                           background:-moz-linear-gradient(top, rgba(255,255,255,1), rgba(229,229,229,1));
@@ -85,13 +88,12 @@ h2#settingsheader { cursor:pointer; }
 
 #filesouter { padding:0; margin:0 auto; overflow-y:auto; }
 
-#searchcontainer { background:#FFF; padding:3px 4px; height:17px; border-bottom:2px ridge #FFF; white-space:nowrap; }
-#searchcontainer * { display:inline-block; }
-#searchcontainer #searchtext { width:250px; height:14px; padding:0 2px; font-size:11px; float:left; 
+#searchcontainer { background:#FFF; padding:3px 4px; border-bottom:2px ridge #FFF; white-space:nowrap; }
+#searchcontainer #searchtext { flex:1; padding:0 2px; font-size:11px; float:left; height:100%;
 							  border:1px solid #888; border-radius:2px; box-shadow:1px 1px 2px rgba(128,128,128,0.5) inset; }
 #searchcontainer #searchsettings { float:none; }
 #searchcontainer #searchsettings * { height: 16px; line-height:8px; }
-#searchcontainer #addrandom { margin-left:10px; }
+#searchcontainer #addrandom { margin-left:10px; width:100px; height:100%; }
 
 .ui-autocomplete { max-height:250px; overflow-y:auto; overflow-x:hidden; padding-right:20px; }
 .ui-autocomplete img { float:left; padding-top:5px; margin-right: 2px; }
@@ -101,7 +103,7 @@ h2#settingsheader { cursor:pointer; }
 #filescontainer li { }
 #filescontainer img { margin-right:5px; }
 
-#bottomrow { }
+#bottomrow { margin-bottom:50px; }
 #bottomleft {  }
 
 #savedplaylistscontainer {  }
@@ -121,12 +123,51 @@ h2#settingsheader { cursor:pointer; }
             background:-ms-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); 
             background:linear-gradient(top, rgba(254,255,255,1) 0%, rgba(210,235,249,1) 100%); }
 
-#settings { position:fixed; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9;
+
+#settings { display:none; }
+/*#settings { position:fixed; z-index:2000; bottom:-152px; left:0; width:100%; -webkit-transition:all 300ms ease; -webkit-transform:translateZ(0); opacity:0.9;
   -moz-transition:all 300ms ease; -moz-transform:translateZ(0); transition:all 300ms ease; transform:translateZ(0); }
 #settings.active { -webkit-transform:translateY(calc(20px - 100%)); -moz-transform:translateY(calc(20px - 100%)); transform:translateY(calc(20px - 100%)); }
 #settingstab { width:200px; border-radius:0 20px 0 0; float:left; margin-top:-20px; height:20px; line-height:17px; }
 #settingstab .ui-icon { float:left; margin-right:10px; }
-#settingscontainer { clear:left; height:150px; background:#FFF; border-top:2px ridge #FFF; }
+#settingscontainer { clear:left; height:150px; background:#FFF; border-top:2px ridge #FFF; }*/
+
+footer {
+  height:50px;
+  position:fixed;
+  bottom:0;
+  background:#FFF;
+  border-top:1px solid #888;
+  display:flex;
+  width:100%;
+  z-index:3000;
+}
+footer #playpausebutton { flex:2; }
+footer #prevbutton,#nextbutton { flex:1; }
+
+footer .button {
+  height:100%;
+  margin:0;
+  border-top:0;
+  border-left:1px solid #888;
+  border-bottom:0;
+  border-right:0;
+}
+
+header {
+  height:55px;
+  position:fixed;
+  top:0;
+  width:100%;
+  background:#FFF;
+  border-bottom:1px solid #888;
+  z-index:3000;
+}
+
+.rowcontrolscontainer {
+  display:flex;
+  height:30px;
+}
 
 /* JQUI overwrites */
 .ui-state-default { background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 40%, rgba(200,200,200,1) 50%, rgba(255,255,255,1) 100%); 

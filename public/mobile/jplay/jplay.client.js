@@ -655,7 +655,7 @@
             });
         }
     },
-    filetree: {
+    /*filetree: {
         jqnode: {},
         init: function () {
             'use strict';
@@ -866,7 +866,7 @@
                 jplay.helpfunctions.warning('Can only download one at a time at the moment');
             }
         }
-    },
+    },*/
     customplaylists: {
         saveNew: function (name) {
             'use strict';
@@ -929,7 +929,7 @@
 						dblclick(dbleh).on('contextmenu', ctxeh).appendTo($('#customplaylists'));
                 }
             }
-            $.get('getPlaylists', function (data) {
+            $.get('/getPlaylists', function (data) {
                 $.each(data, function () {
                     $('<li/>').addClass('customplaylist remote').text(this.name).data('local', false).data('id', this.id).
                         dblclick(dbleh).on('contextmenu', ctxeh).appendTo($('#customplaylists'));
@@ -1003,7 +1003,7 @@ $(document).ready(function () {
             'url': 'jooon.mooo.com:8088'
         });
     } catch (err) { }*/
-    jplay.filetree.init();
+    //jplay.filetree.init();
     jplay.customplaylists.update();
     jplay.searchfn.init();
     $(document).trigger('jplay.inited');
