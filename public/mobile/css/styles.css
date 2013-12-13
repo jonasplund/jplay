@@ -26,7 +26,7 @@ h2 { background:-webkit-linear-gradient(top, rgba(200,200,200,1), rgba(150,150,1
 h2#settingsheader { cursor:pointer; }
 
 #playercontainer { padding:10px; margin:50px 0 0 0; background-color:white; }
-#playercontainer .button,#progressbar,#volumeslidercontainer *,#cover { cursor:pointer; }
+#playercontainer .button,#progressbar,#volumeslider *,#cover { cursor:pointer; }
 #playerleft { }
 #playercontrols { }
 #playercontainer .controlbutton { height:50px; float:left; width:30%; }
@@ -37,17 +37,13 @@ h2#settingsheader { cursor:pointer; }
 #piinner { width:auto; white-space:nowrap; cursor:default;  text-align:right; }
 #wikipedia { width:16px; height:16px; background-image:url("/img/wiki.png"); display:none; float:right; margin-top:2px; }
 #progressinfo { display:flex; }
-#progressbar { flex:1; }
-#progressmeter { height:1em; box-shadow:2px 2px 3px #888 inset; }
-#progressmeter .ui-progressbar-value { box-shadow:2px 2px 3px #888 inset; background-color:#FF0; }
-#progressmeter .ui-widget-header { background:#AEE; border-right:1px solid #333; }
+#progressbar { flex:1; height:1em; -webkit-appearance:none; border:1px solid #333; }
+#progressbar::-webkit-progress-bar { box-shadow:2px 2px 3px #888 inset; background:transparent; }
+#progressbar::-webkit-progress-value { box-shadow:2px 2px 3px #888 inset; background-color:#AEE; border-right:1px solid #333; }
 #time { line-height:1em; margin-left:10px; cursor:default; height:1em; padding:0 5px; 
   width:100px; text-align:center; font-size:1em; overflow:hidden; }
 #volumecontainer { display:flex; margin-top:10px; }
-#volumeslidercontainer { flex:1; }
-#volumeslider { height:1em; box-shadow:2px 2px 3px #888 inset; }
-#volumeslider a { box-shadow:-2px -2px 3px #777 inset; border-radius:5px; height:100%; width:12px; background:#EEE; 
-  border:1px solid #888; outline:none; }
+#volumeslider { flex:1; height:1em; box-shadow:2px 2px 3px #888 inset; border:1px solid #333; margin:0; }
 #mutebutton { width:100px; margin-left:10px; margin-right:0; height:1em; padding:0 5px; }
 #fft { height:100px; width:200px; float:left; margin-left:5px; background:#000; }
 #searchlinksbutton { width:16px; height:16px; display:none; float:right; margin-top:2px; }

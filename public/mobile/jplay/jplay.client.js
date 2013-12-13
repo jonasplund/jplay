@@ -37,7 +37,7 @@
             elements.playinfo = $('#playinfo');
             elements.searchlinksbutton = $('#searchlinksbutton');
             elements.searchlinksmenu = $('#searchlinksmenu');
-            elements.progressmeter = $('#progressmeter');
+            elements.progressbar = $('#progressbar');
             elements.volumeslider = $('#volumeslider');
             elements.mutebutton = $('#mutebutton');
             elements.covercontainer = $('#covercontainer');
@@ -277,7 +277,7 @@
                     elements.time.text('--:--/--:--');
                     return;
                 }
-                elements.progressmeter.progressbar('option', 'value', 100 * this.currentTime / this.duration);
+                jplay.ui.elements.progressbar.attr('value', 100 * this.currentTime / this.duration);
                 var newTime = jplay.helpfunctions.toTimeString(this.currentTime) + '/' + 
                     jplay.helpfunctions.toTimeString(this.duration);
                 // Avoid 3 of 4 full layouts per second
@@ -366,11 +366,16 @@
                 });
                 return true;
             });
-            elements.progressmeter.progressbar().click(function (e) {
+            elements.progressbar.click(function (e) {
                 var player = jplay.player.domobj;
                 player.currentTime = player.duration * (e.pageX - $(this).offset().left) / $(this).width();
             });
-            elements.volumeslider.slider({
+            elements.volumeslider.on('input', function () {
+                console.log('change');
+                jplay.player.setVolume($(this).val() / 100);
+                jplay.settings.update();
+            });
+            /*elements.volumeslider.slider({
                 value: jplay.settings.items.volume * 100,
                 slide: function () {
                     jplay.player.setVolume($(this).slider('option', 'value') / 100);
@@ -380,7 +385,7 @@
                     jplay.player.setVolume($(this).slider('option', 'value') / 100);
                     jplay.settings.update();
                 }
-            });
+            });*/
             elements.covercontainer.cover({});
             elements.addrandombutton.click(jplay.searchfn.addRandom);
         },
@@ -536,14 +541,14 @@
                 }
             }
             jplay.player.setVolume(vol);
-            jplay.ui.elements.volumeslider.slider('option', 'value', vol * 100);
+            // jplay.ui.elements.volumeslider.slider('option', 'value', vol * 100);
         },
         setVolume: function (value) {
             'use strict';
             jplay.settings.items.volume = value;
             jplay.player.domobj.volume = value;
 
-            jplay.ui.elements.volumeslider.slider.value = 100 * value;
+            //jplay.ui.elements.volumeslider.slider.value = 100 * value;
             if (jplay.settings.items.fft && jplay.ui.elements.fft) {
                 jplay.ui.elements.fft.fft({ 'volume': value });
             }

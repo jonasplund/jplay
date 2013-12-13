@@ -363,7 +363,7 @@
                     break;
                 }
             }
-            res.writeHead(206, {
+            res.writeHead(200, {
                 'Content-Type': contentType,
                 'Content-length': (end - start) + 1,
                 'Connection': 'keep-alive',
