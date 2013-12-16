@@ -140,239 +140,247 @@
         winMinWidth: 1000 // Minimum window width for tabs to be visible. 0 = always enabled.
     };
 
-    function Tab (tabs, settings) {
-        var self = this;
-        var contentId = settings.contentId || settings.name + 'TabContent';
-        var tabId = settings.tabId || settings.name + 'Tab';
-        this.tabs = tabs;
-        this.tab = $('<div class="jp-tab" />').text(settings.title).attr('id', tabId).click(function () { self.activate(); });
-        this.title = settings.title;
-        this.name = settings.name;
-        this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.defaultText);
-        this.preprocess = settings.preprocess;
-        this.postprocess = settings.postprocess;
-        this.settings = settings;
-        this.disabled = false;
-        this.tabs.tabsContainer.append(this.tab);
-        this.tabs.tabsContentContainer.append(this.tabContent);
-    }
+    var Tab = (function () { 
+        function Tab (tabs, settings) {
+            var self = this;
+            var contentId = settings.contentId || settings.name + 'TabContent';
+            var tabId = settings.tabId || settings.name + 'Tab';
+            this.tabs = tabs;
+            this.tab = $('<div class="jp-tab" />').text(settings.title).attr('id', tabId).click(function () { self.activate(); });
+            this.title = settings.title;
+            this.name = settings.name;
+            this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.defaultText);
+            this.preprocess = settings.preprocess;
+            this.postprocess = settings.postprocess;
+            this.settings = settings;
+            this.disabled = false;
+            this.tabs.tabsContainer.append(this.tab);
+            this.tabs.tabsContentContainer.append(this.tabContent);
+        }
 
-    Tab.prototype.content = function (content) {
-        if (content) {
-            this.tabContent.html(content);
+        Tab.prototype.content = function (content) {
+            if (content) {
+                this.tabContent.html(content);
+                return this;
+            } else {
+                return this.tabContent.html();
+            }
+        };
+
+        Tab.prototype.preprocessData = function (data) {
+            return this.preprocess ? this.preprocess.call(this, data) : '';
+        };
+
+        Tab.prototype.postprocessContent = function () {
+            if (this.postprocess) {
+                this.postprocess.call(this);
+            }
             return this;
-        } else {
-            return this.tabContent.html();
-        }
-    };
-
-    Tab.prototype.preprocessData = function (data) {
-        return this.preprocess ? this.preprocess.call(this, data) : '';
-    };
-
-    Tab.prototype.postprocessContent = function () {
-        if (this.postprocess) {
-            this.postprocess.call(this);
-        }
-        return this;
-    };
-
-    Tab.prototype.hide = function () {
-        this.tabContent.addClass('jp-hiddenTabContent').removeClass('jp-visibleTabContent');
-        this.tab.addClass('jp-inactiveTab').removeClass('jp-activeTab');
-        return this;
-    };
-
-    Tab.prototype.show = function () {
-        this.tabContent.addClass('jp-visibleTabContent').removeClass('jp-hiddenTabContent');
-        this.tab.addClass('jp-activeTab').removeClass('jp-inactiveTab');
-        return this;
-    };
-
-    Tab.prototype.activate = function () {
-        this.tabs.setActive(this);
-        return this;
-    };
-
-    Tab.prototype.disable = function () {
-        this.disabled = true;
-        this.tab.addClass('jp-disabledTab');
-        if (this.tabs.activeTab === this) {
-            this.tabs.activateFirstEnabled();
-        }
-        return this;
-    };
-
-    Tab.prototype.enable = function () {
-        this.disabled = false;
-        this.tab.removeClass('jp-disabledTab');
-        return this;
-    };
-
-    function Tabs (element, tabsSettings) {
-        var self = this;
-        this.vertical = tabsSettings.direction === 'vertical';
-        this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
-        this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
-        this.tabsContainer = $('<div class="jp-tabsContainer">').appendTo(this.tabsContainerOuter);
-        this.tabsContainerOuter.append($('<div style="clear:both"></div>'));
-        this.tabsContentContainer = $('<div class="jp-tabsContentContainer">').appendTo(element);
-        this.settings = tabsSettings;
-        this.preload = {
-            enabled: tabsSettings.preload,
-            hasData: false,
-            data: {},
-            id: -1
         };
-        tabsSettings.tabs.sort(function (a, b) { return a.order - b.order; });
-        this.tabObjects = [];
-        for (var i = 0; i < tabsSettings.tabs.length; i++) {
-            var tab = new Tab(this, tabsSettings.tabs[i]);
-            this.tabObjects.push(tab);
-            this.element.append(tab);
-        }
-        this.tabsContainer.append('<div style="clear:left;">');
-        if (tabsSettings.firstActive) {
-            this.setActive(tabsSettings.firstActive);
-        }
-        this.resize();
-        this.inited = false;
-        var inner = function () {
-            $(document).trigger('jplay.displaychange');
+
+        Tab.prototype.hide = function () {
+            this.tabContent.addClass('jp-hiddenTabContent').removeClass('jp-visibleTabContent');
+            this.tab.addClass('jp-inactiveTab').removeClass('jp-activeTab');
+            return this;
         };
-        this.element.on('transitionend transitionEnd msTransitionEnd webkitTransitionEnd', inner);
-        this.checkWidth();
-        $(window).resize(function () { self.checkWidth(); });
-    }
 
-    Tabs.prototype.checkWidth = function () {
-        if (this.settings.winMinWidth &&
-            $(window).width() < this.settings.winMinWidth) {
-            this.hide();
+        Tab.prototype.show = function () {
+            this.tabContent.addClass('jp-visibleTabContent').removeClass('jp-hiddenTabContent');
+            this.tab.addClass('jp-activeTab').removeClass('jp-inactiveTab');
+            return this;
+        };
+
+        Tab.prototype.activate = function () {
+            this.tabs.setActive(this);
+            return this;
+        };
+
+        Tab.prototype.disable = function () {
+            this.disabled = true;
+            this.tab.addClass('jp-disabledTab');
+            if (this.tabs.activeTab === this) {
+                this.tabs.activateFirstEnabled();
+            }
+            return this;
+        };
+
+        Tab.prototype.enable = function () {
+            this.disabled = false;
+            this.tab.removeClass('jp-disabledTab');
+            return this;
+        };
+
+        return Tab;
+    })();
+
+    var Tabs = (function () {
+        function Tabs (element, tabsSettings) {
+            var self = this;
+            this.vertical = tabsSettings.direction === 'vertical';
+            this.element = element.addClass('jp-tabsOuterContainer').addClass(this.vertical ? 'vertical' : 'horizontal');
+            this.tabsContainerOuter = $('<div class="jp-tabsContainerOuter"></div>').appendTo(element);
+            this.tabsContainer = $('<div class="jp-tabsContainer">').appendTo(this.tabsContainerOuter);
+            this.tabsContainerOuter.append($('<div style="clear:both"></div>'));
+            this.tabsContentContainer = $('<div class="jp-tabsContentContainer">').appendTo(element);
+            this.settings = tabsSettings;
+            this.preload = {
+                enabled: tabsSettings.preload,
+                hasData: false,
+                data: {},
+                id: -1
+            };
+            tabsSettings.tabs.sort(function (a, b) { return a.order - b.order; });
+            this.tabObjects = [];
+            for (var i = 0; i < tabsSettings.tabs.length; i++) {
+                var tab = new Tab(this, tabsSettings.tabs[i]);
+                this.tabObjects.push(tab);
+                this.element.append(tab);
+            }
+            this.tabsContainer.append('<div style="clear:left;">');
+            if (tabsSettings.firstActive) {
+                this.setActive(tabsSettings.firstActive);
+            }
+            this.resize();
+            this.inited = false;
+            var inner = function () {
+                $(document).trigger('jplay.displaychange');
+            };
+            this.element.on('transitionend transitionEnd msTransitionEnd webkitTransitionEnd', inner);
+            this.checkWidth();
+            $(window).resize(function () { self.checkWidth(); });
         }
-    };
 
-    Tabs.prototype.getTab = function (o) {
-        o = o.title || o;
-        return this.tabObjects.filter(function (item) { return item.title === o; })[0];
-    };
-
-    Tabs.prototype.updateAll = function (songInfo) {
-        var self = this;
-        var checkDisabled = function () {
-            // Callback. Close Tabs if none is enabled.
-            if (!self.tabObjects.filter(function (item) { return !item.disabled; }).length) {
-                self.hide();
+        Tabs.prototype.checkWidth = function () {
+            if (this.settings.winMinWidth &&
+                $(window).width() < this.settings.winMinWidth) {
+                this.hide();
             }
         };
-        if (this.activeTab && this.activeTab.tabContent) {
-            this.activeTab.content('<div class="ajaxloader" />');
-        }
-        if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
-            for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
-                var currTab = self.tabObjects[i];
-                if (this.preload.data[currTab.name]) {
-                    currTab.content(currTab.preprocessData(this.preload.data[currTab.name]));
-                    currTab.postprocessContent();
-                } else {
-                    currTab.content('No information found.');
+
+        Tabs.prototype.getTab = function (o) {
+            o = o.title || o;
+            return this.tabObjects.filter(function (item) { return item.title === o; })[0];
+        };
+
+        Tabs.prototype.updateAll = function (songInfo) {
+            var self = this;
+            var checkDisabled = function () {
+                // Callback. Close Tabs if none is enabled.
+                if (!self.tabObjects.filter(function (item) { return !item.disabled; }).length) {
+                    self.hide();
                 }
+            };
+            if (this.activeTab && this.activeTab.tabContent) {
+                this.activeTab.content('<div class="ajaxloader" />');
             }
-            this.preload.hasData = false;
-            checkDisabled();
-        } else {
-            $.get(this.settings.updateAllUrl, songInfo, function (data) {
+            if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
                 for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
                     var currTab = self.tabObjects[i];
-                    if (data[currTab.name]) {
-                        var pData = currTab.preprocessData(data[currTab.name]);
-                        if (pData) {
-                            currTab.content(pData).enable();
-                            currTab.postprocessContent();
+                    if (this.preload.data[currTab.name]) {
+                        currTab.content(currTab.preprocessData(this.preload.data[currTab.name]));
+                        currTab.postprocessContent();
+                    } else {
+                        currTab.content('No information found.');
+                    }
+                }
+                this.preload.hasData = false;
+                checkDisabled();
+            } else {
+                $.get(this.settings.updateAllUrl, songInfo, function (data) {
+                    for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
+                        var currTab = self.tabObjects[i];
+                        if (data[currTab.name]) {
+                            var pData = currTab.preprocessData(data[currTab.name]);
+                            if (pData) {
+                                currTab.content(pData).enable();
+                                currTab.postprocessContent();
+                            } else {
+                                currTab.content('No information found.').disable();
+                            }
                         } else {
                             currTab.content('No information found.').disable();
                         }
-                    } else {
-                        currTab.content('No information found.').disable();
                     }
-                }
-                checkDisabled();
-            });
-        } 
-        return this;
-    };
-
-    Tabs.prototype.setActive = function (title) {
-        title = title.title || title;
-        var activeTab = this.getTab(title);
-        if (activeTab.disabled === true) {
+                    checkDisabled();
+                });
+            } 
             return this;
-        }
-        this.tabObjects.forEach(function (tab) { tab.hide(); });
-        if (this.activeTab && (title === this.activeTab.title)) {
-            this.hide();
-            this.activeTab = false;
-            return this;
-        }
-        this.show();
-        activeTab.show();
-        this.activeTab = activeTab;
-        return this;
-    };
+        };
 
-    Tabs.prototype.hide = function () {
-        this.element.addClass('hidden');
-        if (!this.vertical) {
-            this.element.addClass('vertical');
-            this.resize(true);
-        }
-        this.activeTab.hide();
-        return this;
-    };
-
-    Tabs.prototype.show = function () {
-        this.element.removeClass('hidden');
-        if (!this.vertical) {
-            this.element.removeClass('vertical');
-            this.resize(true);
-        }
-        return this;
-    };
-
-    Tabs.prototype.preloadAll = function (songInfo) {
-        var self = this;
-        if (!this.preload.enabled) {
-            return this;
-        }
-        $.get(this.settings.updateAllUrl, songInfo, function (data) {
-            self.preload.data = data;
-            self.preload.hasData = true;
-            self.preload.id = songInfo.id;
-        });
-        return this;
-    };
-
-    Tabs.prototype.resize = function (forceV) {
-        if (this.vertical || forceV) {
-            var width = 0;
-            $.each(this.tabObjects, function () { width += this.tab.outerWidth(); });
-            this.tabsContainer.width(width + 'px');
-            this.tabsContainerOuter.css('width', $(window).height());
-        }
-        return this;
-    };
-
-    Tabs.prototype.activateFirstEnabled = function () {
-        var done = false;
-        this.tabObjects.forEach(function (item) {
-            if (!done &&
-                !item.disabled) {
-                item.activate();
-                done = true;
+        Tabs.prototype.setActive = function (title) {
+            title = title.title || title;
+            var activeTab = this.getTab(title);
+            if (activeTab.disabled === true) {
+                return this;
             }
-        });
-        return this;
-    };
+            this.tabObjects.forEach(function (tab) { tab.hide(); });
+            if (this.activeTab && (title === this.activeTab.title)) {
+                this.hide();
+                this.activeTab = false;
+                return this;
+            }
+            this.show();
+            activeTab.show();
+            this.activeTab = activeTab;
+            return this;
+        };
+
+        Tabs.prototype.hide = function () {
+            this.element.addClass('hidden');
+            if (!this.vertical) {
+                this.element.addClass('vertical');
+                this.resize(true);
+            }
+            this.activeTab.hide();
+            return this;
+        };
+
+        Tabs.prototype.show = function () {
+            this.element.removeClass('hidden');
+            if (!this.vertical) {
+                this.element.removeClass('vertical');
+                this.resize(true);
+            }
+            return this;
+        };
+
+        Tabs.prototype.preloadAll = function (songInfo) {
+            var self = this;
+            if (!this.preload.enabled) {
+                return this;
+            }
+            $.get(this.settings.updateAllUrl, songInfo, function (data) {
+                self.preload.data = data;
+                self.preload.hasData = true;
+                self.preload.id = songInfo.id;
+            });
+            return this;
+        };
+
+        Tabs.prototype.resize = function (forceV) {
+            if (this.vertical || forceV) {
+                var width = 0;
+                this.tabObjects.forEach(function (item) { width += item.tab.outerWidth(); });
+                this.tabsContainer.width(width + 'px');
+                this.tabsContainerOuter.css('width', $(window).height());
+            }
+            return this;
+        };
+
+        Tabs.prototype.activateFirstEnabled = function () {
+            var done = false;
+            this.tabObjects.forEach(function (item) {
+                if (!done &&
+                    !item.disabled) {
+                    item.activate();
+                    done = true;
+                }
+            });
+            return this;
+        };
+
+        return Tabs;
+    }) ();
 
     var tabs = new Tabs($('#sidebar'), options);
 }) (jplay, $);
