@@ -19,9 +19,7 @@
             jplay.playlist.save();
         });
     }).on('jplay.newsong', function (e) {
-        tabs.updateAll(e.to);
-    }).on('jplay.soonnewsong', function (e) {
-        tabs.preloadAll(e.next);
+        tabs.updateAll(e.to, e.next);
     });
 
     var preprocessors = {
@@ -150,6 +148,7 @@
             this.title = settings.title;
             this.name = settings.name;
             this.tabContent = $('<div class="jp-tabContent" />').attr('id', contentId).text(settings.defaultText);
+            this.nextData = null;
             this.preprocess = settings.preprocess;
             this.postprocess = settings.postprocess;
             this.settings = settings;
@@ -210,6 +209,10 @@
             return this;
         };
 
+        Tab.prototype.setNextData = function (data) {
+            this.nextData = data;
+        };
+
         return Tab;
     })();
 
@@ -231,11 +234,11 @@
             };
             tabsSettings.tabs.sort(function (a, b) { return a.order - b.order; });
             this.tabObjects = [];
-            for (var i = 0; i < tabsSettings.tabs.length; i++) {
-                var tab = new Tab(this, tabsSettings.tabs[i]);
+            tabsSettings.tabs.forEach(function (item) {
+                var tab = new Tab(this, item);
                 this.tabObjects.push(tab);
                 this.element.append(tab);
-            }
+            }, this);
             this.tabsContainer.append('<div style="clear:left;">');
             if (tabsSettings.firstActive) {
                 this.setActive(tabsSettings.firstActive);
@@ -262,7 +265,7 @@
             return this.tabObjects.filter(function (item) { return item.title === o; })[0];
         };
 
-        Tabs.prototype.updateAll = function (songInfo) {
+        Tabs.prototype.updateAll = function (songInfo, nextInfo) {
             var self = this;
             var checkDisabled = function () {
                 // Callback. Close Tabs if none is enabled.
@@ -270,40 +273,72 @@
                     self.hide();
                 }
             };
-            if (this.activeTab && this.activeTab.tabContent) {
-                this.activeTab.content('<div class="ajaxloader" />');
-            }
-            if (this.preload.enabled && this.preload.hasData && songInfo.id === this.preload.id) {
-                for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
-                    var currTab = self.tabObjects[i];
-                    if (this.preload.data[currTab.name]) {
-                        currTab.content(currTab.preprocessData(this.preload.data[currTab.name]));
-                        currTab.postprocessContent();
-                    } else {
-                        currTab.content('No information found.');
-                    }
-                }
-                this.preload.hasData = false;
-                checkDisabled();
-            } else {
-                $.get(this.settings.updateAllUrl, songInfo, function (data) {
-                    for (var i = 0, endi = self.tabObjects.length; i < endi; i++) {
-                        var currTab = self.tabObjects[i];
-                        if (data[currTab.name]) {
-                            var pData = currTab.preprocessData(data[currTab.name]);
-                            if (pData) {
-                                currTab.content(pData).enable();
-                                currTab.postprocessContent();
-                            } else {
-                                currTab.content('No information found.').disable();
-                            }
+
+            this.tabObjects.forEach(function (item) {
+                item.content('<div class="ajaxloader" />');
+            }); 
+
+            if (this.preload.enabled) {
+                if (this.preload.hasData && songInfo.id === this.preload.id) {
+                    this.tabObjects.forEach(function (item) {
+                        if (item.nextData) {
+                            item.content(item.preprocess(item.nextData));
+                            item.enable().postprocessContent();
+                            item.nextData = null;
                         } else {
-                            currTab.content('No information found.').disable();
+                            item.content('No information found.').disable();
                         }
-                    }
+                        item.postprocessContent();
+                        item.nextData = null;
+                    });
+                    self.preload.hasData = false;
+                    checkDisabled();
+                    $.get(this.settings.updateAllUrl, nextInfo).then(function (results) {
+                        self.preload.hasData = true;
+                        self.preload.id = nextInfo.id;
+                        self.tabObjects.forEach(function (item, index) {
+                            if (results[item.name]) {
+                                item.nextData = results[item.name];
+                            }
+                        });
+                    });
+                } else {
+                    $.get(this.settings.updateAllUrl, songInfo).then(function (results) {
+                        self.tabObjects.forEach(function (item, index) {
+                            var pData = item.preprocessData(results[item.name]);
+                            if (pData) {
+                                item.content(pData).enable();
+                                item.postprocessContent();
+                            } else {
+                                item.content('No information found.').disable();
+                            }
+                        });
+                        checkDisabled();
+                    });
+                    $.get(this.settings.updateAllUrl, nextInfo).then(function (results) {
+                        self.preload.hasData = true;
+                        self.preload.id = nextInfo.id;
+                        self.tabObjects.forEach(function (item, index) {
+                            if (results[item.name]) {
+                                item.nextData = results[item.name];
+                            }
+                        });
+                    });
+                }
+            } else {
+                $.get(this.settings.updateAllUrl, songInfo).then(function (results) {
+                    self.tabObjects.forEach(function (item, index) {
+                        var pData = item.preprocessData(results[item.name]);
+                        if (pData) {
+                            item.content(pData).enable();
+                            item.postprocessContent();
+                        } else {
+                            item.content('No information found.').disable();
+                        }
+                    });
                     checkDisabled();
                 });
-            } 
+            }
             return this;
         };
 
@@ -341,19 +376,6 @@
                 this.element.removeClass('vertical');
                 this.resize(true);
             }
-            return this;
-        };
-
-        Tabs.prototype.preloadAll = function (songInfo) {
-            var self = this;
-            if (!this.preload.enabled) {
-                return this;
-            }
-            $.get(this.settings.updateAllUrl, songInfo, function (data) {
-                self.preload.data = data;
-                self.preload.hasData = true;
-                self.preload.id = songInfo.id;
-            });
             return this;
         };
 
