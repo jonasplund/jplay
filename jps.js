@@ -351,27 +351,36 @@
                 return;
             }
             filesize = data[0].filesize;
+            contentType = options.musicExtensions.filter(function (item) {
+                return item.extension === path.extname(fullpath);
+            })[0].contenttype;
             if (req.headers.range === undefined) {
-                req.headers.range = '-';
-            }
-            parts = req.headers.range.replace(/bytes=/, '').split('-');
-            start = parts[0] ? parseInt(parts[0], 10) : 0;
-            end = parts[1] ? parseInt(parts[1], 10) : (data[0].filesize ? data[0].filesize - 1 : 0);
-            for (i = 0; i < options.musicExtensions.length; i++) {
-                if (path.extname(fullpath) === options.musicExtensions[i].extension) {
-                    contentType = options.musicExtensions[i].contenttype;
-                    break;
+                res.writeHead(200, {
+                    'Content-Type': contentType,
+                    'Connection': 'keep-alive'
+                });
+                readStream = fs.createReadStream(fullpath);
+                readStream.pipe(res); 
+            } else {
+                parts = req.headers.range.replace(/bytes=/, '').split('-');
+                start = parts[0] ? parseInt(parts[0], 10) : 0;
+                end = parts[1] ? parseInt(parts[1], 10) : (data[0].filesize ? data[0].filesize - 1 : 0);
+                for (i = 0; i < options.musicExtensions.length; i++) {
+                    if (path.extname(fullpath) === options.musicExtensions[i].extension) {
+                        contentType = options.musicExtensions[i].contenttype;
+                        break;
+                    }
                 }
+                res.writeHead(206, {
+                    'Content-Type': contentType,
+                    'Content-length': (end - start) + 1,
+                    'Connection': 'keep-alive',
+                    'Accept-Ranges': 'bytes',
+                    'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize
+                });
+                readStream = fs.createReadStream(fullpath, { start: start, end: end });
+                readStream.pipe(res);    
             }
-            res.writeHead(200, {
-                'Content-Type': contentType,
-                'Content-length': (end - start) + 1,
-                'Connection': 'keep-alive',
-                'Accept-Ranges': 'bytes',
-                'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize
-            });
-            readStream = fs.createReadStream(fullpath, { start: start, end: end });
-            readStream.pipe(res);
         });
     };
 

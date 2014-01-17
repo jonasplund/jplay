@@ -138,7 +138,9 @@
                 data.map(function (item) { build(item, position, before) });
             });
         } else {
-            return build(json, position, before);
+            var tmp = build(json, position, before);
+            this.save();
+            return tmp;
         }
     };
     Playlist.prototype.togglerepeat = function () {

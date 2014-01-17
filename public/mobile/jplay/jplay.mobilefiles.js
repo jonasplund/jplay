@@ -99,6 +99,7 @@
             this.artist = settings.artist;
             this.album = settings.album;
             this.year = settings.year;
+            this.id = settings.id;
         }
         FileListFile.prototype = Object.create(FileListItem.prototype);
 
@@ -107,7 +108,8 @@
                 'artist': this.artist, 
                 'album': this.album, 
                 'title': this.title, 
-                'year': this.year
+                'year': this.year,
+                'id': this.id
             });
             return this;
         };
