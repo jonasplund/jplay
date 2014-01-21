@@ -335,14 +335,12 @@
         var connection = mysql.createConnection(options.dbConnection);
         connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
-            req.connection.setTimeout(3600000);
             if (err) { throw err; }
             qry = 'UPDATE songs SET playcount = playcount + 1 WHERE id = ?';
             connection.query(qry, [id], function (err, data) {
                 connection.end();
             });
             if (data.length < 1) { return; }
-            recSongPlay(req, data[0].dirid);
             fullpath = path.join(data[0].dir, data[0].filename);
             if (!fs.existsSync(fullpath)) {
                 sys.error('Error serving ' + fullpath);
@@ -361,6 +359,7 @@
                 });
                 readStream = fs.createReadStream(fullpath);
                 readStream.pipe(res); 
+                recSongPlay(req, data[0].dirid);
             } else {
                 parts = req.headers.range.replace(/bytes=/, '').split('-');
                 start = parts[0] ? parseInt(parts[0], 10) : 0;
@@ -380,6 +379,7 @@
                 });
                 readStream = fs.createReadStream(fullpath, { start: start, end: end });
                 readStream.pipe(res);    
+                recSongPlay(req, data[0].dirid);
             }
         });
     };
