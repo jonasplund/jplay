@@ -351,7 +351,7 @@
             filesize = data[0].filesize;
             contentType = options.musicExtensions.filter(function (item) {
                 return item.extension === path.extname(fullpath);
-            })[0].contenttype;
+            })[0].contentType;
             if (req.headers.range === undefined) {
                 res.writeHead(200, {
                     'Content-Type': contentType,
@@ -366,20 +366,22 @@
                 end = parts[1] ? parseInt(parts[1], 10) : (data[0].filesize ? data[0].filesize - 1 : 0);
                 for (i = 0; i < options.musicExtensions.length; i++) {
                     if (path.extname(fullpath) === options.musicExtensions[i].extension) {
-                        contentType = options.musicExtensions[i].contenttype;
+                        contentType = options.musicExtensions[i].contentType;
                         break;
                     }
                 }
                 res.writeHead(206, {
                     'Content-Type': contentType,
-                    'Content-length': (end - start) + 1,
+                    'Content-Length': end - start + 1,
                     'Connection': 'keep-alive',
                     'Accept-Ranges': 'bytes',
                     'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize
                 });
                 readStream = fs.createReadStream(fullpath, { start: start, end: end });
-                readStream.pipe(res);    
-                recSongPlay(req, data[0].dirid);
+                readStream.pipe(res);
+                if (start === 0) {
+                    recSongPlay(req, data[0].dirid);
+                }
             }
         });
     };
