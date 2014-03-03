@@ -336,10 +336,11 @@
         connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
             if (err) { throw err; }
-            qry = 'UPDATE songs SET playcount = playcount + 1 WHERE id = ?';
+            /*qry = 'UPDATE songs SET playcount = playcount + 1 WHERE id = ?';
             connection.query(qry, [id], function (err, data) {
                 connection.end();
-            });
+            });*/
+            connection.end();
             if (data.length < 1) { return; }
             fullpath = path.join(data[0].dir, data[0].filename);
             if (!fs.existsSync(fullpath)) {
