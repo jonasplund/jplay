@@ -257,7 +257,7 @@
         };
 
         Player.prototype.setActiveSong = function (playlistentry) {
-            var ple, plcontainer, data, scrollto, relpos, oldSong;
+            var ple, plcontainer, data, scrollto, relpos, oldSong, nextData;
             var that = this;
             ple = $(playlistentry);
             plcontainer = jplay.ui.elements.playlistcontainer;
@@ -288,7 +288,8 @@
             this.mesource = null;
             this.createInstance();
             this.jqobj.prop('src', '/getMusic?id=' + data.id).get(0).play();
-            $(document).trigger({ type: 'jplay.newsong', from: oldSong, to: data, next: this.next(true).data('attribs') });
+            nextData = this.next ? this.next(true).data('attribs') : undefined;
+            $(document).trigger({ type: 'jplay.newsong', from: oldSong, to: data, next: nextData });
             this.soonTriggered = false;
             // FIXME: muted doesn't work after changing songs. Temporary solution:
             setTimeout(function () {

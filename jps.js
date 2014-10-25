@@ -336,10 +336,6 @@
         connection.query(qry, [id], function (err, data) {
             var fullpath, filesize, parts, start, end, contentType, i, readStream;
             if (err) { throw err; }
-            /*qry = 'UPDATE songs SET playcount = playcount + 1 WHERE id = ?';
-            connection.query(qry, [id], function (err, data) {
-                connection.end();
-            });*/
             connection.end();
             if (data.length < 1) { return; }
             fullpath = path.join(data[0].dir, data[0].filename);
@@ -356,15 +352,17 @@
             if (req.headers.range === undefined) {
                 res.writeHead(200, {
                     'Content-Type': contentType,
-                    'Connection': 'keep-alive'
+                    'Content-Length': filesize
                 });
                 readStream = fs.createReadStream(fullpath);
                 readStream.pipe(res); 
                 recSongPlay(req, data[0].dirid);
             } else {
+                console.log(" ====== REQ ========");
+                console.log(req.headers);
                 parts = req.headers.range.replace(/bytes=/, '').split('-');
                 start = parts[0] ? parseInt(parts[0], 10) : 0;
-                end = parts[1] ? parseInt(parts[1], 10) : (data[0].filesize ? data[0].filesize - 1 : 0);
+                end = parts[1] ? parseInt(parts[1], 10) : data[0].filesize - 1;
                 for (i = 0; i < options.musicExtensions.length; i++) {
                     if (path.extname(fullpath) === options.musicExtensions[i].extension) {
                         contentType = options.musicExtensions[i].contentType;
@@ -374,13 +372,17 @@
                 res.writeHead(206, {
                     'Content-Type': contentType,
                     'Content-Length': end - start + 1,
-                    'Connection': 'keep-alive',
+                    //'Connection': 'keep-alive',
                     'Accept-Ranges': 'bytes',
-                    'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize
+                    'Content-Range': 'bytes ' + start + '-' + end + '/' + filesize,
+                    //'Transfer-Encoding': 'chunked'
                 });
+                console.log(" ====== res._headers ========");
+                console.log(res._headers);
                 readStream = fs.createReadStream(fullpath, { start: start, end: end });
                 readStream.pipe(res);
                 if (start === 0) {
+                    console.log(" ====== RECORDING ========");
                     recSongPlay(req, data[0].dirid);
                 }
             }
